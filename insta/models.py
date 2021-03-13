@@ -1,9 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils import timezone
-from django.contrib.auth.models import User
-
-
+from django.conf import settings
 
 
 class CustomUser(AbstractUser):
@@ -16,14 +14,14 @@ class Post(models.Model):
     Model representing a Post
     """
 
-    author = models.ForeignKey(User, on_delete=modles.SET_NULL, null=True)
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
     post_date = models.DateTimeField(auto_now_add=True)
-    likes = models.ManyToManyField(User, related_name='blogpost_like')
+    likes = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='blogpost_like')
     picture = models.ImageField(upload_to="images_post", height_field=400, width_field=400)
     caption = models.TextField(max_length=1500, blank=True, null=True)
 
     class Meta:
-        ordering = [post_date]
+        ordering = ["post_date"]
 
     def __str__(self):
         return self.author + " " + caption
@@ -45,10 +43,10 @@ class BlogComment(models.Model):
     Model representing a comment against a blog post.
     """
     description = models.TextField(max_length=1000, help_text="Enter comment about blog here.")
-    author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
       # Foreign Key used because BlogComment can only have one author/User, but users can have multiple comments
     post_date = models.DateTimeField(auto_now_add=True)
-    blog = models.ForeignKey(Blog, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
     
     class Meta:
         ordering = ["post_date"]
