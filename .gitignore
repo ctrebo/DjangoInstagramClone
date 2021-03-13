@@ -91,3 +91,4 @@ local_settings.py
 db.sqlite3
 uploads/
 media/pp_pics
+media/images_post

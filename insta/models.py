@@ -17,14 +17,14 @@ class Post(models.Model):
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
     post_date = models.DateTimeField(auto_now_add=True)
     likes = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='blogpost_like')
-    picture = models.ImageField(upload_to="images_post", height_field=400, width_field=400)
+    picture = models.ImageField(upload_to="images_post", height_field=None, width_field=None)
     caption = models.TextField(max_length=1500, blank=True, null=True)
 
     class Meta:
         ordering = ["post_date"]
 
     def __str__(self):
-        return self.author + " " + caption
+        return self.author.username
 
     def get_absolute_url(self):
         """

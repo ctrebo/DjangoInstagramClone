@@ -1,8 +1,7 @@
 from django.contrib import admin
 
-# Register your models here.
 from django.contrib import admin
-from .models import CustomUser
+from .models import CustomUser, PostComment, Post
 from .forms import CustomUserCreationForm, CustomUserChangeForm
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
@@ -32,5 +31,23 @@ class CustomUserAdmin(BaseUserAdmin):
         ),
     )
 
+class PostCommentInline(admin.TabularInline):
+    model = PostComment
 
+
+@admin.register(Post)
+class PostAdmin(admin.ModelAdmin):
+    list_display = ("author", "post_date")
+    list_filter = ("author", "post_date")
+
+    fieldsets = (("Post information", {'fields': ('author', 'likes', 'picture', "caption")}),)
+
+    inlines = [PostCommentInline]
+
+@admin.register(PostComment)
+class PostCommentAdmin(admin.ModelAdmin):
+    list_display = ("author", "post_date", "description")
+    list_filter = ("author", "post_date", "post")
+
+    fieldsets = (("Post Comment information", {'fields': ('author', 'description', "post")}),)
 
