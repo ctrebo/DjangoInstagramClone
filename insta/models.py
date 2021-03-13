@@ -38,7 +38,7 @@ class Post(models.Model):
         """
         return self.likes.count()
 
-class BlogComment(models.Model):
+class PostComment(models.Model):
     """
     Model representing a comment against a blog post.
     """
