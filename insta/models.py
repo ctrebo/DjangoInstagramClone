@@ -16,7 +16,7 @@ class Post(models.Model):
 
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
     post_date = models.DateTimeField(auto_now_add=True)
-    likes = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='blogpost_like')
+    likes = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='blogpost_like', blank=True)
     picture = models.ImageField(upload_to="images_post", height_field=None, width_field=None)
     caption = models.TextField(max_length=1500, blank=True, null=True)
 
@@ -44,7 +44,7 @@ class PostComment(models.Model):
     """
     description = models.TextField(max_length=1000, help_text="Enter comment about blog here.")
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
-      # Foreign Key used because BlogComment can only have one author/User, but users can have multiple comments
+    # Foreign Key used because BlogComment can only have one author/User, but users can have multiple comments
     post_date = models.DateTimeField(auto_now_add=True)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     

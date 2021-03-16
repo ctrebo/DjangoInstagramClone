@@ -1,0 +1,39 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+{% for post in post_list %}
+<div class="row mb-3 mb-3 mb-md-5">
+    <div class="col-12 col-md-7 p-0 p-md-2">
+        <section class="border-post">
+            <section>
+                <header class="p-075">
+                    <article>
+                        <img class="post-pp"  src="{{post.author.prof_pic.url}}" alt="alt">
+                        <span class="ml-3">
+                            <b>{{post.author.username}}</b>
+                        </span>
+                    </article>
+                </header>
+            </section>
+            <section>
+                <article>
+                    <img class="w-100 h-auto"  src="{{post.picture.url}}" alt="alt">
+                </article>
+            </section>
+            <section>
+                <article class="px-3 py-2">
+                    <a class="" href=""><i class="fa fa-15 fa-heart text-danger"></i></a>
+                    <a class="px-3" href=""><i class="fa fa-15 fa-comment fontawesome-border text-white"></i></a>
+                </article>
+            </section>
+            <section>
+                <article class="">
+                    
+                </article>
+            </section>
+        </section>
+
+    </div>
+</div>
+{% endfor %}
+{% endblock %}
