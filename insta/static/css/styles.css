@@ -58,3 +58,9 @@ nav .img-profpic {
         border: 1px solid rgba(193, 193, 193, 1);
     }
 }
+
+.time-ago {
+    text-transform: uppercase;
+    color: rgba(var(--f52,142,142,142),1);
+    font-size: 10px;
+}
