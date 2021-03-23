@@ -110,7 +110,7 @@ class PostComment(models.Model):
         return titlestring
 
     @property
-    def time_posted_ago(self):
+    def time_commented_ago(self):
         """
         Function that return how long ago post was created
         """

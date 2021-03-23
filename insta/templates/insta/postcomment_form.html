@@ -1,0 +1,77 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<div class="row postition-relative">
+    <div class="col-12 col-md-7 px-0">
+        <section class="d-block d-md-none">
+            <header class="px-3 p-075 border-comments">
+                <article>
+                    <img class="post-pp"  src="{{post.author.prof_pic.url}}" alt="alt">
+                    <span class="ml-3 font-size-username">
+                        <b>{{post.author.username}}</b>
+                    </span>
+                </article>
+            </header>
+        </section>
+        <section>                
+            <article>
+                <img class="w-100 h-auto"  src="{{post.picture.url}}" alt="alt">
+            </article>
+        </section>
+    </div>
+    <div class="col-md-5 col-12 px-0">
+        <section class="d-none d-md-block">
+            <header class="px-3 p-075 border-comments">
+                <article>
+                    <img class="post-pp"  src="{{post.author.prof_pic.url}}" alt="alt">
+                    <span class="ml-3 font-size-username">
+                        <b>{{post.author.username}}</b>
+                    </span>
+                </article>
+            </header>
+        </section>
+        <section class="h-75 d-none d-md-block w-100 border-add-comment position-absolute">
+            <article class="overflow-comments">
+                {% if comment_list %}
+                    {% for comment in comment_list %}
+                        <section class="px-3 pt-3 d-none d-md-block">
+                            <article>
+                                <img class="post-pp"  src="{{comment.post.author.prof_pic.url}}" alt="alt">
+                                <span class="ml-3 font-size-username">
+                                    <b>{{post.author.username}}</b><span>&nbsp</span><span>{{comment.description}} </span>
+                                </span>
+                                <p class="time-ago ml-5 mb-0">{{comment.time_commented_ago}}</p>
+                            </article>
+                        </section>
+                    {% endfor %}
+                {% else %}
+                <p class="p-3">No comments</p> 
+                {% endif %}
+            </article>
+        </section>
+        <section class="px-3 d-none d-md-block">
+            <article>
+                <form action="" method="post" class="">
+                    {% csrf_token %}
+                    <table class="table-form w-75">
+                    {{ form.as_table }}
+                    </table>
+                    <input type="submit" class="btn text-info submit-comment" value="Submit" />
+                </form>
+            </article>
+        </section>
+        <section class="px-3 d-block d-md-none">
+            <article>
+                <form action="" method="post" class="">
+                    {% csrf_token %}
+                    <table class="table-form w-75">
+                    {{ form.as_table }}
+                    </table>
+                    <input type="submit" class="btn text-info submit" value="Submit" />
+                </form>
+            </article>
+        </section>
+
+    </div>
+</div>
+{% endblock %}
