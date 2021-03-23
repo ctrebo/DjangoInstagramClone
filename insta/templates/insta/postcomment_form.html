@@ -36,9 +36,9 @@
                     {% for comment in comment_list %}
                         <section class="px-3 pt-3 d-none d-md-block">
                             <article>
-                                <img class="post-pp"  src="{{comment.post.author.prof_pic.url}}" alt="alt">
+                                <img class="post-pp"  src="{{comment.author.prof_pic.url}}" alt="alt">
                                 <span class="ml-3 font-size-username">
-                                    <b>{{post.author.username}}</b><span>&nbsp</span><span>{{comment.description}} </span>
+                                    <b>{{comment.author.username}}</b><span>&nbsp</span><span>{{comment.description}} </span>
                                 </span>
                                 <p class="time-ago ml-5 mb-0">{{comment.time_commented_ago}}</p>
                             </article>
