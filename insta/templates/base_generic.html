@@ -52,7 +52,7 @@
           <a class="nav-link" href=""><i class="fa fa-15 fa-plus fontawesome-border text-white {% ifequal request.path index_url %} color-black {% endifequal %}"></i></a>          
         </li>
         <li class="nav-item">
-          <a class="nav-link" href=""><i class="fa fa-15 fa-home fontawesome-border text-white {% ifequal request.path index_url %} color-black {% endifequal %}"></i></a>
+          <a class="nav-link" href="{% url 'index'%}"><i class="fa fa-15 fa-home fontawesome-border text-white {% ifequal request.path index_url %} color-black {% endifequal %}"></i></a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href=""><i class="fa fa-15 fa-heart fontawesome-border text-white {% ifequal request.path index_url %} color-black {% endifequal %}"></i></a>
@@ -62,8 +62,8 @@
         </li>
         
         {% if user.is_authenticated %}
-        <li class="nav-item">
-          <a class="nav-link position-relative" href="{% url 'index' %}"><img class="img-profpic" src="{{user.prof_pic.url}}" alt="url"></a></li>
+        <li class="nav-item"> 
+          <a class="nav-link position-relative mr-3 mr-md-0" href="{% url 'index' %}">{{user.username}}<img class="img-profpic" src="{{user.prof_pic.url}}" alt="url"></a></li>
         {% endif %}
       </ul>
     </div>
