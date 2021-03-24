@@ -34,7 +34,7 @@ class PostListView(LoginRequiredMixin, generic.ListView):
     
     def get_context_data(self, **kwargs):
         user_model = get_user_model()
-        users = user_model.objects.all()[:10]
+        users = user_model.objects.exclude(username=self.request.user.username)[:5]
 
         context = super(PostListView, self).get_context_data(**kwargs)
         context["recommandation_list"] = users

@@ -32,21 +32,20 @@
         </section>
         <section class="h-75 d-none d-md-block w-100 border-add-comment position-absolute">
             <article class="overflow-comments">
-                {% if comment_list %}
-                    {% for comment in comment_list %}
-                        <section class="px-3 pt-3 d-none d-md-block">
-                            <article>
-                                <img class="post-pp"  src="{{comment.author.prof_pic.url}}" alt="alt">
-                                <span class="ml-3 font-size-username">
-                                    <b>{{comment.author.username}}</b><span>&nbsp</span><span>{{comment.description}} </span>
-                                </span>
-                                <p class="time-ago ml-5 mb-0">{{comment.time_commented_ago}}</p>
-                            </article>
-                        </section>
-                    {% endfor %}
-                {% else %}
-                <p class="p-3">No comments</p> 
-                {% endif %}
+                {% for comment in comment_list %}
+                    <section class="px-3 pt-3 d-none d-md-block">
+                        <article>
+                            <img class="post-pp"  src="{{comment.author.prof_pic.url}}" alt="alt">
+                            <span class="ml-3 font-size-username">
+                                <b>{{comment.author.username}}</b><span>&nbsp</span><span>{% for word in comment.description_to_array %} {% if "@" in word %} <a href="{% comment %} insert here link to user-detail page {% endcomment %}">{{word}}  </a> {% else %}{{word}} {% endif %}{% endfor %}</span>
+                            </span>
+                            <p class="time-ago ml-5 mb-0">{{comment.time_commented_ago}}</p>
+                        </article>
+                    </section>
+                {% empty %}
+                    <p class="p-3">No comments</p> 
+                {% endfor %}
+            
             </article>
         </section>
         <section class="px-3 d-none d-md-block">
@@ -67,7 +66,7 @@
                     <table class="table-form w-75">
                     {{ form.as_table }}
                     </table>
-                    <input type="submit" class="btn text-info submit" value="Submit" />
+                    <input type="submit" class="btn text-info submit w-25" value="Submit" />
                 </form>
             </article>
         </section>

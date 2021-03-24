@@ -110,6 +110,10 @@ class PostComment(models.Model):
         return titlestring
 
     @property
+    def description_to_array(self):
+        return self.description.split()
+
+    @property
     def time_commented_ago(self):
         """
         Function that return how long ago post was created

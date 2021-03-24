@@ -63,7 +63,7 @@
         
         {% if user.is_authenticated %}
         <li class="nav-item"> 
-          <a class="nav-link position-relative mr-3 mr-md-0" href="{% url 'index' %}">{{user.username}}<img class="img-profpic" src="{{user.prof_pic.url}}" alt="url"></a></li>
+          <a class="nav-link position-relative mr-3 mr-md-0" href="{% url 'index' %}"><img class="img-profpic" src="{{user.prof_pic.url}}" alt="url"></a></li>
         {% endif %}
       </ul>
     </div>
