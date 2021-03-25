@@ -1,0 +1,12 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<div>
+    {{user_for_page.username}}
+    {% for post in user_for_page.post_set.all %}
+    <div>
+        <img src="{{post.picture.url}}">
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -77,3 +77,16 @@ def postCommentCreate(request, pk):
 
     return render(request, 'insta/postcomment_form.html', context)
 
+# class UserDetailView(LoginRequiredMixin, generic.DetailView):
+    # model = User
+    # context_object_name = 'user_object'
+
+def user_detail(request, pk):
+    user_model = get_user_model()
+    user_for_page = get_object_or_404(user_model, pk=pk)
+
+    context = {
+        'user_for_page': user_for_page, 
+    }
+
+    return render(request, 'insta/user_detail.html', context)

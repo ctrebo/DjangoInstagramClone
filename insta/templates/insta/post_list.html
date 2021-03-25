@@ -8,9 +8,9 @@
             <section>
                 <header class="px-3 p-075">
                     <article>
-                        <img class="post-pp"  src="{{post.author.prof_pic.url}}" alt="alt">
-                        <span class="ml-3 font-size-username">
-                            <b>{{post.author.username}}</b>
+                        <a href="{% url 'user-detail' post.author.pk %}"><img class="post-pp"  src="{{post.author.prof_pic.url}}" alt="alt"></a>
+                        <span class="ml-2 font-size-username">
+                            <a class="text-dark" href="{% url 'user-detail' post.author.pk %}"><b>{{post.author.username}}</b></a>
                         </span>
                     </article>
                 </header>
@@ -29,7 +29,7 @@
             <section class="px-3">
                 <article>
                     <span class="font-size-username">
-                        <b>{{post.author.username}}</b><span>&nbsp</span><span>{{post.caption}}</span>
+                        <b><a class="text-dark" href="{% url 'user-detail' post.author.pk %}">{{post.author.username}}</a></b><span>&nbsp</span><span>{{post.caption}}</span>
                     </span>
                 </article>
             </section>
@@ -41,8 +41,8 @@
                     {% if post.postcomment_set.all %}
                     <span class="font-size-username">
                         {% with first_comment=post.postcomment_set.all|first %}
-                        <b>{{first_comment.author.username}}</b>    
-                        <span>&nbsp</span><span>{% for word in first_comment.description_to_array %}{% if "@" in word %} <a href="{% comment %} insert here link to user-detail page {% endcomment %}">{{word}}  </a> {% else %}{{word}} {% endif %}{% endfor %}</span>
+                        <b><a href="{% url 'user-detail' first_comment.author.pk %}" class="text-dark">{{first_comment.author.username}}</a></b>    
+                        <span>&nbsp</span><span>{% for word in first_comment.description_to_array %}{% if "@" in word %} <a href="{% url 'user-detail' first_comment.author.pk  %}">{{word}}  </a> {% else %}{{word}} {% endif %}{% endfor %}</span>
                         {% endwith %}
                     </span>
                     {% endif %}
@@ -64,9 +64,9 @@
             <div class="py-4">
                 {% for user in recommandation_list %}
                 <div class="mb-3">
-                    <a href=""><img class="post-pp" src="{{user.prof_pic.url}}"></a>
+                    <a href="{% url 'user-detail' user.pk %}"><img class="post-pp" src="{{user.prof_pic.url}}"></a>
                     <!-- <img class="post-pp" src="{{user.prof_pic.url}}"> -->
-                    <b><a class="text-dark" href="">{{user.username}}</a></b>
+                    <b><a class="text-dark" href="{% url 'user-detail' user.pk %}">{{user.username}}</a></b>
                 </div>
                 {% endfor %}
             </div>
