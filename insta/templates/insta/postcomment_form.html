@@ -25,7 +25,7 @@
                 <article>
                     <img class="post-pp"  src="{{post.author.prof_pic.url}}" alt="alt">
                     <span class="ml-2 font-size-username">
-                        <b>{{post.author.username}}</b>
+                        <b><a class="text-dark" href="{% url 'user-detail' post.author.pk %}">{{post.author.username}}</a></b>
                     </span>
                 </article>
             </header>
@@ -37,7 +37,7 @@
                         <article>
                             <img class="post-pp"  src="{{comment.author.prof_pic.url}}" alt="alt">
                             <span class="ml-3 font-size-username">
-                                <b>{{comment.author.username}}</b><span>&nbsp</span><span>{% for word in comment.description_to_array %} {% if "@" in word %} <a href="{% comment %} insert here link to user-detail page {% endcomment %}">{{word}}  </a> {% else %}{{word}} {% endif %}{% endfor %}</span>
+                                <b><a class="text-dark" href="{% url 'user-detail' comment.author.pk %}">{{comment.author.username}}</a></b><span>&nbsp</span><span>{% for word in comment.description_to_array %} {% if "@" in word %} <a href="{% comment %} insert here link to user-detail page {% endcomment %}">{{word}}  </a> {% else %}{{word}} {% endif %}{% endfor %}</span>
                             </span>
                             <p class="time-ago ml-5 mb-0">{{comment.time_commented_ago}}</p>
                         </article>
@@ -63,8 +63,8 @@
             <article>
                 <form action="" method="post" class="">
                     {% csrf_token %}
-                    <table class="table-form w-75">
-                    {{ form.as_table }}
+                    <table>
+                        {{ form.as_table }}
                     </table>
                     <input type="submit" class="btn text-info submit w-25" value="Submit" />
                 </form>
