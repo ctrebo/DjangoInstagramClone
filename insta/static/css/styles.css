@@ -4,6 +4,10 @@
     -moz-box-shadow: 0px 10px 5px 0px rgba(0,0,0,0.9);
 } */
 
+p {
+    margin-bottom: .5rem;
+}
+
 .border-navbar {
     border-bottom: 1px solid rgba(100, 100, 100, .5);
 }
@@ -35,7 +39,6 @@ nav .img-profpic {
 
 .image-container {
     
-    background-color: red;
     width: 100%;
     padding-top: 100%; /* 1:1 Aspect Ratio */
     position: relative; /* If you want text inside of it */
@@ -63,12 +66,6 @@ nav .img-profpic {
     padding-bottom: .75rem
 }
 
-@media (min-width: 768px) {
-    .border-post {
-        border-radius: 3px;
-        border: 1px solid rgba(193, 193, 193, 1);
-    }
-}
 
 .time-ago {
     text-transform: uppercase;
@@ -124,5 +121,78 @@ nav .img-profpic {
 .recommendations-fixed {
     position: fixed;
     right: 0;
+    top: 60px;
 }
 
+
+.img-user-detail {
+    position: relative;
+    width: 100%; /* The size you want */
+  }
+.img-user-detail:after {
+    content: "";
+    display: block;
+    padding-bottom: 100%; /* The padding depends on the width, not on the height, so with a padding-bottom of 100% you will get a square */
+}
+  
+.img-user-detail img {
+    position: absolute; /* Take your picture out of the flow */
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0; /* Make the picture taking the size of it's parent */
+    width: 100%; /* This if for the object-fit */
+    height: 100%; /* This if for the object-fit */
+    object-fit: cover; /* Equivalent of the background-size: cover; of a background-image */
+    object-position: center;
+}
+.border-50 {
+    border-radius: 50%;
+}
+
+.hover {
+    background-color: black;
+    position: absolute;
+    bottom: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background-color: rgba(0, 0, 0, 0);
+    color: rgba(0, 0, 0, 0);
+}
+.hover:hover {
+    background-color: rgba(0, 0, 0, .5);
+    color: rgba(255, 255, 255, 1);
+}
+
+.center-comment-symbol {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    cursor: pointer !important;
+}
+
+@media (min-width: 768px) {
+    .border-post {
+        border-radius: 3px;
+        border: 1px solid rgba(193, 193, 193, 1);
+    }
+    .mb-for-user-detail {
+        margin-bottom: 30px;
+    }
+}
+
+@media (max-width: 768px) {
+    .p-15px {
+        padding-right: 1.5px;
+        padding-left: 1.5px ;
+        /* margin-bottom: 3px; */
+        /* padding-bottom: 0px; */
+    }
+    .mb-for-user-detail {
+        margin-bottom: 3px;
+    }
+ 
+} 
