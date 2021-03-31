@@ -12,6 +12,11 @@ p {
     border-bottom: 1px solid rgba(100, 100, 100, .5);
 }
 
+.dropdown-item {
+    color: inherit !important;
+    background-color: white  !important;
+}
+
 .fa-15 {
     font-size: 1.5em;
 }
@@ -19,6 +24,7 @@ p {
 .fontawesome-border {
     text-shadow: -1px 0 #000, 0 1px #000, 1px 0 #000, 0 -1px #000;
 }
+
 
 .color-black {
     color: black !important;
@@ -160,6 +166,8 @@ nav .img-profpic {
     z-index: 1000;
     background-color: rgba(0, 0, 0, 0);
     color: rgba(0, 0, 0, 0);
+    cursor: pointer !important;
+
 }
 .hover:hover {
     background-color: rgba(0, 0, 0, .5);
@@ -171,7 +179,12 @@ nav .img-profpic {
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-    cursor: pointer !important;
+}
+.more-posts-of {
+    font-size: 14px;
+}
+.h-65 {
+    height: 65%;
 }
 
 @media (min-width: 768px) {
@@ -193,6 +206,22 @@ nav .img-profpic {
     }
     .mb-for-user-detail {
         margin-bottom: 3px;
+    }
+
+    .hover {
+        background-color: black;
+        position: absolute;
+        bottom: 0;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        background-color: rgba(0, 0, 0, 0);
+        color: rgba(0, 0, 0, 0);
+    }
+    .hover:hover {
+        background-color: rgba(0, 0, 0, 0);
+        color: rgba(0, 0, 0, 0);
     }
  
 } 
