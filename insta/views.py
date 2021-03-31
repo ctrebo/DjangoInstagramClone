@@ -34,7 +34,7 @@ class PostListView(LoginRequiredMixin, generic.ListView):
     
     def get_context_data(self, **kwargs):
         user_model = get_user_model()
-        users = user_model.objects.exclude(username=self.request.user.username)[:5]
+        users = user_model.objects.all().exclude(username=self.request.user.username)
 
         context = super(PostListView, self).get_context_data(**kwargs)
         context["recommandation_list"] = users
@@ -45,7 +45,9 @@ class PostListView(LoginRequiredMixin, generic.ListView):
 @login_required
 def postCommentCreate(request, pk):
     """View function for renewing a specific BookInstance by librarian."""
+    
     post_for_comment = get_object_or_404(Post, pk=pk)
+    other_posts_of_author = post_for_comment.author.post_set.all().exclude(pk=post_for_comment.pk)[:6]
     comment_list = PostComment.objects.filter(post=post_for_comment).order_by("post_date")
 
     # If this is a POST request then process the Form data
@@ -73,6 +75,7 @@ def postCommentCreate(request, pk):
         'form': form,
         'post': post_for_comment,
         'comment_list': comment_list, 
+        'other_posts_of_author': other_posts_of_author, 
     }
 
     return render(request, 'insta/postcomment_form.html', context)

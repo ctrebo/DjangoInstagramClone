@@ -23,11 +23,20 @@ class CustomUserChangeForm(UserChangeForm):
 
 
 class PostCommentCreateForm(ModelForm):
+    
+
     def clean_description(self):
         data = self.cleaned_data["description"]
         #check if there are no swearwords in comment
         if "motherfucker" in data or "dick" in data:
            raise ValidationError(_('Please do not use swear words!'))
+        a = []
+        for x in data:
+            if x == '@':
+                a.append(x)
+        if len(a) != len(set(a)):
+           raise ValidationError(_(""))
+
 
         return data
 
