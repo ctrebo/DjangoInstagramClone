@@ -14,6 +14,7 @@ from django.contrib.auth import get_user_model
 
 
 
+
 User = settings.AUTH_USER_MODEL
 # Create your views here.
 
@@ -93,3 +94,10 @@ def user_detail(request, pk):
     }
 
     return render(request, 'insta/user_detail.html', context)
+
+class ProfilPageListView(LoginRequiredMixin, generic.ListView):
+    model = Post
+    template_name = "insta/profil_page_by_user.html"
+
+    def get_queryset(self):
+        return Post.objects.filter(author=self.request.user)
