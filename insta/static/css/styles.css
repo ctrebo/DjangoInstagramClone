@@ -233,7 +233,11 @@ nav .img-profpic {
     opacity: .7;
 }
 
-
+.copy-link-slider {
+    height:41px;
+    margin-bottom: -50px;
+    transition: all .5s;
+}
 
 @media (min-width: 768px) {
     #img-profilpage {

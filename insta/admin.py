@@ -37,8 +37,11 @@ class PostCommentInline(admin.TabularInline):
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
-    list_display = ("author", "post_date")
+    list_display = ("author", "post_date", "id")
     list_filter = ("author", "post_date")
+
+    # readonly_fields = ('id',)
+
 
     fieldsets = (("Post information", {'fields': ('author', 'likes', 'picture', "caption")}),)
 
@@ -46,7 +49,7 @@ class PostAdmin(admin.ModelAdmin):
 
 @admin.register(PostComment)
 class PostCommentAdmin(admin.ModelAdmin):
-    list_display = ("author", "post_date", "description")
+    list_display = ("author", "post_date", "description", "id")
     list_filter = ("author", "post_date", "post")
 
     fieldsets = (("Post Comment information", {'fields': ('author', 'description', "post")}),)
