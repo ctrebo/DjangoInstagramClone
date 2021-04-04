@@ -237,6 +237,11 @@ nav .img-profpic {
     height:41px;
     margin-bottom: -50px;
     transition: all .5s;
+    color: rgba(255, 255, 255, 0.925)
+}
+
+.change-color-link-navbar:hover {
+    background-color: rgba(255, 251, 251, 0.774) !important;
 }
 
 @media (min-width: 768px) {
