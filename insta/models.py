@@ -41,6 +41,20 @@ class Post(models.Model):
         """
         return self.likes.count()
     
+    # @property
+    # def get_liked_list(self):
+    #     liked = []
+    #     for post in Post.objects.exclude(author=self.request.user).order_by("-post_date"):
+    #         if post.likes.filter(id=self.request.user.id).exists():
+    #             liked.append(True)
+    #         else:
+    #              liked.append(False)
+
+    #     return liked
+
+    """
+    Return when difference of now and time, when it was posted
+    """
     @property
     def time_posted_ago(self):
         """

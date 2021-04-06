@@ -37,11 +37,36 @@ class PostListView(LoginRequiredMixin, generic.ListView):
         user_model = get_user_model()
         users = user_model.objects.all().exclude(username=self.request.user.username)
 
+        liked = []
+        for post in Post.objects.exclude(author=self.request.user).order_by("-post_date"):
+            if post.likes.filter(id=self.request.user.id).exists():
+                liked.append(" text-danger")
+            else:
+                liked.append(" text-white fontawesome-border")
+
         context = super(PostListView, self).get_context_data(**kwargs)
+        context["list_liked"] = liked
         context["recommandation_list"] = users
         return context
 
 
+def blogPostLike(request, pk):
+    post = get_object_or_404(Post, id=request.POST.get('post_id'))
+    if post.likes.filter(id=request.user.id).exists():
+        post.likes.remove(request.user)
+    else:
+        post.likes.add(request.user)
+
+    return HttpResponseRedirect(reverse('create-comment', args=[str(pk)]))
+
+def blogPostLikeListView(request, pk):
+    post = get_object_or_404(Post, id=request.POST.get('post_id'))
+    if post.likes.filter(id=request.user.id).exists():
+        post.likes.remove(request.user)
+    else:
+        post.likes.add(request.user)
+
+    return HttpResponseRedirect(reverse('index'))
 
 @login_required
 def postCommentCreate(request, pk):
@@ -50,6 +75,11 @@ def postCommentCreate(request, pk):
     post_for_comment = get_object_or_404(Post, pk=pk)
     other_posts_of_author = post_for_comment.author.post_set.all().exclude(pk=post_for_comment.pk)[:6]
     comment_list = PostComment.objects.filter(post=post_for_comment).order_by("post_date")
+
+    likes_connected = get_object_or_404(Post, id=pk)
+    liked = False
+    if likes_connected.likes.filter(id=request.user.id).exists():
+        liked = True
 
     # If this is a POST request then process the Form data
     if request.method == 'POST':
@@ -76,7 +106,9 @@ def postCommentCreate(request, pk):
         'form': form,
         'post': post_for_comment,
         'comment_list': comment_list, 
-        'other_posts_of_author': other_posts_of_author, 
+        'other_posts_of_author': other_posts_of_author,
+        'number_of_likes': likes_connected.number_of_likes(),
+        'post_is_liked': liked, 
     }
 
     return render(request, 'insta/postcomment_form.html', context)
@@ -101,3 +133,24 @@ class ProfilPageListView(LoginRequiredMixin, generic.ListView):
 
     def get_queryset(self):
         return Post.objects.filter(author=self.request.user)
+
+class PostCreateView(LoginRequiredMixin, CreateView):
+    model = Post
+    fields = ["picture", "caption"]
+
+    def get_success_url(self):
+        """
+        After posting comment return to blog page
+        """
+        return reverse("profpage-user")
+
+
+    def form_valid(self, form):
+        """
+        Add author form data before setting it as valid (so it is saved to model)
+        """
+        #Add logged-in user as author of post
+        form.instance.author = self.request.user
+        # Call super-class form validation behaviour
+        return super(PostCreateView, self).form_valid(form)
+

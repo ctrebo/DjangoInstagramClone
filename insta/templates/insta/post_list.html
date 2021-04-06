@@ -1,8 +1,6 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-<!-- Button trigger modal -->
-
 {% for post in post_list %}
 <div class="row mb-3 mb-3 mb-md-5">
     <div class="col-12 col-md-7 p-0 p-md-2">
@@ -50,8 +48,13 @@
             </section>
             <section class="px-3">
                 <article class="py-2">
-                    <a class="" href=""><i class="fa fa-15 fa-heart text-danger"></i></a>
-                    <a class="px-3" href="{% url 'create-comment' post.pk %}"><i class="fa fa-15 fa-comment fontawesome-border text-white"></i></a>
+                    {% load insta_extras %}
+                    <form action="{% url 'like-post-for-list-view' post.pk %}" class="d-inline like-form" method="POST">
+                        {% csrf_token %}
+                        <button type="submit" id="like-submit-bottom-home" name="post_id" value="{{post.pk}}" class="btn bg-white px-0"><i class="fa fa-15 fa-heart{% cycle_list list_liked %}"></i></button>
+                    </form>
+                    <!-- <a class="" href=""><i class="fa fa-15 fa-heart text-danger"></i></a> -->
+                    <a class="px-2" href="{% url 'create-comment' post.pk %}"><i class="fa fa-15 fa-comment fontawesome-border text-white"></i></a>
                 </article>
             </section>
             <section class="px-3">

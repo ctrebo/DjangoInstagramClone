@@ -8,12 +8,15 @@ hr {
     border-top: 1px solid rgba(0,0,0,.3);
 }
 
+.navbar-brand:focus,
+.navbar-brand:active {
+    outline: none;
+    box-shadow: none;
+}
+
 .height-width-0 {
     height: 0;
     width: 0;
-}
-.text-copy {
-    /* display: none; */
 }
 
 .modal-content {
@@ -209,10 +212,18 @@ nav .img-profpic {
 
 .center-comment-symbol {
     position: absolute;
-    left: 50%;
+    left: 65%;
     top: 50%;
     transform: translate(-50%, -50%);
 }
+
+.center-heart-symbol {
+    position: absolute;
+    left: 35%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
 .more-posts-of {
     font-size: 14px;
 }
@@ -242,6 +253,11 @@ nav .img-profpic {
 
 .change-color-link-navbar:hover {
     background-color: rgba(255, 251, 251, 0.774) !important;
+}
+
+#like-create-comment {
+    position: absolute;
+    left: 0;
 }
 
 @media (min-width: 768px) {

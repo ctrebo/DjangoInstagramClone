@@ -48,6 +48,8 @@
             <div onclick="location.href='{% url 'create-comment' post.pk %}';" class="hover h-100 w-100 mx-auto">
                 <p class="px-3 center-comment-symbol"
                     href="{% url 'create-comment' post.pk %}"><i class="fa fa-15 fa-comment"></i> {{post.postcomment_set.count}}</p>
+                <p class="px-3 center-heart-symbol"
+                    href="{% url 'create-comment' post.pk %}"><i class="fa fa-15 fa-heart"></i> {{post.number_of_likes}}</p>
             </div>
         </div>
     </div>

@@ -1,7 +1,7 @@
-var variable_height = ($("#row-create-comment").height() - $("#header-create-comment").outerHeight() - $("#submit-comment").outerHeight() - 7);
+var variable_height = ($("#row-create-comment").height() - $("#header-create-comment").outerHeight() - $("#submit-comment").outerHeight() - $("#like-create-comment").outerHeight() - 8);
 $("#comment-section").css("height", variable_height.toString() + "px");
 
-// var height = document.getElementById("#row-create-comment").height() -   
+$("#like-create-comment").css("bottom", ($("#submit-comment").outerHeight() + 8).toString() + "px");
 
 
 $( ".fontawesome-border" ).click(function() {
@@ -10,16 +10,18 @@ $( ".fontawesome-border" ).click(function() {
 
 
 
+  
 var copiedMessageInFrame = false;
 
 function openAndCloseCopyMessage(mydata) {
-  navigator.clipboard.writeText(mydata);
-  $(".copy-link-slider").css("margin-bottom", "0px");
-  copiedMessageInFrame = true;
-  setTimeout(function () {
-    $(".copy-link-slider").css("margin-bottom", "-50px");
-    copiedMessageInFrame = false; 
-  }, 10000);
+    navigator.clipboard.writeText(mydata);
+    $(".copy-link-slider").css("margin-bottom", "0px");
+    copiedMessageInFrame = true;
+    setTimeout(function () {
+      $(".copy-link-slider").css("margin-bottom", "-50px");
+      copiedMessageInFrame = false; 
+    }, 5500);  
+
 }
 
 function copyToClipboard(mydata) {
@@ -33,5 +35,8 @@ function copyToClipboard(mydata) {
     else {
       openAndCloseCopyMessage(mydata);
     }
-
 }
+
+
+// document.location.reload(true);
+
