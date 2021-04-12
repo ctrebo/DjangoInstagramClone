@@ -39,7 +39,15 @@ class Post(models.Model):
         """
         return number of likes on post
         """
-        return self.likes.count()
+        num_likes = self.likes.count()
+        if num_likes < 1000:
+            return num_likes
+        elif num_likes>= 1000 and num_likes< 1000000:
+            return str(num_likes//1000)+"k"
+        elif num_likes>=1000000 and num_likes < 1000000000:
+            return str(num_likes//1000000) + "M"
+        else:
+             return str(num_likes//1000000000)+"B"
     
     # @property
     # def get_liked_list(self):

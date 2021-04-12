@@ -1,0 +1,22 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12 col-md-8 m-auto">
+        <form action="" method="post" class="d-none d-md-block" enctype="multipart/form-data">
+            {% csrf_token %}
+            <table class="w-100">
+                {{form.as_table}}
+            </table>
+            <input type="submit" class="btn w-25 btn-outline-success" value="Submit" />
+        </form>
+        <form action="" method="post" class="d-md-none" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{form.as_p}}
+            <input type="submit" class="btn w-25 btn-outline-success" value="Submit" />
+        </form>
+
+    </div>
+</div>
+
+{% endblock %}

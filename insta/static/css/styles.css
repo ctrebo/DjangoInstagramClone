@@ -1,11 +1,21 @@
-/* .shadow1 {
-    box-shadow: 0px 10px 5px 0px rgba(0,0,0,0.9);
-    -webkit-box-shadow: 0px 10px 5px 0px rgba(0,0,0,0.9);
-    -moz-box-shadow: 0px 10px 5px 0px rgba(0,0,0,0.9);
-} */
-
+/* Change the white to any color */
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active
+{
+ -webkit-box-shadow: 0 0 0 30px white inset !important;
+}
 hr {
     border-top: 1px solid rgba(0,0,0,.3);
+}
+
+.placeholder-color::placeholder {
+    color: 1px solid rgb(0, 0, 0);
+}
+
+label {
+    font-weight: bold;
 }
 
 .navbar-brand:focus,
@@ -13,6 +23,7 @@ hr {
     outline: none;
     box-shadow: none;
 }
+
 
 .height-width-0 {
     height: 0;
@@ -64,6 +75,10 @@ p {
 
 .color-black {
     color: black !important;
+}
+
+.borderradius-input-field {
+    border-radius: 3px;
 }
 
 body {
@@ -245,11 +260,13 @@ nav .img-profpic {
 }
 
 .copy-link-slider {
+    /* margin-bottom: -50px; */
     height:41px;
     margin-bottom: -50px;
     transition: all .5s;
     color: rgba(255, 255, 255, 0.925)
 }
+
 
 .change-color-link-navbar:hover {
     background-color: rgba(255, 251, 251, 0.774) !important;
@@ -258,6 +275,26 @@ nav .img-profpic {
 #like-create-comment {
     position: absolute;
     left: 0;
+}
+
+.border-update-user-input {
+    border: 1px solid rgb(207, 199, 199);
+}
+
+.height-textarea-update-user {
+    height: 60px;
+}
+
+.height-textarea-update-user::placeholder {
+    color: rgb(190, 190, 190);
+}
+
+.height-input-update-user {
+    height: 32px;
+}
+
+.height-input-update-user::placeholder {
+    color: rgb(190, 190, 190);
 }
 
 @media (min-width: 768px) {

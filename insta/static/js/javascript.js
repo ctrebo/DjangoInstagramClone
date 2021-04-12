@@ -9,23 +9,47 @@ $( ".fontawesome-border" ).click(function() {
   });
 
 
-
-  
+//variable to save time when prev function was clicked
+var t0;
+//variable that saves if currently there gets something copied and if slider is still open 
 var copiedMessageInFrame = false;
+//variable that saves if this is the first time something gets copied
+var copiedAgain = false;
+// var timeLastTimeFun;
 
 function openAndCloseCopyMessage(mydata) {
     navigator.clipboard.writeText(mydata);
     $(".copy-link-slider").css("margin-bottom", "0px");
+    // prevCopiedMessageInFrame = copiedMessageInFrame;
     copiedMessageInFrame = true;
     setTimeout(function () {
+      if(!copiedAgain) {
       $(".copy-link-slider").css("margin-bottom", "-50px");
-      copiedMessageInFrame = false; 
-    }, 5500);  
-
+      copiedMessageInFrame = false;
+    }  else {
+      // timeLastTimeFun = Date.now();
+      var t1 = performance.now()
+      var minusTime = 5000 - (t1-t0-500);
+      if(minusTime < 0 || (5000 - t1 - t0 > 5500)) {
+        minusTime = 5000;
+      }
+      
+      setTimeout(function() {
+        $(".copy-link-slider").css("margin-bottom", "-50px");
+      }, 5000 - minusTime);
+      }  
+    }, 5000);
 }
+
+// if(copiedMessageInFrame==true && copyAgain == true && (Date.now() - timeLastTimeFun > 5600)) {
+  // console.log("fun called")
+    // copyAgain = false;
+    // copiedMessageInFrame = false;
+// }
 
 function copyToClipboard(mydata) {
     if(copiedMessageInFrame == true){
+      copiedAgain = true
       copiedMessageInFrame = false;
       $(".copy-link-slider").css("margin-bottom", "-50px");
       setTimeout(function () {
@@ -34,9 +58,20 @@ function copyToClipboard(mydata) {
     }
     else {
       openAndCloseCopyMessage(mydata);
+      t0 = performance.now()
+
     }
 }
 
+// function openAndCloseCopyMessage(mydata) {
+//       navigator.clipboard.writeText(mydata);
+//       $(".copy-link-slider").css("margin-bottom", "0px");
+//       setTimeout(function () {
+//         $(".copy-link-slider").css("margin-bottom", "-50px");
+//       }, 5000);
+//       // $(".copy-link-slider").css("margin-bottom", "-50px");
+// }
 
-// document.location.reload(true);
-
+// function copyToClipboard(mydata) {
+//     openAndCloseCopyMessage(mydata);
+// }

@@ -6,26 +6,14 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse, reverse_lazy
 from django.http import Http404, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import get_user_model
+from django.views.decorators.csrf import csrf_exempt,csrf_protect #Add this
 
 from .models import Post, PostComment
 
-from insta.forms import PostCommentCreateForm
-from django.contrib.auth import get_user_model
-
-
-
+from insta.forms import PostCommentCreateForm, UserUpdateForm
 
 User = settings.AUTH_USER_MODEL
-# Create your views here.
-
-# def BlogPostLike(request, pk):
-#     post = get_object_or_404(BlogPost, id=request.POST.get('blogpost_id'))
-#     if post.likes.filter(id=request.user.id).exists():
-#         post.likes.remove(request.user)
-#     else:
-#         post.likes.add(request.user)
-
-#     return HttpResponseRedirect(reverse('blogpost-detail', args=[str(pk)]))
 
 class PostListView(LoginRequiredMixin, generic.ListView):
     model = Post
@@ -59,6 +47,7 @@ def blogPostLike(request, pk):
 
     return HttpResponseRedirect(reverse('create-comment', args=[str(pk)]))
 
+@csrf_exempt
 def blogPostLikeListView(request, pk):
     post = get_object_or_404(Post, id=request.POST.get('post_id'))
     if post.likes.filter(id=request.user.id).exists():
@@ -113,9 +102,30 @@ def postCommentCreate(request, pk):
 
     return render(request, 'insta/postcomment_form.html', context)
 
-# class UserDetailView(LoginRequiredMixin, generic.DetailView):
-    # model = User
-    # context_object_name = 'user_object'
+
+@login_required
+def updateUser(request, pk):
+    if request.method == 'POST':
+
+        # Create a form instance and populate it with data from the request (binding):
+        form = UserUpdateForm(request.POST, request.FILES, instance=request.user)
+        # Check if the form is valid:
+        if form.is_valid():
+            form.save()
+            # redirect to a new URL:
+            return HttpResponseRedirect(reverse('profpage-user') )
+    # If this is a GET (or any other method) create the default form.
+    else:
+        form = UserUpdateForm(instance=request.user)
+        
+
+    context = {
+        'form': form,
+
+    }
+    return render(request, 'insta/user_update_form.html', context)
+
+
 
 def user_detail(request, pk):
     user_model = get_user_model()
