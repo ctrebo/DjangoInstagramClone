@@ -8,12 +8,16 @@ from django.http import Http404, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
 from django.views.decorators.csrf import csrf_exempt,csrf_protect #Add this
+from django.db.models import Q # new
+
 
 from .models import Post, PostComment
 
 from insta.forms import PostCommentCreateForm, UserUpdateForm
 
 User = settings.AUTH_USER_MODEL
+user_model = get_user_model()
+
 
 class PostListView(LoginRequiredMixin, generic.ListView):
     model = Post
@@ -22,7 +26,6 @@ class PostListView(LoginRequiredMixin, generic.ListView):
         return Post.objects.exclude(author=self.request.user).order_by("-post_date")
     
     def get_context_data(self, **kwargs):
-        user_model = get_user_model()
         users = user_model.objects.all().exclude(username=self.request.user.username)
 
         liked = []
@@ -128,7 +131,6 @@ def updateUser(request, pk):
 
 
 def user_detail(request, pk):
-    user_model = get_user_model()
     user_for_page = get_object_or_404(user_model, pk=pk)
 
     context = {
@@ -164,3 +166,12 @@ class PostCreateView(LoginRequiredMixin, CreateView):
         # Call super-class form validation behaviour
         return super(PostCreateView, self).form_valid(form)
 
+class SearchResultsView(LoginRequiredMixin, generic.ListView):
+    model = user_model
+    template_name="insta/search_results.html"
+
+    def get_queryset(self):
+        query = self.request.GET.get('q')
+        object_list = user_model.objects.filter(username__icontains=query).exclude(username=self.request.user.username)[:50]
+
+        return object_list 

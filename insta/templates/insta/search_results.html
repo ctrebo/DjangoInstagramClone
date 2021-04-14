@@ -1,0 +1,31 @@
+{% extends "base_generic.html" %}
+{% block content %}
+<div class="row">
+    <div class="col-8 m-auto">
+        <h1 class="text-center">Search Results</h1>
+        {% if object_list %}
+        <!-- <ul class="mt-5"> -->
+          {% for user in object_list %}
+            <a href="{% url 'user-detail' user.pk %}" class="">
+                <section class="position-relative mb-1 section-search-page px-2 py-2">
+                    <div>
+                        <article class="d-inline my-auto ">
+                                <img src="{{user.prof_pic.url}}" class="post-pp img-fluid">
+                        </article>
+                        <article class="d-inline search-article">
+                            <div>
+                                <b class="username-search text-dark">{{user.username}}</b>
+                            </div>
+                            <small class="font-weight-light text-dark">{{user.first_name}}</small>
+                        </article>
+                    </div>
+                </section>
+            </a>
+          {% endfor %}
+        <!-- </ul> -->
+        {% else %}
+        <p>No queries</p>
+    {% endif %}
+    </div>
+</div>
+{% endblock %}
