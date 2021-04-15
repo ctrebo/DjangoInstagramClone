@@ -175,3 +175,11 @@ class SearchResultsView(LoginRequiredMixin, generic.ListView):
         object_list = user_model.objects.filter(username__icontains=query).exclude(username=self.request.user.username)[:50]
 
         return object_list 
+
+class SearchPageListView(generic.ListView):
+    model = Post
+    template_name = "insta/search_page.html"
+
+
+    def get_queryset(self):
+        return Post.objects.exclude(author=self.request.user).order_by("-likes")

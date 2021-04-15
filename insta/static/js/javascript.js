@@ -8,6 +8,8 @@ $( ".fontawesome-border" ).click(function() {
     $(this).css("text-shadow", "-1px 0 rgb(136, 128, 128), 0 1px rgb(136, 128, 128), 1px 0 rgb(136, 128, 128), 0 -1px rgb(136, 128, 128)")
   });
 
+$("#searchfield-mobile").css("width", ($("body").outerWidth() - $("#ul-mobile-search").outerWidth() - 12).toString() + "px")
+
 
 //variable to save time when prev function was clicked
 var t0;
@@ -62,16 +64,3 @@ function copyToClipboard(mydata) {
 
     }
 }
-
-// function openAndCloseCopyMessage(mydata) {
-//       navigator.clipboard.writeText(mydata);
-//       $(".copy-link-slider").css("margin-bottom", "0px");
-//       setTimeout(function () {
-//         $(".copy-link-slider").css("margin-bottom", "-50px");
-//       }, 5000);
-//       // $(".copy-link-slider").css("margin-bottom", "-50px");
-// }
-
-// function copyToClipboard(mydata) {
-//     openAndCloseCopyMessage(mydata);
-// }

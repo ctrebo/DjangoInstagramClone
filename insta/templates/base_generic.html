@@ -30,7 +30,7 @@
         <li class="nav-item">
         {% url 'index' as index_url %}
         {% url 'create-post' as createpost_url %}
-        <!-- {% url 'index' as index_url %} -->
+        {% url 'search_page' as search_page %}
         <!-- {% url 'index' as index_url %} -->
 
           <a class="nav-link" href="{{createpost_url}}"><i class="fa fa-15 fa-plus fontawesome-border text-white {% ifequal request.path createpost_url %} color-black {% endifequal %}"></i></a>          
@@ -42,7 +42,7 @@
             <a class="nav-link" href=""><i class="fa fa-15 fa-heart fontawesome-border text-white {% ifequal request.path index_url %} color-black {% endifequal %}"></i></a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href=""><i class="fa fa-15 fa-compass fontawesome-border text-white {% ifequal request.path index_url %} color-black {% endifequal %}"></i></a>
+            <a class="nav-link" href="{{search_page}}"><i class="fa fa-15 fa-compass fontawesome-border text-white {% ifequal request.path search_page %} color-black {% endifequal %}"></i></a>
         </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle position-relative mr-3 mr-md-0" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

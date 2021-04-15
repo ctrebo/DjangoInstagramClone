@@ -1,8 +1,10 @@
 {% extends "base_generic.html" %}
 {% block content %}
 <div class="row">
-    <div class="col-8 m-auto">
+    <div class="col-12 col-md-8 m-auto">
         <h1 class="text-center">Search Results</h1>
+        <hr>
+        <!-- <h2 class="text-center d-md-none">Search Results</h2> -->
         {% if object_list %}
         <!-- <ul class="mt-5"> -->
           {% for user in object_list %}

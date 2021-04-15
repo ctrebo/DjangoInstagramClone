@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <!-- Font Awesome CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+  <!-- Add additional CSS in static file -->
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <div class="d-none d-md-block">
+        <nav class="navbar fixed-top navbar-expand shadow1 border-navbar bg-white">
+            <div class="container">
+              <a class="navbar-brand text-dark" href="#"><strong>Instagram</strong></a>
+              <form class="d-none d-md-block" action="{% url 'search_results' %}" method="get">
+                <input class="px-2 borderradius-input-field border-search-field" name="q" type="text" placeholder="Search...">
+              </form>
+        
+              <div class="" id="navbarNavDropdown">
+              <!-- <ul class="navbar-nav d-inline"> -->
+                <!-- <form action="{% url 'search_results' %}" method="get"> -->
+                  <!-- <input class="d-inline" name="q" type="text" placeholder="Search..."> -->
+                <!-- </form> -->
+              <!-- </ul> -->
+              <ul class="navbar-nav mb-2 mb-lg-0 navbar-right ml-auto my-auto">
+                <li class="nav-item">
+                {% url 'index' as index_url %}
+                {% url 'create-post' as createpost_url %}
+                {% url 'search_page' as search_page %}
+                <!-- {% url 'index' as index_url %} -->
+        
+                  <a class="nav-link" href="{{createpost_url}}"><i class="fa fa-15 fa-plus fontawesome-border text-white {% ifequal request.path createpost_url %} color-black {% endifequal %}"></i></a>          
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{{index_url}}"><i class="fa fa-15 fa-home fontawesome-border text-white {% ifequal request.path index_url %} color-black {% endifequal %}"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href=""><i class="fa fa-15 fa-heart fontawesome-border text-white {% ifequal request.path index_url %} color-black {% endifequal %}"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{search_page}}"><i class="fa fa-15 fa-compass fontawesome-border text-white {% ifequal request.path search_page %} color-black {% endifequal %}"></i></a>
+                </li>
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle position-relative mr-3 mr-md-0" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <img class="img-profpic" src="{{user.prof_pic.url}}" alt="url">
+                  </a>
+                  <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+                    <a class="dropdown-item change-color-link-navbar" href="{% url 'profpage-user' %}"><i class="fa fa-user fa-15 fontawesome-border text-white mr-3"></i>Profil</a>
+                    <hr class="mt-1 mb-1">
+                    <a class="dropdown-item change-color-link-navbar" href="#"></i>
+                      Log out</a>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </nav>    {% block content %}
+        <hr class="mt-0 mb-5 d-md-none">
+        <div class="row">
+        {% for post in post_list %}
+            <div class="col-4 p-15px mb-for-user-detail position-relative">
+                <div class="img-user-detail">
+                    <img src="{{post.picture.url}}" alt="">
+                    <div onclick="location.href='{% url 'create-comment' post.pk %}';" class="hover h-100 w-100 mx-auto">
+                        <p class="px-3 center-comment-symbol"
+                            href="{% url 'create-comment' post.pk %}"><i class="fa fa-15 fa-comment"></i> {{post.postcomment_set.count}}</p>
+                        <p class="px-3 center-heart-symbol"
+                            href="{% url 'create-comment' post.pk %}"><i class="fa fa-15 fa-heart"></i> {{post.number_of_likes}}</p>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+        </div>
+    
+        {% endblock %}
+    </div>
+    <div class="d-block d-md-none">
+        <nav class="navbar fixed-top navbar-expand shadow1 border-navbar bg-white">
+            <div class="container">
+              <form class="2" action="{% url 'search_results' %}" method="get">
+                <input class="px-2 borderradius-input-field border-search-field" id="searchfield-mobile" name="q" type="text" placeholder="Search...">
+              </form>
+        
+              <div class="" id="navbarNavDropdown">
+              <!-- <ul class="navbar-nav d-inline"> -->
+                <!-- <form action="{% url 'search_results' %}" method="get"> -->
+                  <!-- <input class="d-inline" name="q" type="text" placeholder="Search..."> -->
+                <!-- </form> -->
+              <!-- </ul> -->
+              <ul class="navbar-nav mb-2 mb-lg-0 navbar-right ml-auto my-auto" id="ul-mobile-search">
+                <li class="nav-item">
+                {% url 'index' as index_url %}
+                {% url 'create-post' as createpost_url %}
+                {% url 'search_page' as search_page %}
+                <!-- {% url 'index' as index_url %} -->
+        
+                  <a class="nav-link" href="{{createpost_url}}"><i class="fa fa-15 fa-plus fontawesome-border text-white {% ifequal request.path createpost_url %} color-black {% endifequal %}"></i></a>          
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{{index_url}}"><i class="fa fa-15 fa-home fontawesome-border text-white {% ifequal request.path index_url %} color-black {% endifequal %}"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href=""><i class="fa fa-15 fa-heart fontawesome-border text-white {% ifequal request.path index_url %} color-black {% endifequal %}"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{search_page}}"><i class="fa fa-15 fa-compass fontawesome-border text-white {% ifequal request.path search_page %} color-black {% endifequal %}"></i></a>
+                </li>
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle position-relative mr-3 mr-md-0" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <img class="img-profpic" src="{{user.prof_pic.url}}" alt="url">
+                  </a>
+                  <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+                    <a class="dropdown-item change-color-link-navbar" href="{% url 'profpage-user' %}"><i class="fa fa-user fa-15 fontawesome-border text-white mr-3"></i>Profil</a>
+                    <hr class="mt-1 mb-1">
+                    <a class="dropdown-item change-color-link-navbar" href="#"></i>
+                      Log out</a>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+        <div class="row">
+            {% for post in post_list %}
+            <div class="col-4 p-15px mb-for-user-detail position-relative">
+                <div class="img-user-detail">
+                    <img src="{{post.picture.url}}" alt="">
+                    <div onclick="location.href='{% url 'create-comment' post.pk %}';" class="hover h-100 w-100 mx-auto">
+                        <p class="px-3 center-comment-symbol"
+                            href="{% url 'create-comment' post.pk %}"><i class="fa fa-15 fa-comment"></i> {{post.postcomment_set.count}}</p>
+                        <p class="px-3 center-heart-symbol"
+                            href="{% url 'create-comment' post.pk %}"><i class="fa fa-15 fa-heart"></i> {{post.number_of_likes}}</p>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+        </div>
+    </div>
+
+
+
+    <script
+  src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script src="{% static 'js/javascript.js' %}"></script>
+</body>
+</html>
+
