@@ -11,7 +11,7 @@
         </article>
         <article class="mt-3">
             {% with num_blogs_user=user.post_set.count %}
-                <h4>{{num_blogs_user}} {% if num_blogs_user != 1 %} Posts {% else %} Post {% endif %}</h4>
+                <h4>{{num_blogs_user}}  Post{{num_blogs_user|pluralize}}</h4>
             {% endwith %}
         </article>
     </div>

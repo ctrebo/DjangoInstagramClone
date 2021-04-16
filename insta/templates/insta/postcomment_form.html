@@ -102,7 +102,7 @@
             <article>
                 <form action="{% url 'like-post' post.pk %}" method="POST">
                     {% csrf_token %}                
-                    <button type="submit" name="post_id" value="{{post.pk}}" class="btn mt-3 bg-white" id="like-create-comment"><i class="fa fa-15 fa-heart{% if post_is_liked %} text-danger{% else %} text-white fontawesome-border{% endif %}"></i></button>
+                    <button type="submit" name="post_id" value="{{post.pk}}" class="btn mt-2 bg-white" id="like-create-comment"><i class="fa fa-15 fa-heart{% if post_is_liked %} text-danger{% else %} text-white fontawesome-border{% endif %}"></i></button>
                 </form>
             </article>
         </section>

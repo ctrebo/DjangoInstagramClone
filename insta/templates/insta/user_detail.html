@@ -15,9 +15,18 @@
         <section>
             <article>
                 <div>
-                    <h2 class="font-weight-normal font-italic">{{user_for_page.username}}</h2> 
+                    <h2 class="font-weight-normal font-italic">{{user_for_page.username}}                 
+                        <form action="{% url 'follow-user' user_for_page.pk %}" method="POST" class="d-inline ml-md-2">
+                            {% csrf_token %}
+                            {% if user_is_followed %}                
+                            <button type="submit" name="user_id" value="{{user_for_page.pk}}" class="btn btn-primary" id="">Subscribed</button>
+                            {% else %}
+                            <button type="submit" name="user_id" value="{{user_for_page.pk}}" class="btn btn-primary" id="">Subscribe</button>
+                            {% endif %}
+                        </form>
+                    </h2> 
                     {% with num_posts=user_for_page.post_set.all.count %}
-                    <p class="d-none my-4 d-md-block"><b>{{num_posts}}</b> {% if num_posts == 1 %} Post {% else %} Posts{% endif %}</p>
+                    <p class="d-none my-4 d-md-block"><b>{{num_posts}}</b> Post{{num_posts|pluralize}}  </p>
                     {% endwith %}
                 </div>
                 <div>

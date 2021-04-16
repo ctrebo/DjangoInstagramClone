@@ -21,9 +21,12 @@ user_model = get_user_model()
 
 class PostListView(LoginRequiredMixin, generic.ListView):
     model = Post
+    template_name = "insta/post_list.html"
 
     def get_queryset(self):
         return Post.objects.exclude(author=self.request.user).order_by("-post_date")
+        # post_list = (self.request.user).followed.all()
+        # return post_list
     
     def get_context_data(self, **kwargs):
         users = user_model.objects.all().exclude(username=self.request.user.username)
@@ -49,6 +52,15 @@ def blogPostLike(request, pk):
         post.likes.add(request.user)
 
     return HttpResponseRedirect(reverse('create-comment', args=[str(pk)]))
+
+def followUser(request, pk):
+    user_to_follow = get_object_or_404(user_model, id=request.POST.get('user_id'))
+    if (request.user).followed.filter(id=user_to_follow.id).exists():
+        (request.user).followed.remove(user_to_follow)
+    else:
+        (request.user).followed.add(user_to_follow)
+
+    return HttpResponseRedirect(reverse('user-detail', args=[str(pk)]))
 
 @csrf_exempt
 def blogPostLikeListView(request, pk):
@@ -132,9 +144,15 @@ def updateUser(request, pk):
 
 def user_detail(request, pk):
     user_for_page = get_object_or_404(user_model, pk=pk)
-
+    followers_connected = get_object_or_404(user_model, pk=pk)
+    liked = False
+    if (request.user).followed.filter(id=followers_connected.id).exists():
+        liked = True
     context = {
-        'user_for_page': user_for_page, 
+        'user_for_page': user_for_page,
+        # 'number_of_followers':  followers_connected.number_of_likes(),
+        'user_is_followed': liked,
+         
     }
 
     return render(request, 'insta/user_detail.html', context)
