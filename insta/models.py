@@ -11,6 +11,7 @@ class CustomUser(AbstractUser):
     date_joined = models.DateTimeField(auto_now_add=True)
     prof_pic    = models.ImageField(upload_to ='pp_pics/', height_field=None, width_field=None, default="default_pp.jpg")
     bio         = models.TextField(max_length=150, blank=True, null=True)
+    followed    = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='followed_field', blank=True)
 
 class Post(models.Model):
     """
