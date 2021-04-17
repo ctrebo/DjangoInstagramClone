@@ -1,6 +1,8 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
+{% for usersz in user_vars %}
+    {% for post in usersz.post_set.all %}
 <div class="row mb-3 mb-3 mb-md-5">
     <div class="col-12 col-md-7 p-0 p-md-2">
         <section class="border-post">
@@ -65,7 +67,7 @@
             </section>
             <section class="px-3">
                 <article>
-                    {% if post.postcomment_set.count > 1%}
+                    {% if post.postcomment_set.count > 1 %}
                     <p class="mb-1 mt-1"><a class="comment-post text-decoration-none" href="{% url 'create-comment' post.pk %}">Show all {{post.postcomment_set.count}} comments</a></p>
                     {% endif %}
                     {% if post.postcomment_set.all %}
@@ -89,9 +91,31 @@
     </div>
      {% if forloop.first %}
     <div class="col-md-5 d-none d-md-block recommendations-fixed">
+        <section class="vh-100">
+            <article>
+                <div class="py-4">
+                    <p class="font-weight-light mb-4">Recommandations for you</p>
+                    {% for user in recommandation_list %}
+                    <div class="mb-3">
+                        <a href="{% url 'user-detail' user.pk %}"><img class="post-pp img-fluid" src="{{user.prof_pic.url}}"></a>
+                        <!-- <img class="post-pp" src="{{user.prof_pic.url}}"> -->
+                        <b><a class="text-dark" href="{% url 'user-detail' user.pk %}">{{user.username}}</a></b>
+                    </div>
+                    {% endfor %}
+                </div>
+            </article>
+        </section>
+    </div>
+    {% endif %}
+</div>
+<!-- <input class="text-copy height-width-0" value="{% url 'create-comment' post.pk %}">  -->
+{% endfor %}
+{% empty %}
+<div class="col-md-5 d-none d-md-block recommendations-fixed">
     <section class="vh-100">
         <article>
             <div class="py-4">
+                <p class="font-weight-light mb-4">Recommandations for you</p>
                 {% for user in recommandation_list %}
                 <div class="mb-3">
                     <a href="{% url 'user-detail' user.pk %}"><img class="post-pp img-fluid" src="{{user.prof_pic.url}}"></a>
@@ -102,10 +126,7 @@
             </div>
         </article>
     </section>
-    </div>
-    {% endif %}
 </div>
-<!-- <input class="text-copy height-width-0" value="{% url 'create-comment' post.pk %}">  -->
 {% endfor %}
 
 

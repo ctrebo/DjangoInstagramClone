@@ -106,7 +106,9 @@ class Post(models.Model):
             if result == "1":
                 return result + " year ago"
             else:
-                return result + " years ago"             
+                return result + " years ago"
+        else:
+            return "undefined"             
 
 class PostComment(models.Model):
     """

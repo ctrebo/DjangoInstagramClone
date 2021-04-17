@@ -20,27 +20,36 @@ user_model = get_user_model()
 
 
 class PostListView(LoginRequiredMixin, generic.ListView):
-    model = Post
+    model = user_model
     template_name = "insta/post_list.html"
 
-    def get_queryset(self):
-        return Post.objects.exclude(author=self.request.user).order_by("-post_date")
-        # post_list = (self.request.user).followed.all()
-        # return post_list
+    # def get_queryset(self):
+        # return Post.objects.exclude(author=self.request.user).order_by("-post_date")
+
     
     def get_context_data(self, **kwargs):
-        users = user_model.objects.all().exclude(username=self.request.user.username)
-
+        
+        #if signed in user liked let heart have red color else white
         liked = []
         for post in Post.objects.exclude(author=self.request.user).order_by("-post_date"):
             if post.likes.filter(id=self.request.user.id).exists():
                 liked.append(" text-danger")
             else:
                 liked.append(" text-white fontawesome-border")
+        
+        #get all users that signed in user follows
+        user_vars = self.request.user.followed.all()
+        #get list of id's of users that signed in user follows
+        user_vars_values = self.request.user.followed.all().values_list("id")
+
+        #exclude signed in user and users that signed in user follows from recommandation list 
+        recommandation_list = user_model.objects.all().exclude(username=self.request.user.username).exclude(id__in=user_vars_values)
+
 
         context = super(PostListView, self).get_context_data(**kwargs)
         context["list_liked"] = liked
-        context["recommandation_list"] = users
+        context["recommandation_list"] = recommandation_list
+        context["user_vars"] = user_vars
         return context
 
 
