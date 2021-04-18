@@ -209,4 +209,6 @@ class SearchPageListView(generic.ListView):
 
 
     def get_queryset(self):
-        return Post.objects.exclude(author=self.request.user).order_by("-likes")
+        user_vars = self.request.user.followed.all()
+
+        return Post.objects.exclude(author=self.request.user).exclude(author__in=user_vars).order_by("-likes")
