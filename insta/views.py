@@ -212,3 +212,14 @@ class SearchPageListView(generic.ListView):
         user_vars = self.request.user.followed.all()
 
         return Post.objects.exclude(author=self.request.user).exclude(author__in=user_vars).order_by("-likes")
+
+@login_required
+def activityPage(request):
+
+    like_list = request.user.followed.all()
+
+    context = {
+        'like_list': like_list,
+    }
+    return render(request, 'insta/activity_page.html', context)
+

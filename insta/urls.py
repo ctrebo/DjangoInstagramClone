@@ -15,6 +15,7 @@ urlpatterns = [
     re_path(r"^user/(?P<pk>[0-9]+)/update/$", views.updateUser, name="update-user"),
     re_path(r"^search/$", views.SearchResultsView.as_view(), name='search_results'),
     re_path(r"^search-page/$", views.SearchPageListView.as_view(), name='search_page'),
+    re_path(r"^user/activity/$", views.activityPage, name='activity-page'),
 
 
 ]

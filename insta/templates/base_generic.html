@@ -31,7 +31,7 @@
         {% url 'index' as index_url %}
         {% url 'create-post' as createpost_url %}
         {% url 'search_page' as search_page %}
-        <!-- {% url 'index' as index_url %} -->
+        {% url 'activity-page' as activity_page %}
 
           <a class="nav-link" href="{{createpost_url}}"><i class="fa fa-15 fa-plus fontawesome-border text-white {% ifequal request.path createpost_url %} color-black {% endifequal %}"></i></a>          
         </li>
@@ -39,7 +39,7 @@
           <a class="nav-link" href="{{index_url}}"><i class="fa fa-15 fa-home fontawesome-border text-white {% ifequal request.path index_url %} color-black {% endifequal %}"></i></a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href=""><i class="fa fa-15 fa-heart fontawesome-border text-white {% ifequal request.path index_url %} color-black {% endifequal %}"></i></a>
+            <a class="nav-link" href="{{activity_page}}"><i class="fa fa-15 fa-heart fontawesome-border text-white {% ifequal request.path activity_page %} color-black {% endifequal %}"></i></a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="{{search_page}}"><i class="fa fa-15 fa-compass fontawesome-border text-white {% ifequal request.path search_page %} color-black {% endifequal %}"></i></a>
