@@ -315,6 +315,7 @@ nav .img-profpic {
     left: 50px;
 }
 
+
 .section-search-page:hover {
     background-color:rgb(248, 248, 248);
 }
@@ -324,7 +325,10 @@ nav .img-profpic {
         height: 150px;
         width: 150px;
         border-radius: 50%;
-    }    
+    } 
+    .border-onlyon-md {
+        border: 1px solid #dee2e6;
+    }
 
     .border-post {
         border-radius: 3px;

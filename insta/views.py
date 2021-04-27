@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.conf import settings
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
@@ -10,14 +10,37 @@ from django.contrib.auth import get_user_model
 from django.views.decorators.csrf import csrf_exempt,csrf_protect #Add this
 from django.db.models import Q # new
 
+#libraries for signup
+from django.contrib.auth import login, authenticate
+from django.contrib.auth.forms import UserCreationForm
+
 
 from .models import Post, PostComment
 
-from insta.forms import PostCommentCreateForm, UserUpdateForm
+from insta.forms import PostCommentCreateForm, UserUpdateForm, CustomUserCreationForm
 
-User = settings.AUTH_USER_MODEL
 user_model = get_user_model()
 
+
+#signup view
+def signup(request):
+    """
+    view that signes user up and creates a BlogAuthor object for the user
+    """
+    if request.method == 'POST':
+        form = CustomUserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            raw_password = form.cleaned_data.get('password1')
+            user = authenticate(username=username, password=raw_password)
+            login(request, user)
+
+            return redirect('index')
+
+    else:
+        form = CustomUserCreationForm()
+    return render(request, 'signup.html', {'form': form})
 
 class PostListView(LoginRequiredMixin, generic.ListView):
     model = user_model

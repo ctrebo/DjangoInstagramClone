@@ -11,6 +11,19 @@ $( ".fontawesome-border" ).click(function() {
 $("#searchfield-mobile").css("width", ($("body").outerWidth() - $("#ul-mobile-search").outerWidth() - 12).toString() + "px")
 
 
+//add placeholder and padding to login form username
+$("#id_username").attr("placeholder", "Username");
+$("#id_username").css("padding-left", "0.25rem");
+$("#id_username").css("padding-right", "0.25rem");
+$("#id_username").css("border-radius", "3px");
+$("#id_username").css("width", "100%");
+//add placeholder and padding to login form password
+$("#id_password").attr("placeholder", "Password");
+$("#id_password").css("padding-left", "0.25rem");
+$("#id_password").css("padding-right", "0.25rem");
+$("#id_password").css("border-radius", "3px");
+$("#id_password").css("width", "100%");
+
 //variable to save time when prev function was clicked
 var t0;
 //variable that saves if currently there gets something copied and if slider is still open 
@@ -42,12 +55,6 @@ function openAndCloseCopyMessage(mydata) {
       }  
     }, 5000);
 }
-
-// if(copiedMessageInFrame==true && copyAgain == true && (Date.now() - timeLastTimeFun > 5600)) {
-  // console.log("fun called")
-    // copyAgain = false;
-    // copiedMessageInFrame = false;
-// }
 
 function copyToClipboard(mydata) {
     if(copiedMessageInFrame == true){
