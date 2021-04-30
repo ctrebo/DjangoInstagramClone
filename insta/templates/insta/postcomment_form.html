@@ -20,7 +20,7 @@
                       <!-- Modal -->
                       <div class="modal fade" id="modal-{{post.pk}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog" role="document">
-                          <div class="modal-content">
+                          <div class="modal-content modal-content-post-setting">
                             <div class="modal-body px-0">
                                 <section class="px-3">
                                     {% url 'create-comment' post.pk as url_to_copy %}
@@ -45,7 +45,7 @@
             </article>
         </section>
     </div>
-    <div class="col-md-5 col-12 px-0">
+    <div class="col-md-5 col-12 px-0 bg-white">
         <section class="d-none d-md-block">
             <header class="px-3 p-075 border-comments" id="header-create-comment">
                 <article>
@@ -61,7 +61,7 @@
                       <!-- Modal -->
                       <div class="modal fade" id="modal-{{post.pk}}-2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog" role="document">
-                          <div class="modal-content">
+                          <div class="modal-content modal-content-post-setting">
                             <div class="modal-body px-0">
                                 <section class="px-3">
                                     {% url 'create-comment' post.pk as url_to_copy %}

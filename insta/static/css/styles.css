@@ -18,6 +18,10 @@ label {
     font-weight: bold;
 }
 
+button:focus {
+    outline: none;
+}
+
 .navbar-brand:focus,
 .navbar-brand:active {
     outline: none;
@@ -30,7 +34,8 @@ label {
     width: 0;
 }
 
-.modal-content {
+
+.modal-content-post-setting {
     border-radius: 15px;
     width: 400px;
     top: 50%;
@@ -315,6 +320,9 @@ nav .img-profpic {
     left: 50px;
 }
 
+.background-color-background {
+    background-color: #fafafa
+}
 
 .section-search-page:hover {
     background-color:rgb(248, 248, 248);
@@ -347,6 +355,32 @@ nav .img-profpic {
     }
 }
 
+.modal-content-subs {
+    border-radius: 12px;
+    max-width: 400px;
+    height: 400px;
+}
+
+.modal-body-subs {
+    overflow-y: scroll;
+}
+
+.black-border-top {
+    border-bottom: 1px solid #000;
+}
+
+.font-size-1point25em {
+    font-size: 1.25em;
+}
+
+.font-size-closebutton-modal {
+    font-size: 3rem;
+}
+
+.padding-close-button-modal {
+    padding: 5px 16px !important;
+}
+
 @media (max-width: 768px) {
     #like-create-comment {
         position: relative;
@@ -354,7 +388,7 @@ nav .img-profpic {
 
     }
 
-    .modal-content {
+    .modal-content-post-setting {
         top: 50%;
         width: 260px;
         transform: translate(-130px, 260px);
@@ -384,5 +418,5 @@ nav .img-profpic {
         background-color: rgba(0, 0, 0, 0);
         color: rgba(0, 0, 0, 0);
     }
- 
+    
 } 

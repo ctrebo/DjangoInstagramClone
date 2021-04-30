@@ -195,6 +195,16 @@ class ProfilPageListView(LoginRequiredMixin, generic.ListView):
 
     def get_queryset(self):
         return Post.objects.filter(author=self.request.user)
+    
+    def get_context_data(self, **kwargs):
+        
+        user_follows_list = self.request.user.followed.all()
+        # follows_user_list = self.request.user._set.all()
+
+        context = super(ProfilPageListView, self).get_context_data(**kwargs)
+        context["user_follows_list"] = user_follows_list
+
+        return context
 
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post

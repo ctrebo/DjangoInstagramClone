@@ -1,6 +1,17 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
+
+<!-- display users that user follows -->
+<!-- {% for userx in user_follows_list %}
+    <p>{{userx.username}}</p>
+{% endfor %} -->
+
+<!-- display users that follow user -->
+<!-- <h1>FOllowerd</h1>
+{% for userx in user.followed_field.all %}
+    <p>{{userx.username}}</p>
+{% endfor %} -->
 <div class="row">
     <div class="col-4 col-md-3 my-auto">
         <img class="img-profpic" src="{{user.prof_pic.url}}" alt="alt" id="img-profilpage">
@@ -10,9 +21,113 @@
             <h1 class="font-weight-light">{{user.username}} <a class="btn border text-decoration-none opacity-07-active ml-3" href="{% url 'update-user' user.pk %}">Update profile</a></h1>
         </article>
         <article class="mt-3">
-            {% with num_blogs_user=user.post_set.count %}
-                <h4>{{num_blogs_user}}  Post{{num_blogs_user|pluralize}}</h4>
-            {% endwith %}
+            <ul class="pl-0">
+                <li class="d-inline-block font-size-1point25em mr-5">
+                    {% with num_blogs_user=user.post_set.count %}
+                        <b>{{num_blogs_user}}</b> Post{{num_blogs_user|pluralize}}
+                    {% endwith %}
+                </li>
+                <li class="d-inline-block mr-5">
+                    <a type="button" class="font-size-1point25em" data-toggle="modal" data-target="#seeSubscribersModal">
+                        <b>{{user.followed_field.count}}</b> Followers{{num_blogs_user|pluralize}}
+                    </a>
+                    
+                    <!-- Modal followers-->
+                    <div class="modal fade" id="seeSubscribersModal" tabindex="-1" role="dialog" aria-labelledby="seeSubscribersModalTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                          <div class="modal-content modal-content-subs">
+                            <div class="modal-header p-2 black-border-top">
+                              <h5 class="modal-title text-center" id="exampleModalLongTitle">Followers</h5>
+                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                            </div>
+                            <div class="modal-body modal-body-subs pt-0">
+                                {% for user in user.followed_field.all %}
+                                <section class="position-relative mb-1 section-search-page px-2 py-2">
+                                    <div>
+                                        <article class="d-inline my-auto">
+                                            <a href="{% url 'user-detail' user.pk %}">
+                                                <img src="{{user.prof_pic.url}}" class="post-pp img-fluid">
+                                            </a>
+                                                
+                                        </article>
+                                        <article class="d-inline search-article">
+                                            <div>
+                                                <a href="{% url 'user-detail' user.pk %}">
+                                                    <b class="username-search text-dark">{{user.username}}</b>
+                                                </a>
+                                                
+                                            </div>
+                                            <small class="font-weight-light text-dark">{{user.first_name}}</small>
+                                        </article>
+                                    </div>
+                                </section>
+                                {% endfor %}
+
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                              <button type="button" class="btn btn-primary">Save changes</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                </li>
+                <li class="d-inline-block font-size-1point5em">
+                    <a type="button" class="font-size-1point25em" data-toggle="modal" data-target="#seeFollowedPeopleModal">
+                        <b>{{user_follows_list.count}}</b> Following{{num_blogs_user|pluralize}}
+                    </a>
+                    <!-- Modal Following -->
+                    <div class="modal fade" id="seeFollowedPeopleModal" tabindex="-1" role="dialog" aria-labelledby="seeSubscribersModalTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                          <div class="modal-content modal-content-subs">
+                            <div class="modal-header p-2 black-border-top">
+                              <h5 class="modal-title text-center" id="exampleModalLongTitle">Following</h5>
+                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                            </div>
+                            <div class="modal-body modal-body-subs pt-0 ">
+                                {% for user in user_follows_list %}
+                                <section class="position-relative mb-1 section-search-page px-2 py-2">
+                                    <div>
+                                        <article class="d-inline my-auto">
+                                            <a href="{% url 'user-detail' user.pk %}">
+                                                <img src="{{user.prof_pic.url}}" class="post-pp img-fluid">
+                                            </a>
+                                                
+                                        </article>
+                                        <article class="d-inline search-article">
+                                            <div>
+                                                <a href="{% url 'user-detail' user.pk %}">
+                                                    <b class="username-search text-dark">{{user.username}}</b>
+                                                </a>
+                                                
+                                            </div>
+                                            <small class="font-weight-light text-dark">{{user.first_name}}</small>
+                                        </article>
+                                        <article class="d-inline float-right">
+                                            <button class="h-100">Entfolgen</button>
+                                        </article>
+                                    </div>
+                                </section>
+                                {% endfor %}
+
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                              <button type="button" class="btn btn-primary">Save changes</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+
+                </li>
+            </ul>
+
         </article>
     </div>
 </div>

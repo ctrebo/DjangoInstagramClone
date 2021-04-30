@@ -7,7 +7,7 @@
     <div class="col-12 col-md-7 p-0 p-md-2">
         <section class="border-post">
             <section>
-                <header class="px-3 p-075">
+                <header class="px-3 p-075 bg-white">
                     <article>
                         <a href="{% url 'user-detail' post.author.pk %}"><img class="post-pp img-fluid"  src="{{post.author.prof_pic.url}}" alt="alt"></a>
                         <span class="ml-2 font-size-username">
@@ -19,7 +19,7 @@
                           <!-- Modal -->
                           <div class="modal fade" id="modal-{{post.pk}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog" role="document">
-                              <div class="modal-content">
+                              <div class="modal-content modal-content-post-setting">
                                 <div class="modal-body px-0">
                                     <section class="px-3">
                                         <article><a class="w-100 d-block text-dark text-decoration-none text-center" href=" {% url 'create-comment' post.pk %}">View post</a></article>
@@ -47,7 +47,7 @@
                     <img class="w-100 h-auto img-fluid"  src="{{post.picture.url}}" alt="alt">
                 </article>
             </section>
-            <section class="px-3">
+            <section class="px-3 bg-white">
                 <article class="py-2">
                     {% load insta_extras %}
                     <form action="{% url 'like-post-for-list-view' post.pk %}" class="d-inline like-form" method="POST">
