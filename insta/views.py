@@ -94,6 +94,15 @@ def followUser(request, pk):
 
     return HttpResponseRedirect(reverse('user-detail', args=[str(pk)]))
 
+def followUserProfPage(request, pk):
+    user_to_follow = get_object_or_404(user_model, id=request.POST.get('user_id'))
+    if (request.user).followed.filter(id=user_to_follow.id).exists():
+        (request.user).followed.remove(user_to_follow)
+    else:
+        (request.user).followed.add(user_to_follow)
+
+    return HttpResponseRedirect(reverse('profpage-user'))
+
 @csrf_exempt
 def blogPostLikeListView(request, pk):
     post = get_object_or_404(Post, id=request.POST.get('post_id'))

@@ -19,31 +19,147 @@
                         <form action="{% url 'follow-user' user_for_page.pk %}" method="POST" class="d-inline ml-md-2">
                             {% csrf_token %}
                             {% if user_is_followed %}                
-                            <button type="submit" name="user_id" value="{{user_for_page.pk}}" class="btn btn-primary" id="">Subscribed</button>
+                            <button type="submit" name="user_id" value="{{user_for_page.pk}}" class="btn bg-white border" id="">Unfollow</button>
                             {% else %}
-                            <button type="submit" name="user_id" value="{{user_for_page.pk}}" class="btn btn-primary" id="">Subscribe</button>
+                            <button type="submit" name="user_id" value="{{user_for_page.pk}}" class="btn btn-primary" id="">Follow</button>
                             {% endif %}
                         </form>
-                    </h2> 
-                    {% with num_posts=user_for_page.post_set.all.count %}
-                    <p class="d-none my-4 d-md-block"><b>{{num_posts}}</b> Post{{num_posts|pluralize}}  </p>
-                    {% endwith %}
+                    </h2>
+                    <article class="mt-3">
+                        <ul class="pl-0 d-none d-md-block">
+                            <li class="d-inline-block font-size-1point25em mr-5">
+                                {% with num_blogs_user=user_for_page.post_set.count %}
+                                    <b>{{num_blogs_user}}</b> Post{{num_blogs_user|pluralize}}
+                                {% endwith %}
+                            </li>
+                            <li class="d-inline-block mr-5">
+                                <a type="button" class="font-size-1point25em" data-toggle="modal" data-target="#seeSubscribersModal">
+                                    <b>{{user_for_page.followed_field.count}}</b> Follower{{user_for_page.followed_field.count|pluralize}}
+                                </a>
+                                
+                                <!-- Modal followers-->
+                                <div class="modal fade" id="seeSubscribersModal" tabindex="-1" role="dialog" aria-labelledby="seeSubscribersModalTitle" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                      <div class="modal-content modal-content-subs">
+                                        <div class="modal-header p-2 black-border-top">
+                                          <h5 class="modal-title text-center" id="exampleModalLongTitle">Followers</h5>
+                                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                          </button>
+                                        </div>
+                                        <div class="modal-body modal-body-subs pt-0">
+                                            {% for user_follower in user_for_page.followed_field.all %}
+                                            <section class="position-relative mb-1 section-search-page px-2 py-2">
+                                                <div>
+                                                    <article class="d-inline my-auto">
+                                                        <a {% ifnotequal user.pk user_follower.pk %} href="{% url 'user-detail' user_follower.pk %}" {% else %}  href="{% url 'profpage-user' %}" {% endifnotequal %}>
+                                                            <img src="{{user_follower.prof_pic.url}}" class="post-pp img-fluid">
+                                                        </a>
+                                                            
+                                                    </article>
+                                                    <article class="d-inline search-article">
+                                                        <div>
+                                                            <a {% ifnotequal user.pk user_follower.pk %} href="{% url 'user-detail' user_follower.pk %}" {% else %}  href="{% url 'profpage-user' %}" {% endifnotequal %}>
+                                                                <b class="username-search text-dark">{{user_follower.username}}</b>
+                                                            </a>
+                                                            
+                                                        </div>
+                                                        <small class="font-weight-light text-dark">{{user_follower.first_name}}</small>
+                                                    </article>
+                                                </div>
+                                            </section>
+                                            {% endfor %}
+            
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+            
+                            </li>
+                            <li class="d-inline-block font-size-1point5em">
+                                <a type="button" class="font-size-1point25em" data-toggle="modal" data-target="#seeFollowedPeopleModal">
+                                    <b>{{user_for_page.followed.count}}</b> Following{{user_for_page.followed.count|pluralize}}
+                                </a>
+                                <!-- Modal Following -->
+                                <div class="modal fade" id="seeFollowedPeopleModal" tabindex="-1" role="dialog" aria-labelledby="seeSubscribersModalTitle" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                      <div class="modal-content modal-content-subs">
+                                        <div class="modal-header p-2 black-border-top">
+                                          <h5 class="modal-title text-center" id="exampleModalLongTitle">Following</h5>
+                                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                          </button>
+                                        </div>
+                                        <div class="modal-body modal-body-subs pt-0 ">
+                                            {% for user_following in user_for_page.followed.all %}
+                                            <section class="position-relative mb-1 section-search-page px-2 py-2">
+                                                <div>
+                                                    <article class="d-inline my-auto">
+                                                        <a {% ifnotequal user.pk user_following.pk %} href="{% url 'user-detail' user_following.pk %}" {% else %}  href="{% url 'profpage-user' %}" {% endifnotequal %}>
+                                                            <img src="{{user_following.prof_pic.url}}" class="post-pp img-fluid">
+                                                        </a>
+                                                            
+                                                    </article>
+                                                    <article class="d-inline search-article">
+                                                        <div>
+                                                            <a {% ifnotequal user.pk user_following.pk %} href="{% url 'user-detail' user_following.pk %}" {% else %}  href="{% url 'profpage-user' %}" {% endifnotequal %}>
+                                                                <b class="username-search text-dark">{{user_following.username}}</b>
+                                                            </a>
+                                                            
+                                                        </div>
+                                                        <small class="font-weight-light text-dark">{{user_following.first_name}}</small>
+                                                    </article>
+                                                    <article class="d-inline float-right">
+                                                        <!-- <form action="{% url 'follow-user-profpage' user.pk %}" method="POST" class="d-inline ml-md-2">
+                                                            {% csrf_token %}
+                                                            <button type="submit" name="user_id" value="{{user.pk}}" class="btn border btn-white bg-white" id="">Following</button>
+                                                        </form> -->
+                                                    </article>
+                                                </div>
+                                            </section>
+                                            {% endfor %}
+            
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                            </li>
+                        </ul>
+                    </article> 
                 </div>
                 <div>
-                    <span>{{user_for_page.bio|linebreaks}}</span>
+                    <span>{% if user_for_page.bio %}{{user_for_page.bio|linebreaks}} {% endif %} </span>
                 </div>
             </article>
         </section>
     </div>
 </div>
-<hr class="mt-4 my-md-5 mb-1">
+<hr class="mt-4 my-md-5 mb-0">
 <div class="row d-md-none">
-    <div class="col-4 m-auto">
-        <section class="">
+    <div class="col-12">
+        <section class="py-2">
             <article>
-                {% with num_posts=user_for_page.post_set.all.count %}
-                <b class="mx-auto">{{num_posts}}</b><p>Posts</p>
-                {% endwith %}
+                <ul class="p-0 m-0">
+                    <li class="d-inline-block">
+                        <span classs="text-center">
+                            <span class="d-block text-center"><b>{{user.post_set.count}}</b></span>
+                            Posts
+                        </span>
+                    </li>
+                    <li class="d-inline-block following-middle">
+                        <span classs="text-center">
+                            <span class="d-block text-center"><b>{{user_for_page.followed_field.count}}</b></span>
+                            Follower{}
+                        </span>
+                    </li>
+
+                    <li class="d-inline-block following-right">
+                        <span classs="text-center">
+                            <span class="d-block text-center"><b>{{user_for_page.followed.count}}</b></span>
+                            Following
+                        </span>
+                    </li>
+                </ul>
             </article>
         </section>
     </div>

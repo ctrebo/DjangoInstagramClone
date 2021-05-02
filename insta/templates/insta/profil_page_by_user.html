@@ -30,7 +30,7 @@
                 </li>
                 <li class="d-inline-block mr-5">
                     <a type="button" class="font-size-1point25em" data-toggle="modal" data-target="#seeSubscribersModal">
-                        <b>{{user.followed_field.count}}</b> Followers{{num_blogs_user|pluralize}}
+                        <b>{{user.followed_field.count}}</b> Follower{{user.followed_field.count|pluralize}}
                     </a>
                     
                     <!-- Modal followers-->
@@ -74,7 +74,7 @@
                 </li>
                 <li class="d-inline-block font-size-1point5em">
                     <a type="button" class="font-size-1point25em" data-toggle="modal" data-target="#seeFollowedPeopleModal">
-                        <b>{{user_follows_list.count}}</b> Following{{num_blogs_user|pluralize}}
+                        <b>{{user_follows_list.count}}</b> Following{{user_follows_list.count|pluralize}}
                     </a>
                     <!-- Modal Following -->
                     <div class="modal fade" id="seeFollowedPeopleModal" tabindex="-1" role="dialog" aria-labelledby="seeSubscribersModalTitle" aria-hidden="true">
@@ -145,20 +145,20 @@
                     <li class="d-inline-block">
                         <span classs="text-center">
                             <span class="d-block text-center"><b>{{user.post_set.count}}</b></span>
-                            Posts
+                            Posts{{user.post_set.count|pluralize}}
                         </span>
                     </li>
                     <li class="d-inline-block following-middle">
                         <span classs="text-center">
                             <span class="d-block text-center"><b>{{user.followed_field.count}}</b></span>
-                            Followers
+                            Followers{{user.followed_field.count|pluralize}}
                         </span>
                     </li>
 
                     <li class="d-inline-block following-right">
                         <span classs="text-center">
                             <span class="d-block text-center"><b>{{user_follows_list.count}}</b></span>
-                            Following
+                            Following{{user_follows_list.count|pluralize}}
                         </span>
                     </li>
                 </ul>
