@@ -398,6 +398,10 @@ nav .img-profpic {
     right: 15px;
 }
 
+.cursor-pointer {
+    cursor: pointer;
+}
+
 
 @media (max-width: 768px) {
     #like-create-comment {

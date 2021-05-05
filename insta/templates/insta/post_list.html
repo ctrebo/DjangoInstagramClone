@@ -28,7 +28,7 @@
                                         <section class="px-3">
                                             {% url 'create-comment' post.pk as url_to_copy %}
                                             {% with full_url=request.META.HTTP_HOST|add:url_to_copy %}
-                                            <article><p data-dismiss="modal" class="w-100 d-block text-dark text-decoration-none text-center" onclick='copyToClipboard("{{full_url}}")'>Copy link</p></article>
+                                            <article><p data-dismiss="modal" class="w-100 d-block text-dark text-decoration-none text-center cursor-pointer" onclick='copyToClipboard("{{full_url}}")'>Copy link</p></article>
                                             {% endwith %}
                                         </section>
                                         <hr>
