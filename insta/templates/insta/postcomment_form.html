@@ -87,7 +87,8 @@
                         <article>
                             <img class="post-pp"  src="{{comment.author.prof_pic.url}}" alt="alt">
                             <span class="ml-3 font-size-username">
-                                <b><a class="text-dark" href="{% url 'user-detail' comment.author.pk %}">{{comment.author.username}}</a></b><span>&nbsp</span><span>{% for word in comment.description_to_array %} {% if "@" in word %} <a href="{% comment %} insert here link to user-detail page {% endcomment %}">{{word}}  </a> {% else %}{{word}} {% endif %}{% endfor %}</span>
+                                {% load insta_extras %}
+                                <b><a class="text-dark" href="{% url 'user-detail' comment.author.pk %}">{{comment.author.username}}</a></b><span>&nbsp</span><span>{% for word in comment.description_to_array %} {% if "@" in word %} <a href="{% get_tagged_user word %}">{{word}}  </a> {% else %}{{word}} {% endif %}{% endfor %}</span>
                             </span>
                             <p class="time-ago ml-5 mb-0">{{comment.time_commented_ago}}</p>
                         </article>
