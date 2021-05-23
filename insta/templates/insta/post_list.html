@@ -74,7 +74,7 @@
                         <span class="font-size-username">
                             {% with first_comment=post.postcomment_set.all|first %}
                             <b><a href="{% url 'user-detail' first_comment.author.pk %}" class="text-dark">{{first_comment.author.username}}</a></b>    
-                            <span>&nbsp</span><span>{% for word in first_comment.description_to_array %}{% if "@" in word %} <a href="{% url 'user-detail' first_comment.author.pk  %}">{{word}}  </a> {% else %}{{word}} {% endif %}{% endfor %}</span>
+                            <span>&nbsp</span><span>{% for word in first_comment.description_to_array %}{% if "@" in word %} <a href="{% get_tagged_user word %}">{{word}}  </a> {% else %}{{word}} {% endif %}{% endfor %}</span>
                             {% endwith %}
                         </span>
                         {% endif %}
