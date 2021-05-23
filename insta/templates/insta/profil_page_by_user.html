@@ -122,16 +122,20 @@
                 </li>
             </ul>
         </article>
-        <article class="d-none d-md-block"><p><div>
-            <span>{{user.bio|linebreaks}}</span>
-        </div></p></article>
+        <article class="d-none d-md-block">
+            <p class="mb-1"><b>{{user.first_name}}</b></p>
+            <div>
+                <span>{{user.bio|linebreaks}}</span>
+            </div>
+        </article>
     </div>
 </div>
 <div class="row d-md-none">
     <div class="col-12">
         <section>
             <article>
-                <p><span>{{user.bio|linebreaks}}</span></p>
+                <p class="mb-1"><b>{{user.first_name}}</b></p>
+                <span>{{user.bio|linebreaks}}</span>
             </article>
         </section>
     </div>

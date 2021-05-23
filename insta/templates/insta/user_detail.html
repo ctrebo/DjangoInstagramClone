@@ -127,9 +127,22 @@
                         </ul>
                     </article> 
                 </div>
-                <div>
-                    <span>{% if user_for_page.bio %}{{user_for_page.bio|linebreaks}} {% endif %} </span>
-                </div>
+                <section class="d-none d-md-block">
+                    <article>
+                        <p class="mb-1"><b>{{user.first_name}}</b></p>
+                        <span>{% if user_for_page.bio %}{{user_for_page.bio|linebreaks}} {% endif %} </span>
+                    </article>
+                </section>
+            </article>
+        </section>
+    </div>
+</div>
+<div class="row d-md-none">
+    <div class="col-12">
+        <section>
+            <article>
+                <p class="mb-1"><b>{{user.first_name}}</b></p>
+                <span>{% if user_for_page.bio %}{{user_for_page.bio|linebreaks}} {% endif %} </span>
             </article>
         </section>
     </div>
