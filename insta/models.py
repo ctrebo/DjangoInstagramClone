@@ -134,9 +134,11 @@ class PostComment(models.Model):
             titlestring=self.description
         return titlestring
 
+
     @property
     def description_to_array(self):
         return self.description.split()
+
 
     @property
     def time_commented_ago(self):

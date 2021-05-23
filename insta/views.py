@@ -258,10 +258,20 @@ class SearchPageListView(generic.ListView):
 @login_required
 def activityPage(request):
 
-    like_list = request.user.followed.all()
+    post_list = request.user.post_set.all()
+    followers_list = request.user.followed_field.all()
+    
 
     context = {
-        'like_list': like_list,
+        'post_list': post_list,
+        'followers_list': followers_list,
+        
     }
     return render(request, 'insta/activity_page.html', context)
 
+@login_required
+def dontexistPage(request, string):
+    context = {
+        
+    }
+    return render(request, 'insta/dont_exist_page.html', context)

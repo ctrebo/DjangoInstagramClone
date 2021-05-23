@@ -18,6 +18,7 @@ urlpatterns = [
     re_path(r"^search-page/$", views.SearchPageListView.as_view(), name='search_page'),
     re_path(r'^signup/$', views.signup, name='signup'),
     re_path(r"^user/activity/$", views.activityPage, name='activity-page'),
+    re_path(r"^user/(?P<string>[\w\-]+)/$", views.dontexistPage, name='user-dont-exist'),
 
 
 ]

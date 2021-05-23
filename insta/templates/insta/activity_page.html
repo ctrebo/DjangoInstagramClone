@@ -1,9 +1,59 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-<div class="row">
-    <div class="col-12 col-md-8">
-        
+
+{% for user_follwers in followers_list %}
+    <div class="row mb-3">
+        <div class="col-12 col-md-6 m-auto">
+            <section>
+                <article>
+                    <table class="w-100">
+                        <tr>
+                            <td style="width: 40px;"><img class="post-pp img-fluid" src="{{user_follwers.prof_pic.url}}"></td>
+                            <td class="w-auto"><span><b>{{user_follwers.username}}</b> started following you.</span></td>
+                            <!-- <td style="width: 40px;"><img class="w-h-32 img-fluid" src="{{post.picture.url}}"></td> -->
+                        </tr>
+                    </table>
+                </article>
+            </section>  
+        </div>
     </div>
-</div>
+{% endfor %}
+{% for post in post_list %}
+    {% for user_liked in post.likes.all %}
+        <div class="row mb-3">
+            <div class="col-12 col-md-6 m-auto">
+              <section>
+                  <article>
+                    <table class="w-100">
+                        <tr>
+                            <td style="width: 40px;"><img class="post-pp img-fluid" src="{{user_liked.prof_pic.url}}"></td>
+                            <td class="w-auto"><span><b>{{user_liked.username}}</b> liked your post.</span></td>
+                            <td style="width: 40px;"><img class="w-h-32 img-fluid" src="{{post.picture.url}}"></td>
+                        </tr>
+                    </table>
+                </article>
+              </section>  
+            </div>
+        </div>
+    {% endfor %}
+    {% for comment in post.postcomment_set.all %}
+    <div class="row">
+        <div class="col-12 col-md-6 m-auto">
+          <section>
+              <article>
+                <table class="w-100">
+                    <tr style="line-height: 1.1em;">
+                        <td style="width: 40px;" class="pt-0"><img class="post-pp img-fluid" src="{{comment.author.prof_pic.url}}"></td>
+                        <td class="w-auto"><span><b>{{comment.author.username}}</b> commented your post: {{comment.description}}. <span class="time-ago">{{comment.time_commented_ago}}</span></span></td>
+                        <td style="width: 40px;"><img class="w-h-32 img-fluid" src="{{post.picture.url}}"></td>
+                    </tr>
+                </table>
+            </article>
+          </section>  
+        </div>
+    </div>
+        <!-- </div> -->
+    {% endfor %}
+{% endfor %}
 {% endblock %}

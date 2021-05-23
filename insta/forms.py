@@ -6,7 +6,9 @@ from django.utils.translation import ugettext_lazy as _
 from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
 
+from better_profanity import profanity
 from insta.models import PostComment, Post
+
 from .models import CustomUser
 
 user_model = get_user_model()
@@ -60,9 +62,8 @@ class PostCommentCreateForm(ModelForm):
     def clean_description(self):
         data = self.cleaned_data["description"]
         #check if there are no swearwords in comment
-        if "motherfucker" in data or "dick" in data:
+        if profanity.contains_profanity(data):
            raise ValidationError(_('Please do not use swear words!'))
-        
         return data
 
     class Meta:

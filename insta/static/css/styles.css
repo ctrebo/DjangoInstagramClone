@@ -402,6 +402,16 @@ nav .img-profpic {
     cursor: pointer;
 }
 
+.w-h-32 {
+    width: 32px;
+    height: 32px;
+}
+.errorlist {
+    position: absolute;
+    bottom: 30px;
+    right: 20px;
+    list-style-type: none;
+}
 
 @media (max-width: 768px) {
     #like-create-comment {
