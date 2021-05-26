@@ -85,12 +85,18 @@
                 {% for comment in comment_list %}
                     <section class="px-3 pt-3 d-none d-md-block">
                         <article>
-                            <img class="post-pp"  src="{{comment.author.prof_pic.url}}" alt="alt">
-                            <span class="ml-3 font-size-username">
-                                {% load insta_extras %}
-                                <b><a class="text-dark" href="{% url 'user-detail' comment.author.pk %}">{{comment.author.username}}</a></b><span>&nbsp</span><span>{% for word in comment.description_to_array %} {% if "@" in word %} <a href="{% get_tagged_user word %}">{{word}}  </a> {% else %}{{word}} {% endif %}{% endfor %}</span>
-                            </span>
-                            <p class="time-ago ml-5 mb-0">{{comment.time_commented_ago}}</p>
+                            <table class="w-100">
+                                <tr>
+                                    <td style="width: 40px;"><img class="post-pp"  src="{{comment.author.prof_pic.url}}" alt="alt"></td>
+                                    <td class="w-auto"><span class="font-size-username  line-height-comments">
+                                        <span class="font-size-username">
+                                            {% load insta_extras %}
+                                            <b><a class="text-dark" href="{% if comment.author == user %}  {% url 'profpage-user'  %} {% else %} {% url 'user-detail' comment.author.pk %} {% endif %}">{{comment.author.username}}</a></b><span>&nbsp</span><span>{% for word in comment.description_to_array %} {% if "@" in word %} <a href="{% get_tagged_user word user %}">{{word}}  </a> {% else %}{{word}} {% endif %}{% endfor %}</span><p class="time-ago mb-0">{{comment.time_commented_ago}}</p>
+                                        </span>
+                                    </td>
+                                </tr>
+                            </table>
+                            
                         </article>
                     </section>
                 {% empty %}
