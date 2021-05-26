@@ -2,15 +2,15 @@
 
 {% block content %}
 
-{% for user_follwers in followers_list %}
+{% for user_followers in followers_list %}
     <div class="row mb-3">
         <div class="col-12 col-md-6 m-auto">
             <section>
                 <article>
                     <table class="w-100">
                         <tr>
-                            <td style="width: 40px;"><img class="post-pp img-fluid" src="{{user_follwers.prof_pic.url}}"></td>
-                            <td class="w-auto"><span><b>{{user_follwers.username}}</b> started following you.</span></td>
+                            <td style="width: 40px;"><img class="post-pp img-fluid" src="{{user_followers.prof_pic.url}}"></td>
+                            <td class="w-auto"><span><b><a class="text-dark text-decoration-none" href="{% url 'user-detail' user_followers.pk %}">{{user_followers.username}}</a></b> started following you.</span></td>
                             <!-- <td style="width: 40px;"><img class="w-h-32 img-fluid" src="{{post.picture.url}}"></td> -->
                         </tr>
                     </table>
@@ -28,7 +28,7 @@
                     <table class="w-100">
                         <tr>
                             <td style="width: 40px;"><img class="post-pp img-fluid" src="{{user_liked.prof_pic.url}}"></td>
-                            <td class="w-auto"><span><b>{{user_liked.username}}</b> liked your post.</span></td>
+                            <td class="w-auto"><span><b><a class="text-dark text-decoration-none" href="{% url 'user-detail' user_liked.pk %}">{{user_liked.username}}</a></b> liked your post.</span></td>
                             <td style="width: 40px;"><img class="w-h-32 img-fluid" src="{{post.picture.url}}"></td>
                         </tr>
                     </table>

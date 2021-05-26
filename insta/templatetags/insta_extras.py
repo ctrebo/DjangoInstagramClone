@@ -45,4 +45,4 @@ def get_tagged_user(tagged_user, self_user):
             #return to custom page
             return reverse('user-dont-exist', args=[str(tagged_user[1:])])
     else:
-        return reverse("index")
+        return ""
