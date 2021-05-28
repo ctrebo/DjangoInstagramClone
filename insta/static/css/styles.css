@@ -389,8 +389,7 @@ nav .img-profpic {
 
 .following-middle {
     position: absolute;
-    left: 50%;
-    transform: translate(calc(-50% - 15px), 0px);
+    left: 40%;
 }
 
 .following-right {

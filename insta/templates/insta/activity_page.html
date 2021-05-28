@@ -22,6 +22,7 @@
 {% for post in post_list %}
     {% for user_liked in post.likes.all %}
         <div class="row mb-3">
+            <!-- <p>Hi</p> -->
             <div class="col-12 col-md-6 m-auto">
               <section>
                   <article>
@@ -38,9 +39,10 @@
         </div>
     {% endfor %}
     {% for comment in post.postcomment_set.all %}
-    <div class="row">
+    <div class="row mb-3">
         <div class="col-12 col-md-6 m-auto">
-          <section>
+
+            <section>
               <article>
                 <table class="w-100">
                     <tr style="line-height: 1.1em;">
