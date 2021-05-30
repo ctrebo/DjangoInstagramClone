@@ -21,7 +21,7 @@ class CustomUserAdmin(BaseUserAdmin):
         ('Permissions', {
             'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions',)}),
 
-        ('Custom user', {'fields': ('bio', 'prof_pic', 'followed')}),
+        ('Custom user', {'fields': ('bio', 'prof_pic', 'followed', 'saved_posts')}),
     )
     
     add_fieldsets = (

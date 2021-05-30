@@ -12,6 +12,7 @@ class CustomUser(AbstractUser):
     prof_pic    = models.ImageField(upload_to ='pp_pics/', height_field=None, width_field=None, default="default_pp.jpg")
     bio         = models.TextField(max_length=150, blank=True, null=True)
     followed    = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='followed_field', blank=True)
+    saved_posts = models.ManyToManyField('Post', related_name="saved_post_field", blank=True)
 
 class Post(models.Model):
     """
@@ -28,7 +29,7 @@ class Post(models.Model):
         ordering = ["-post_date"]
 
     def __str__(self):
-        return self.author.username
+        return self.author.username + " " + str(self.pk)
 
     def get_absolute_url(self):
         """
@@ -50,16 +51,6 @@ class Post(models.Model):
         else:
              return str(num_likes//1000000000)+"B"
     
-    # @property
-    # def get_liked_list(self):
-    #     liked = []
-    #     for post in Post.objects.exclude(author=self.request.user).order_by("-post_date"):
-    #         if post.likes.filter(id=self.request.user.id).exists():
-    #             liked.append(True)
-    #         else:
-    #              liked.append(False)
-
-    #     return liked
 
     """
     Return when difference of now and time, when it was posted
