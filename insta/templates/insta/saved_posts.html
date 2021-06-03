@@ -149,7 +149,7 @@
         </section>
     </div>
 </div>
-<div class="row d-md-none border-top-gray border-bottom-gray">
+<div class="row d-md-none border-bottom-gray border-top-gray">
     <div class="col-12">
         <section class="py-2">
             <article>
@@ -262,10 +262,11 @@
         </section>
     </div>
 </div>
+
 <div class="d-none d-md-block">
     <div class="row mt-0 mt-md-4 mb-5 border-top-gray">
-        <a href="{% url 'profpage-user' %}" class="ml-auto py-3 text-decoration-none text-muted mr-5 border-saved-or-posts"><i class="fa fa-camera-retro mr-1"></i>Beiträge</a>
-        <a href="{% url 'saved-posts-user' %}" class="mr-auto py-3 text-decoration-none text-muted"><i class="fa fa-bookmark mr-1"></i>Saved</a>
+        <a href="{% url 'profpage-user' %}" class="ml-auto py-3 text-decoration-none text-muted mr-5"><i class="fa fa-camera-retro mr-1"></i>Beiträge</a>
+        <a href="{% url 'saved-posts-user' %}" class="mr-auto py-3 text-decoration-none text-muted border-saved-or-posts"><i class="fa fa-bookmark mr-1"></i>Saved</a>
     </div>
 </div>
 
@@ -274,9 +275,8 @@
     <a href="{% url 'saved-posts-user' %}" class="text-decoration-none text-dark mr-auto py-2"><i class="fa fa-bookmark fa-2x"></i></a>
 </div>
 
-
 <div class="row">
-    {% for post in user.post_set.all%}
+    {% for post in post_list%}
     <div class="col-4 p-15px mb-for-user-detail position-relative">
         <div class="img-user-detail">
             <img src="{{post.picture.url}}" alt="">

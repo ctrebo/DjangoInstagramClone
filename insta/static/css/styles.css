@@ -283,6 +283,11 @@ nav .img-profpic {
     left: 0;
 }
 
+#save-create-comment {
+    position: absolute;
+    right:0;
+}
+
 .border-update-user-input {
     border: 1px solid rgb(207, 199, 199);
 }
@@ -414,6 +419,21 @@ nav .img-profpic {
 
 .line-height-comments {
     line-height: 1.2rem;
+}
+
+.border-radius-6px {
+    border-radius: 6px;
+}
+
+.border-top-gray {
+    border-top:1px solid rgb(168, 168, 168);
+}
+.border-bottom-gray {
+    border-bottom:1px solid rgb(168, 168, 168);
+}
+
+.border-saved-or-posts {
+    border-top:1px solid #000;
 }
 
 @media (max-width: 768px) {

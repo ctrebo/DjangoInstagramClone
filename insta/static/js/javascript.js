@@ -2,6 +2,7 @@ var variable_height = ($("#row-create-comment").height() - $("#header-create-com
 $("#comment-section").css("height", variable_height.toString() + "px");
 
 $("#like-create-comment").css("bottom", ($("#submit-comment").outerHeight() + 7).toString() + "px");
+$("#save-create-comment").css("bottom", ($("#submit-comment").outerHeight() + 7).toString() + "px");
 
 
 $( ".fontawesome-border" ).click(function() {

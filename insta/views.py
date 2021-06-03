@@ -113,6 +113,25 @@ def blogPostLikeListView(request, pk):
 
     return HttpResponseRedirect(reverse('index'))
 
+def userSavePost(request, pk):
+    post = get_object_or_404(Post, id=request.POST.get('post_id'))
+    if request.user.saved_posts.filter(id=post.id).exists():
+        request.user.saved_posts.remove(post)
+    else:
+        request.user.saved_posts.add(post)
+            
+    return HttpResponseRedirect(reverse('create-comment', args=[str(pk)]))
+
+def userSavePostListView(request, pk):
+    post = get_object_or_404(Post, id=request.POST.get('post_id'))
+    if request.user.saved_posts.filter(id=post.id).exists():
+        request.user.saved_posts.remove(post)
+    else:
+        request.user.saved_posts.add(post)
+            
+    return HttpResponseRedirect(reverse('index'))
+
+
 @login_required
 def postCommentCreate(request, pk):
     """View function for renewing a specific BookInstance by librarian."""
@@ -125,6 +144,8 @@ def postCommentCreate(request, pk):
     liked = False
     if likes_connected.likes.filter(id=request.user.id).exists():
         liked = True
+    
+    post_is_saved = True if request.user.saved_posts.filter(id=post_for_comment.id).count() == 1 else False
 
     # If this is a POST request then process the Form data
     if request.method == 'POST':
@@ -154,6 +175,7 @@ def postCommentCreate(request, pk):
         'other_posts_of_author': other_posts_of_author,
         'number_of_likes': likes_connected.number_of_likes(),
         'post_is_liked': liked, 
+        'post_is_saved': post_is_saved, 
     }
 
     return render(request, 'insta/postcomment_form.html', context)
@@ -275,3 +297,19 @@ def dontexistPage(request, string):
         
     }
     return render(request, 'insta/dont_exist_page.html', context)
+
+class SavedPostsListView(LoginRequiredMixin, generic.ListView):
+    model = Post
+    template_name = "insta/saved_posts.html"
+
+    def get_queryset(self):
+        return self.request.user.saved_posts.all()    
+    def get_context_data(self, **kwargs):
+        
+        user_follows_list = self.request.user.followed.all()
+        # follows_user_list = self.request.user._set.all()
+
+        context = super(SavedPostsListView, self).get_context_data(**kwargs)
+        context["user_follows_list"] = user_follows_list
+
+        return context
