@@ -433,8 +433,12 @@ nav .img-profpic {
 }
 
 .border-saved-or-posts {
-    border-top:1px solid #000;
+    border-top:1px solid #000 !important;
+    border-left: 0 !important;
+    border-right: 0 !important;
+    border-bottom: 0 !important;
 }
+
 
 @media (max-width: 768px) {
     #like-create-comment {
@@ -473,5 +477,6 @@ nav .img-profpic {
         background-color: rgba(0, 0, 0, 0);
         color: rgba(0, 0, 0, 0);
     }
+
     
 } 

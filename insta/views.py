@@ -297,19 +297,3 @@ def dontexistPage(request, string):
         
     }
     return render(request, 'insta/dont_exist_page.html', context)
-
-class SavedPostsListView(LoginRequiredMixin, generic.ListView):
-    model = Post
-    template_name = "insta/saved_posts.html"
-
-    def get_queryset(self):
-        return self.request.user.saved_posts.all()    
-    def get_context_data(self, **kwargs):
-        
-        user_follows_list = self.request.user.followed.all()
-        # follows_user_list = self.request.user._set.all()
-
-        context = super(SavedPostsListView, self).get_context_data(**kwargs)
-        context["user_follows_list"] = user_follows_list
-
-        return context

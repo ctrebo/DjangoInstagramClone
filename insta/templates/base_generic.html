@@ -50,7 +50,7 @@
           </a>
           <div class="dropdown-menu dropdown-menu-right border-radius-6px" aria-labelledby="navbarDropdownMenuLink">
             <a class="dropdown-item change-color-link-navbar pl-3" href="{% url 'profpage-user' %}"><i class="fa fa-user fa-15 fontawesome-border text-white mr-3"></i>Profil</a>
-            <a class="dropdown-item change-color-link-navbar mt-1 pl-3" href="{% url 'saved-posts-user' %}"><i class="fa fa-bookmark fa-15 fontawesome-border text-white mr-3"></i>Saved</a>
+            <button class="border-0 bg-white dropdown-item change-color-link-navbar mt-1 pl-3" onclick="goToSavedPosts()"><i class="fa fa-bookmark fa-15 fontawesome-border text-white mr-3"></i>Saved</button>
             <hr class="mt-1 mb-1">
             <a class="dropdown-item change-color-link-navbar pl-3" href="{% url 'login'%}">
               Logout</a>

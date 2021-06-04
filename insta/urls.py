@@ -21,7 +21,4 @@ urlpatterns = [
     re_path(r'^signup/$', views.signup, name='signup'),
     re_path(r"^user/activity/$", views.activityPage, name='activity-page'),
     re_path(r"^user/(?P<string>[\w\-]+)/$", views.dontexistPage, name='user-dont-exist'),
-    re_path(r"^saved-posts/$", views.SavedPostsListView.as_view(), name="saved-posts-user"),
-
-
 ]

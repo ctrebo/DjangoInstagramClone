@@ -264,19 +264,35 @@
 </div>
 <div class="d-none d-md-block">
     <div class="row mt-0 mt-md-4 mb-5 border-top-gray">
-        <a href="{% url 'profpage-user' %}" class="ml-auto py-3 text-decoration-none text-muted mr-5 border-saved-or-posts"><i class="fa fa-camera-retro mr-1"></i>Beiträge</a>
-        <a href="{% url 'saved-posts-user' %}" class="mr-auto py-3 text-decoration-none text-muted"><i class="fa fa-bookmark mr-1"></i>Saved</a>
+        <button class="border-0 bg-white ml-auto py-3 text-decoration-none text-muted mr-5 border-saved-or-posts"id="buttonSeePosts"  onclick="seePosts()"><i class="fa fa-camera-retro mr-1"></i>Beiträge</button>
+        <button class="border-0 bg-white mr-auto py-3 text-decoration-none text-muted" id="buttonSeeSavedPosts" onclick="seeSavedPosts()"><i class="fa fa-bookmark mr-1"></i>Saved</button>
     </div>
 </div>
 
 <div class="row d-md-none border-bottom-gray mb-3">
-    <a href="{% url 'profpage-user' %}" class="text-decoration-none text-dark ml-auto mr-5 py-2"><i class="fa fa-camera-retro fa-2x"></i></a>
-    <a href="{% url 'saved-posts-user' %}" class="text-decoration-none text-dark mr-auto py-2"><i class="fa fa-bookmark fa-2x"></i></a>
+    <button class="border-0 bg-white text-decoration-none text-dark ml-auto mr-5 py-2" onclick="seePosts()"><i class="fa fa-camera-retro fa-2x"></i></button>
+    <button class="border-0 bg-white text-decoration-none text-dark mr-auto py-2" onclick="seeSavedPosts()"><i class="fa fa-bookmark fa-2x"></i></button>
 </div>
 
 
-<div class="row">
+<div class="row" id="seePosts">
     {% for post in user.post_set.all%}
+    <div class="col-4 p-15px mb-for-user-detail position-relative">
+        <div class="img-user-detail">
+            <img src="{{post.picture.url}}" alt="">
+            <div onclick="location.href='{% url 'create-comment' post.pk %}';" class="hover h-100 w-100 mx-auto">
+                <p class="px-3 center-comment-symbol d-none d-md-block" href="{% url 'create-comment' post.pk %}"><i
+                        class="fa fa-15 fa-comment"></i> {{post.postcomment_set.count}}</p>
+                <p class="px-3 center-heart-symbol" href="{% url 'create-comment' post.pk %}"><i
+                        class="fa fa-15 fa-heart"></i> {{post.number_of_likes}}</p>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<div class="row d-none" id="seeSavedPosts">
+    {% for post in user.saved_posts.all%}
     <div class="col-4 p-15px mb-for-user-detail position-relative">
         <div class="img-user-detail">
             <img src="{{post.picture.url}}" alt="">

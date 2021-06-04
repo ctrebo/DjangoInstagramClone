@@ -72,3 +72,29 @@ function copyToClipboard(mydata) {
 
     }
 }
+
+
+function seePosts() {
+    $("#seePosts").removeClass("d-none");
+    $("#seeSavedPosts").addClass("d-none");
+    $("#buttonSeePosts").addClass("border-saved-or-posts");
+    $("#buttonSeeSavedPosts").removeClass("border-saved-or-posts");
+
+}
+
+function seeSavedPosts() {
+    $("#seeSavedPosts").removeClass("d-none");
+    $("#seePosts").addClass("d-none");
+    $("#buttonSeeSavedPosts").addClass("border-saved-or-posts");
+    $("#buttonSeePosts").removeClass("border-saved-or-posts");
+}
+
+function goToSavedPosts() {
+  window.location.href ="http://127.0.0.1:8000/insta/profilpage#execute";
+}
+
+if (window.location.hash === '#execute') {
+  seeSavedPosts();
+  history.replaceState(null, null, ' ');
+  
+}
