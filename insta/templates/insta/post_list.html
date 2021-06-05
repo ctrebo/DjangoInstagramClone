@@ -47,49 +47,52 @@
                         <img class="w-100 h-auto img-fluid"  src="{{post.picture.url}}" alt="alt">
                     </article>
                 </section>
-                <section class="px-3 bg-white">
-                    <article class="py-2">
-                        {% load insta_extras %}
-                        <form action="{% url 'like-post-for-list-view' post.pk %}" class="d-inline like-form" method="POST">
-                            {% csrf_token %}
-                            <button type="submit" name="post_id" value="{{post.pk}}" class="btn bg-white px-0 like-submit-bottom-home"><i class="fa fa-15 fa-heart{% cycle_list list_liked %}"></i></button>
-                        </form>
-                        <!-- <a class="" href=""><i class="fa fa-15 fa-heart text-danger"></i></a> -->
-                        <a class="px-2" href="{% url 'create-comment' post.pk %}"><i class="fa fa-15 fa-comment fontawesome-border text-white"></i></a>
-                        <form action="{% url 'save-post-list-view' post.pk %}" method="POST" class="d-inline">
-                            {% csrf_token %}                
-                            <button type="submit" name="post_id" value="{{post.pk}}" class="btn px-0 bg-white float-right"><i class="fa fa-15 fa-bookmark{% if post in user.saved_posts.all %} text-dark{% else %} text-white fontawesome-border{% endif %}"></i></button>
-                        </form>
-                    </article>
+                <section class="bg-white">
+                    <section class="px-3">
+                        <article class="py-2">
+                            {% load insta_extras %}
+                            <form action="{% url 'like-post-for-list-view' post.pk %}" class="d-inline like-form" method="POST">
+                                {% csrf_token %}
+                                <button type="submit" name="post_id" value="{{post.pk}}" class="btn bg-white px-0 like-submit-bottom-home"><i class="fa fa-15 fa-heart{% cycle_list list_liked %}"></i></button>
+                            </form>
+                            <!-- <a class="" href=""><i class="fa fa-15 fa-heart text-danger"></i></a> -->
+                            <a class="px-2" href="{% url 'create-comment' post.pk %}"><i class="fa fa-15 fa-comment fontawesome-border text-white"></i></a>
+                            <form action="{% url 'save-post-list-view' post.pk %}" method="POST" class="d-inline">
+                                {% csrf_token %}                
+                                <button type="submit" name="post_id" value="{{post.pk}}" class="btn px-0 bg-white float-right"><i class="fa fa-15 fa-bookmark{% if post in user.saved_posts.all %} text-dark{% else %} text-white fontawesome-border{% endif %}"></i></button>
+                            </form>
+                        </article>
+                    </section>
+                    <section class="px-3">
+                        <article>
+                            <span class="font-size-username">
+                                <b><a class="text-dark" href="{% url 'user-detail' post.author.pk %}">{{post.author.username}}</a></b><span>&nbsp</span><span>{{post.caption}}</span>
+                            </span>
+                        </article>
+                    </section>
+                    <section class="px-3">
+                        <article>
+                            {% if post.postcomment_set.count > 1 %}
+                            <p class="mb-1 mt-1"><a class="comment-post text-decoration-none" href="{% url 'create-comment' post.pk %}">Show all {{post.postcomment_set.count}} comments</a></p>
+                            {% endif %}
+                            {% if post.postcomment_set.all %}
+                            <span class="font-size-username">
+                                {% with first_comment=post.postcomment_set.all|first %}
+                                <b><a href="{% if first_comment.author == user %}  {% url 'profpage-user'  %} {% else %} {% url 'user-detail' first_comment.author.pk %} {% endif %}" class="text-dark">{{first_comment.author.username}}</a></b>    
+                                <span>&nbsp</span><span>{% for word in first_comment.description_to_array %}{% if "@" in word %} <a href="{% get_tagged_user word user %}">{{word}}  </a> {% else %}{{word}} {% endif %}{% endfor %}</span>
+                                {% endwith %}
+                            </span>
+                            {% endif %}
+    
+                        </article>
+                    </section>
+                    <section class="px-3">
+                        <article class="">
+                            <p class="time-ago">{{post.time_posted_ago}}</p>
+                        </article>
+                    </section>
                 </section>
-                <section class="px-3">
-                    <article>
-                        <span class="font-size-username">
-                            <b><a class="text-dark" href="{% url 'user-detail' post.author.pk %}">{{post.author.username}}</a></b><span>&nbsp</span><span>{{post.caption}}</span>
-                        </span>
-                    </article>
-                </section>
-                <section class="px-3">
-                    <article>
-                        {% if post.postcomment_set.count > 1 %}
-                        <p class="mb-1 mt-1"><a class="comment-post text-decoration-none" href="{% url 'create-comment' post.pk %}">Show all {{post.postcomment_set.count}} comments</a></p>
-                        {% endif %}
-                        {% if post.postcomment_set.all %}
-                        <span class="font-size-username">
-                            {% with first_comment=post.postcomment_set.all|first %}
-                            <b><a href="{% if first_comment.author == user %}  {% url 'profpage-user'  %} {% else %} {% url 'user-detail' first_comment.author.pk %} {% endif %}" class="text-dark">{{first_comment.author.username}}</a></b>    
-                            <span>&nbsp</span><span>{% for word in first_comment.description_to_array %}{% if "@" in word %} <a href="{% get_tagged_user word user %}">{{word}}  </a> {% else %}{{word}} {% endif %}{% endfor %}</span>
-                            {% endwith %}
-                        </span>
-                        {% endif %}
-
-                    </article>
-                </section>
-                <section class="px-3">
-                    <article class="">
-                        <p class="time-ago">{{post.time_posted_ago}}</p>
-                    </article>
-                </section>
+                
             </section>
 
         </div>

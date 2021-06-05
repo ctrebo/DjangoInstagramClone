@@ -1,3 +1,12 @@
+main {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 55px;
+    bottom: 0;
+}
+
+
 /* Change the white to any color */
 input:-webkit-autofill,
 input:-webkit-autofill:hover, 
@@ -439,8 +448,15 @@ nav .img-profpic {
     border-bottom: 0 !important;
 }
 
+.bg-color-page {
+    background-color: #fafafa;
+}
+
 
 @media (max-width: 768px) {
+    .background-color-background {
+        background-color: #fff
+    }
     #like-create-comment {
         position: relative;
         left: auto;

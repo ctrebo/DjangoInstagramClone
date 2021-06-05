@@ -51,7 +51,8 @@
                     <img class="img-profpic" src="{{user.prof_pic.url}}" alt="url">
                   </a>
                   <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-                    <a class="dropdown-item change-color-link-navbar" href="{% url 'profpage-user' %}"><i class="fa fa-user fa-15 fontawesome-border text-white mr-3"></i>Profil</a>
+                    <a class="dropdown-item change-color-link-navbar pl-3" href="{% url 'profpage-user' %}"><i class="fa fa-user fa-15 fontawesome-border text-white mr-3"></i>Profil</a>
+                    <button class="border-0 bg-white dropdown-item change-color-link-navbar mt-1 pl-3" onclick="goToSavedPosts()"><i class="fa fa-bookmark fa-15 fontawesome-border text-white mr-3"></i>Saved</button>
                     <hr class="mt-1 mb-1">
                     <a class="dropdown-item change-color-link-navbar" href="{% url 'login'%}"></i>
                       Log out</a>
@@ -116,10 +117,11 @@
                     <img class="img-profpic" src="{{user.prof_pic.url}}" alt="url">
                   </a>
                   <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-                    <a class="dropdown-item change-color-link-navbar" href="{% url 'profpage-user' %}"><i class="fa fa-user fa-15 fontawesome-border text-white mr-3"></i>Profil</a>
+                    <a class="dropdown-item change-color-link-navbar pl-3" href="{% url 'profpage-user' %}"><i class="fa fa-user fa-15 fontawesome-border text-white mr-3"></i>Profil</a>
+                    <button class="border-0 bg-white dropdown-item change-color-link-navbar mt-1 pl-3" onclick="goToSavedPosts()"><i class="fa fa-bookmark fa-15 fontawesome-border text-white mr-3"></i>Saved</button>
                     <hr class="mt-1 mb-1">
                     <a class="dropdown-item change-color-link-navbar" href="{% url 'login'%}"></i>
-                      Log out</a>
+                      Logout</a>
                   </div>
                 </li>
               </ul>

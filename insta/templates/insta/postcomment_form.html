@@ -6,11 +6,11 @@
         <section class="d-block d-md-none">
             <header class="px-3 p-075 border-comments">
                 <article>
-                    <a href="{% url 'user-detail' post.author.pk %}">                    
+                    <a href="{% if user == post.author %} {% url 'profpage-user' %} {% else %} {% url 'user-detail' post.author.pk %} {% endif %}">                    
                         <img class="post-pp"  src="{{post.author.prof_pic.url}}" alt="alt">
                     </a>
                     <span class="ml-2 font-size-username">
-                        <a href="{% url 'user-detail' post.author.pk %}">
+                        <a href="{% if user == post.author %} {% url 'profpage-user' %} {% else %} {% url 'user-detail' post.author.pk %} {% endif %}">
                             <b class="text-dark">{{post.author.username}}</b>
                         </a>
                     </span>
@@ -49,11 +49,11 @@
         <section class="d-none d-md-block">
             <header class="px-3 p-075 border-comments" id="header-create-comment">
                 <article>
-                    <a href="{% url 'user-detail' post.author.pk %}">                    
+                    <a href="{% if user == post.author %} {% url 'profpage-user' %} {% else %} {% url 'user-detail' post.author.pk %} {% endif %}">                    
                         <img class="post-pp"  src="{{post.author.prof_pic.url}}" alt="alt">
                     </a>
                     <span class="ml-2 font-size-username">
-                        <b><a class="text-dark" href="{% url 'user-detail' post.author.pk %}">{{post.author.username}}</a></b>
+                        <b><a class="text-dark" href="{% if user == post.author %} {% url 'profpage-user' %} {% else %} {% url 'user-detail' post.author.pk %} {% endif %}">{{post.author.username}}</a></b>
                     </span>
                     <span class="float-right" data-toggle="modal" data-target="#modal-{{post.pk}}-2">
                         <i class="fa fa-circle font-size-05" aria-hidden=""></i><i class="fa fa-circle font-size-05 margin-015rem" aria-hidden="true"></i><i class="fa fa-circle font-size-05" aria-hidden="true"></i>  
@@ -87,7 +87,7 @@
                         <article>
                             <table class="w-100">
                                 <tr>
-                                    <td style="width: 40px;"><img class="post-pp"  src="{{comment.author.prof_pic.url}}" alt="alt"></td>
+                                    <td style="width: 40px;"><a href="{% if user == post.author %} {% url 'profpage-user' %} {% else %} {% url 'user-detail' post.author.pk %} {% endif %}"><img class="post-pp"  src="{{comment.author.prof_pic.url}}" alt="alt"></a></td>
                                     <td class="w-auto"><span class="font-size-username  line-height-comments">
                                         <span class="font-size-username">
                                             {% load insta_extras %}
