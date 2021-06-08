@@ -1,8 +1,7 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-{% for usersz in user_vars %}
-    {% for post in usersz.post_set.all %}
+{% for post in post_list %}
     <div class="row mb-3 mb-3 mb-md-5">
         <div class="col-12 col-md-7 p-0 p-md-2">
             <section class="border-post">
@@ -42,9 +41,10 @@
                         </article>
                     </header>
                 </section>
-                <section>
+                <section class="position-relative">
                     <article>
                         <img class="w-100 h-auto img-fluid"  src="{{post.picture.url}}" alt="alt">
+                        {% if post.tagged_people.exists %}<div class="tagged-people"><i class="fa text-white fa-user tagged-people-icon"></i></div>{% endif %}
                     </article>
                 </section>
                 <section class="px-3 bg-white">
@@ -52,7 +52,7 @@
                         {% load insta_extras %}
                         <form action="{% url 'like-post-for-list-view' post.pk %}" class="d-inline like-form" method="POST">
                             {% csrf_token %}
-                            <button type="submit" name="post_id" value="{{post.pk}}" class="btn bg-white px-0 like-submit-bottom-home"><i class="fa fa-15 fa-heart{% cycle_list list_liked %}"></i></button>
+                            <button type="submit" name="post_id" value="{{post.pk}}" class="btn bg-white px-0 like-submit-bottom-home"><i class="fa fa-15 fa-heart {% if user in post.likes.all %} text-danger {% else %} text-white fontawesome-border {% endif %} "></i></button>
                         </form>
                         <!-- <a class="" href=""><i class="fa fa-15 fa-heart text-danger"></i></a> -->
                         <a class="px-2" href="{% url 'create-comment' post.pk %}"><i class="fa fa-15 fa-comment fontawesome-border text-white"></i></a>
@@ -91,7 +91,6 @@
         </div>
 
     </div>
-    {% endfor %}
     {% if forloop.first %}
     <div class="col-md-5 d-none d-md-block recommendations-fixed">
         <section class="vh-100">
