@@ -454,6 +454,19 @@ nav  .img-profpic {
     background-color: #fafafa;
 }
 
+.tagged-people {
+    height: 1.7rem;
+    width: 1.7rem;
+    position: absolute;
+    bottom: .5rem;
+    left: .5rem;
+    background-color: #000;
+    border-radius: 50%;
+}
+
+.tagged-people-icon {
+    transform: translateX(calc(50% + 2px));
+}
 
 @media (max-width: 768px) {
     .background-color-background {

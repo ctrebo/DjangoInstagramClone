@@ -6,6 +6,9 @@ import datetime
 from datetime import timezone, timedelta
 from django.urls import reverse #Used to generate URLs by reversing the URL patterns
 
+from django.db.models.signals import m2m_changed
+from django.core.exceptions import ValidationError
+
 
 class CustomUser(AbstractUser):
     date_joined = models.DateTimeField(auto_now_add=True)
@@ -100,7 +103,12 @@ class Post(models.Model):
             else:
                 return result + " years ago"
         else:
-            return "undefined"             
+            return "undefined"       
+
+def tagged_people_changed(sender, **kwargs):
+    if kwargs['instance'].tagged_people.count() > 20:
+        raise ValidationError("You can't tag more than 20 people")  
+m2m_changed.connect(tagged_people_changed, sender=Post.tagged_people.through)    
 
 class PostComment(models.Model):
     """
@@ -175,3 +183,5 @@ class PostComment(models.Model):
                 return result + " year ago"
             else:
                 return result + " years ago"   
+
+

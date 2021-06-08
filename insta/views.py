@@ -46,8 +46,9 @@ class PostListView(LoginRequiredMixin, generic.ListView):
     model = user_model
     template_name = "insta/post_list.html"
 
-    # def get_queryset(self):
-        # return Post.objects.exclude(author=self.request.user).order_by("-post_date")
+    def get_queryset(self):
+        ids_followed = self.request.user.followed.all().values_list("id")
+        return Post.objects.filter(id__in=ids_followed)
 
     
     def get_context_data(self, **kwargs):
