@@ -99,7 +99,7 @@ body {
     margin-top: 60px;
 }
 
-nav .img-profpic {
+nav  .img-profpic {
     position: absolute;
     top: 50% + 10.2px;
     /* right: 0; */
@@ -107,6 +107,8 @@ nav .img-profpic {
     width: 1.5em;
     border-radius: 50%;
 }
+
+
 
 .image-container {
     
