@@ -43,7 +43,7 @@ class PostAdmin(admin.ModelAdmin):
     # readonly_fields = ('id',)
 
 
-    fieldsets = (("Post information", {'fields': ('author', 'likes', 'picture', "caption")}),)
+    fieldsets = (("Post information", {'fields': ('author', 'likes', 'picture', "caption", "tagged_people")}),)
 
     inlines = [PostCommentInline]
 

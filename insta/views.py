@@ -239,7 +239,7 @@ class ProfilPageListView(LoginRequiredMixin, generic.ListView):
 
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
-    fields = ["picture", "caption"]
+    fields = ["picture", "caption", "tagged_people"]
 
     def get_success_url(self):
         """

@@ -24,6 +24,7 @@ class Post(models.Model):
     likes = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='likes', blank=True)
     picture = models.ImageField(upload_to="images_post", height_field=None, width_field=None)
     caption = models.TextField(max_length=1500, blank=True, null=True)
+    tagged_people = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="tagging", blank=True)
 
     class Meta:
         ordering = ["-post_date"]
