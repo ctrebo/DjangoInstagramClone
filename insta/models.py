@@ -103,7 +103,9 @@ class Post(models.Model):
             else:
                 return result + " years ago"
         else:
-            return "undefined"       
+            return "undefined"
+    
+       
 
 def tagged_people_changed(sender, **kwargs):
     if kwargs['instance'].tagged_people.count() > 20:
