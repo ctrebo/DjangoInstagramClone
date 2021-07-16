@@ -98,3 +98,11 @@ if (window.location.hash === '#execute') {
   history.replaceState(null, null, ' ');
   
 }
+
+$( ".single-comment" ).hover(
+  function() {
+    $( this ).children(".comment-options").removeClass("d-none");
+  }, function() {
+    $( this ).children(".comment-options").addClass("d-none");
+  }
+);

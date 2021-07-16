@@ -29,13 +29,51 @@
                                     {% endwith %}
                                 </section>
                                 <hr>
+                                {% if user == post.author %}
+                                <section>
+                                    <article><a data-dismiss="modal" class="w-100 d-block text-danger font-weight-bold text-decoration-none text-center" data-toggle="modal" href="#modalDeletePost2">Delete</a></article>
+                                </section>
+                                <hr>
+                                {% endif %}
                                 <section class="px-3">
                                     <article><a data-dismiss="modal" class="w-100 d-block text-dark text-decoration-none text-center" href="">Abort</a></article>
                                 </section>
                             </div>
                           </div>
                         </div>
-                      </div>        
+                      </div>
+                      <div class="modal fade" id="modalDeletePost2" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                          <div class="modal-content modal-content-delete">
+                            <div class="modal-header">
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-12 m-auto">
+                                            <h5 class="modal-title text-center mb-2" id="exampleModalLongTitle">Delete this post?</h5>
+                                            <p class="text-muted">You won't be able to restore this post if you delete it!</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-body px-0">
+                                <section class="px-3 w-100">
+                                    <article><form action="{% url 'delete-post' post.pk %}" method="POST">
+                                        {% csrf_token %}
+                                        <div class="text-center">
+                                            <button type="submit" name="post_delete_id" value="{{post.pk}}" class="bg-white p-0 border-0 m-auto font-weight-bold text-danger">Delete Post</button>
+                                        </div>                
+                                    </form></article>
+                                </section>
+                                <hr>
+                                <section class="px-3 w-100">
+                                    <article>
+                                        <a data-dismiss="modal" class="w-100 d-block text-dark text-decoration-none text-center" href="">Don't delete</a>
+                                    </article>
+                                </section>
+                            </div>
+                          </div>
+                        </div>
+                      </div>            
                 </article>
             </header>
         </section>
@@ -105,8 +143,46 @@
                                     {% endwith %}
                                 </section>
                                 <hr>
+                                {% if user == post.author %}
+                                <section>
+                                    <article><a data-dismiss="modal" class="w-100 d-block font-weight-bold text-danger text-decoration-none text-center" data-toggle="modal" href="#modalDeletePost">Delete</a></article>
+                                </section>
+                                <hr>
+                                {% endif %}
                                 <section class="px-3">
                                     <article><a data-dismiss="modal" class="w-100 d-block text-dark text-decoration-none text-center" href="">Abort</a></article>
+                                </section>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="modal fade" id="modalDeletePost" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                          <div class="modal-content modal-content-delete">
+                            <div class="modal-header">
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-6 m-auto">
+                                            <h5 class="modal-title text-center mb-2" id="exampleModalLongTitle">Delete this post?</h5>
+                                            <p class="text-muted">You won't be able to restore this post if you delete it!</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-body px-0">
+                                <section class="px-3 w-100">
+                                    <article><form action="{% url 'delete-post' post.pk %}" method="POST">
+                                        {% csrf_token %}
+                                        <div class="text-center">
+                                            <button type="submit" name="post_delete_id" value="{{post.pk}}" class="bg-white p-0 font-weight-bold text-danger border-0 m-auto">Delete Post</button>
+                                        </div>                
+                                    </form></article>
+                                </section>
+                                <hr>
+                                <section class="px-3 w-100">
+                                    <article>
+                                        <a data-dismiss="modal" class="w-100 d-block text-dark text-decoration-none text-center" href="">Don't delete</a>
+                                    </article>
                                 </section>
                             </div>
                           </div>
@@ -118,15 +194,43 @@
         <section id="comment-section" class="d-none d-md-block w-100 border-add-comment position-absolute">
             <article class="overflow-comments">
                 {% for comment in comment_list %}
-                    <section class="px-3 pt-3 d-none d-md-block">
+                    <section class="px-3 pt-3 d-none d-md-block single-comment position-relative">
+                        <span class="position-absolute d-none comment-options" data-toggle="modal" data-target="#modal-comment-{{post.pk}}" >
+                            <i class="fa fa-circle font-size-05" aria-hidden=""></i><i class="fa fa-circle font-size-05 margin-015rem" aria-hidden="true"></i><i class="fa fa-circle font-size-05" aria-hidden="true"></i>  
+                        </span>
+                        <div class="modal fade" id="modal-comment-{{post.pk}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                              <div class="modal-content modal-content-delete">
+                                
+                                <div class="modal-body px-0">
+                                    <section class="px-3 w-100">
+                                        <!-- put pk of post into url so user can be redirected to the same page -->
+                                        <article><form action="{% url 'delete-comment' post.pk %}" method="POST">
+                                            {% csrf_token %}
+                                            <div class="text-center">
+                                                <button type="submit" name="comment_delete_id" value="{{comment.pk}}" class="bg-white p-0 font-weight-bold text-danger border-0 m-auto">Delete Post</button>
+                                            </div>                
+                                        </form></article>
+                                    </section>
+                                    <hr>
+                                    <section class="px-3 w-100">
+                                        <article>
+                                            <a data-dismiss="modal" class="w-100 d-block text-dark text-decoration-none text-center" href="">Abort</a>
+                                        </article>
+                                    </section>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        
                         <article>
                             <table class="w-100">
                                 <tr>
                                     <td style="width: 40px;"><a href="{% if user == post.author %} {% url 'profpage-user' %} {% else %} {% url 'user-detail' post.author.pk %} {% endif %}"><img class="post-pp"  src="{{comment.author.prof_pic.url}}" alt="alt"></a></td>
-                                    <td class="w-auto"><span class="font-size-username  line-height-comments">
+                                    <td class="w-auto line-height-comments"><span class="font-size-username">
                                         <span class="font-size-username">
                                             {% load insta_extras %}
-                                            <b><a class="text-dark" href="{% if comment.author == user %}  {% url 'profpage-user'  %} {% else %} {% url 'user-detail' comment.author.pk %} {% endif %}">{{comment.author.username}}</a></b><span>&nbsp</span><span>{% for word in comment.description_to_array %} {% if "@" in word %} <a href="{% get_tagged_user word user %}">{{word}}  </a> {% else %}{{word}} {% endif %}{% endfor %}</span><p class="time-ago mb-0">{{comment.time_commented_ago}}</p>
+                                            <b><a class="text-dark" href="{% if comment.author == user %}  {% url 'profpage-user'  %} {% else %} {% url 'user-detail' comment.author.pk %} {% endif %}">{{comment.author.username}}</a></b><span>&nbsp</span><span class="">{% for word in comment.description_to_array %} {% if "@" in word %} <a href="{% get_tagged_user word user %}">{{word}}  </a> {% else %}{{word}} {% endif %}{% endfor %}</span><p class="time-ago mb-0">{{comment.time_commented_ago}}</p>
                                         </span>
                                     </td>
                                 </tr>

@@ -74,6 +74,18 @@ def blogPostLike(request, pk):
 
     return HttpResponseRedirect(reverse('create-comment', args=[str(pk)]))
 
+def deletePostView(request, pk):
+    post = get_object_or_404(Post, id=pk)
+    post.delete()
+    
+    return HttpResponseRedirect(reverse('profpage-user'))
+
+def deleteCommentView(request, pk):
+    comment = get_object_or_404(PostComment, id=request.POST.get('comment_delete_id'))
+    comment.delete()
+
+    return HttpResponseRedirect(reverse('create-comment', args=[str(pk)]))
+
 def followUser(request, pk):
     user_to_follow = get_object_or_404(user_model, id=request.POST.get('user_id'))
     if (request.user).followed.filter(id=user_to_follow.id).exists():
@@ -150,7 +162,7 @@ def postCommentCreate(request, pk):
             comment.save()
 
             # redirect to a new URL:
-            return HttpResponseRedirect(reverse('index') )
+            return HttpResponseRedirect(reverse('create-comment', args=[str(pk)]) )
 
     # If this is a GET (or any other method) create the default form.
     else:
@@ -286,3 +298,4 @@ def dontexistPage(request, string):
         
     }
     return render(request, 'insta/dont_exist_page.html', context)
+

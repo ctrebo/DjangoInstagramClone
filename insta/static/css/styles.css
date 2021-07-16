@@ -52,6 +52,14 @@ button:focus {
     transform: translate(-200px, 245px );
 }
 
+.modal-content-delete {
+    border-radius: 15px;
+    width: 400px;
+    left: 50%;
+    transform: translateX(-200px);
+
+}
+
 .margin-015rem {
     margin-left: .15rem;
     margin-right: .15rem;
@@ -468,6 +476,13 @@ nav  .img-profpic {
     transform: translateX(calc(50% + 2px));
 }
 
+.comment-options {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
 @media (max-width: 768px) {
     .background-color-background {
         background-color: #fff
@@ -482,6 +497,13 @@ nav  .img-profpic {
         top: 50%;
         width: 260px;
         transform: translate(-130px, 260px);
+    }
+    .modal-content-delete {
+        border-radius: 15px;
+        width: 260px;
+        left: 50%;
+        transform: translateX(-130px);
+    
     }
     .p-15px {
         padding-right: 1.5px;
