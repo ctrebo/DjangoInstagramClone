@@ -483,6 +483,10 @@ nav  .img-profpic {
     transform: translateY(-50%);
 }
 
+.w-10 {
+    width: 10%;
+}
+
 @media (max-width: 768px) {
     .background-color-background {
         background-color: #fff

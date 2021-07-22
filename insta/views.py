@@ -1,4 +1,8 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404, redirect
 from django.conf import settings
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
@@ -87,22 +91,15 @@ def deleteCommentView(request, pk):
     return HttpResponseRedirect(reverse('create-comment', args=[str(pk)]))
 
 def followUser(request, pk):
-    user_to_follow = get_object_or_404(user_model, id=request.POST.get('user_id'))
+    user_to_follow = get_object_or_404(user_model, id=pk)
+    redirect_path = request.POST.get('redirect_path')
     if (request.user).followed.filter(id=user_to_follow.id).exists():
         (request.user).followed.remove(user_to_follow)
     else:
         (request.user).followed.add(user_to_follow)
+    
+    return HttpResponseRedirect(redirect_path)
 
-    return HttpResponseRedirect(reverse('user-detail', args=[str(pk)]))
-
-def followUserProfPage(request, pk):
-    user_to_follow = get_object_or_404(user_model, id=request.POST.get('user_id'))
-    if (request.user).followed.filter(id=user_to_follow.id).exists():
-        (request.user).followed.remove(user_to_follow)
-    else:
-        (request.user).followed.add(user_to_follow)
-
-    return HttpResponseRedirect(reverse('profpage-user'))
 
 @csrf_exempt
 def blogPostLikeListView(request, pk):

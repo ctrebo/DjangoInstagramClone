@@ -1,7 +1,5 @@
 {% extends "base_generic.html" %}
-
 {% block content %}
-
 <!-- display users that user follows -->
 <!-- {% for userx in user_follows_list %}
     <p>{{userx.username}}</p>
@@ -49,23 +47,34 @@
                                     </button>
                                 </div>
                                 <div class="modal-body modal-body-subs pt-0">
-                                    {% for user in user.followed_field.all %}
+                                    {% for user_in_list in user.followed_field.all %}
                                     <section class="position-relative mb-1 section-search-page px-2 py-2">
                                         <div>
                                             <article class="d-inline my-auto">
-                                                <a href="{% url 'user-detail' user.pk %}">
-                                                    <img src="{{user.prof_pic.url}}" class="post-pp img-fluid">
+                                                <a href="{% url 'user-detail' user_in_list.pk %}">
+                                                    <img src="{{user_in_list.prof_pic.url}}" class="post-pp img-fluid">
                                                 </a>
 
                                             </article>
                                             <article class="d-inline search-article">
                                                 <div>
-                                                    <a href="{% url 'user-detail' user.pk %}">
-                                                        <b class="username-search text-dark">{{user.username}}</b>
+                                                    <a href="{% url 'user-detail' user_in_list.pk %}">
+                                                        <b class="username-search text-dark">{{user_in_list.username}}</b>
                                                     </a>
 
                                                 </div>
-                                                <small class="font-weight-light text-dark">{{user.first_name}}</small>
+                                                <small class="font-weight-light text-dark">{{user_in_list.first_name}}</small>
+                                            </article>
+                                            <article class="d-inline float-right">
+                                                <form action="{% url 'follow-user' user_in_list.pk %}" method="POST"
+                                                    class="d-inline ml-md-2">
+                                                    {% csrf_token %}
+						    {% if user_in_list in user.followed.all %}
+                                                    <button type="submit" name="redirect_path" value="{% url 'profpage-user' %}" class="btn border bg-white text-dark">Following</button>
+						    {% else %}
+                                                    <button type="submit" name="redirect_path" value="{% url 'profpage-user' %}" class="btn border bg-primary text-white">Follow</button>
+						    {% endif %}
+						</form>
                                             </article>
                                         </div>
                                     </section>
@@ -94,31 +103,30 @@
                                     </button>
                                 </div>
                                 <div class="modal-body modal-body-subs pt-0 ">
-                                    {% for user in user_follows_list %}
+                                    {% for user_in_list in user_follows_list %}
                                     <section class="position-relative mb-1 section-search-page px-2 py-2">
                                         <div>
                                             <article class="d-inline my-auto">
-                                                <a href="{% url 'user-detail' user.pk %}">
-                                                    <img src="{{user.prof_pic.url}}" class="post-pp img-fluid">
+                                                <a href="{% url 'user-detail' user_in_list.pk %}">
+                                                    <img src="{{user_in_list.prof_pic.url}}" class="post-pp img-fluid">
                                                 </a>
 
                                             </article>
                                             <article class="d-inline search-article">
                                                 <div>
-                                                    <a href="{% url 'user-detail' user.pk %}">
-                                                        <b class="username-search text-dark">{{user.username}}</b>
+                                                    <a href="{% url 'user-detail' user_in_list.pk %}">
+                                                        <b class="username-search text-dark">{{user_in_list.username}}</b>
                                                     </a>
 
                                                 </div>
-                                                <small class="font-weight-light text-dark">{{user.first_name}}</small>
+                                                <small class="font-weight-light text-dark">{{user_in_list.first_name}}</small>
                                             </article>
                                             <article class="d-inline float-right">
-                                                <form action="{% url 'follow-user-profpage' user.pk %}" method="POST"
+                                                <form action="{% url 'follow-user' user_in_list.pk %}" method="POST"
                                                     class="d-inline ml-md-2">
                                                     {% csrf_token %}
-                                                    <button type="submit" name="user_id" value="{{user.pk}}"
-                                                        class="btn border btn-white bg-white" id="">Following</button>
-                                                </form>
+                                                    <button type="submit" name="redirect_path" value="{% url 'profpage-user' %}" class="btn border btn-white bg-white" id=""> {% if  user_in_list in user.followed.all %} Following{% else %}Follow{% endif %}</button>
+						</form>
                                             </article>
                                         </div>
                                     </section>
@@ -240,12 +248,10 @@
                                                         class="font-weight-light text-dark">{{user.first_name}}</small>
                                                 </article>
                                                 <article class="d-inline float-right">
-                                                    <form action="{% url 'follow-user-profpage' user.pk %}"
+                                                    <form action="{% url 'follow-user' user.pk %}"
                                                         method="POST" class="d-inline ml-md-2">
                                                         {% csrf_token %}
-                                                        <button type="submit" name="user_id" value="{{user.pk}}"
-                                                            class="btn border btn-white bg-white"
-                                                            id="">Following</button>
+                                                        <button type="submit" name="redirect_path" value="{% url 'profpage-user' %}" class="btn border btn-white bg-white" id="">Following</button>
                                                     </form>
                                                 </article>
                                             </div>

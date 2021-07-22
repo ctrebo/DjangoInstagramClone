@@ -133,9 +133,19 @@
                     <p class="font-weight-light mb-4">Recommandations for you</p>
                     {% for user in recommandation_list %}
                     <div class="mb-3">
-                        <a href="{% url 'user-detail' user.pk %}"><img class="post-pp img-fluid" src="{{user.prof_pic.url}}"></a>
-                        <!-- <img class="post-pp" src="{{user.prof_pic.url}}"> -->
-                        <b><a class="text-dark" href="{% url 'user-detail' user.pk %}">{{user.username}}</a></b>
+                        <table class="w-100">
+                            <tr>
+                                <td class="w-10"><a href="{% url 'user-detail' user.pk %}"><img class="post-pp img-fluid" src="{{user.prof_pic.url}}"></a></td>
+                                <td class="w-50"><b><a class="text-dark" href="{% url 'user-detail' user.pk %}">{{user.username}}</a></b></td>
+                                <td>
+                                    <form action="{% url 'follow-user' user.pk %}" method="POST">
+                                        {% csrf_token %}
+
+                                        <button class="bg-white border-0 text-info" type="submit" name="redirect_path" value="{% url 'user-detail' user.pk %}">Follow</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        </table>
                     </div>
                     {% endfor %}
                 </div>
@@ -152,9 +162,20 @@
                     
                     {% for user in recommandation_list %}
                     <div class="mb-3">
-                        <a href="{% url 'user-detail' user.pk %}"><img class="post-pp img-fluid" src="{{user.prof_pic.url}}"></a>
-                        <!-- <img class="post-pp" src="{{user.prof_pic.url}}"> -->
-                        <b><a class="text-dark" href="{% url 'user-detail' user.pk %}">{{user.username}}</a></b>
+		
+                        <table class="w-100">
+                            <tr>
+                                <td class="w-10"><a href="{% url 'user-detail' user.pk %}"><img class="post-pp img-fluid" src="{{user.prof_pic.url}}"></a></td>
+                                <td class="w-50"><b><a class="text-dark" href="{% url 'user-detail' user.pk %}">{{user.username}}</a></b></td>
+                                <td>
+				    <form action="{% url 'follow-user' user.pk %}" method="POST">
+                                        {% csrf_token %}
+
+                                        <button class="bg-white border-0 text-info" type="submit" name="redirect_path" value="{% url 'user-detail' user.pk %}">Follow</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        </table>
                     </div>
                     {% endfor %}
                 </div>
@@ -162,6 +183,4 @@
         </section>
     </div>
 {% endfor %}
-
-
 {% endblock %}

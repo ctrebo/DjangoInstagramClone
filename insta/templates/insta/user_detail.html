@@ -16,12 +16,12 @@
             <article>
                 <div>
                     <h2 class="font-weight-normal font-italic">{{user_for_page.username}}                 
-                        <form action="{% url 'follow-user' user_for_page.pk %}" method="POST" class="d-inline ml-md-2">
+			<form action="{% url 'follow-user' user_for_page.pk %}" method="POST" class="d-inline ml-md-2">
                             {% csrf_token %}
                             {% if user_is_followed %}                
-                            <button type="submit" name="user_id" value="{{user_for_page.pk}}" class="btn bg-white border" id="">Unfollow</button>
+                            	<button type="submit" name="redirect_path" value="{% url 'user-detail' user_for_page.pk %}" class="btn bg-white border" id="">Unfollow</button>
                             {% else %}
-                            <button type="submit" name="user_id" value="{{user_for_page.pk}}" class="btn btn-primary" id="">Follow</button>
+                            	<button type="submit" name="redirect_path" value="{% url 'user-detail' user_for_page.pk %}" class="btn bg-primary border text-white" id="">Follow</button>
                             {% endif %}
                         </form>
                     </h2>
@@ -66,6 +66,17 @@
                                                         </div>
                                                         <small class="font-weight-light text-dark">{{user_follower.first_name}}</small>
                                                     </article>
+                                                    <article class="d-inline float-right">
+                                                        <form action="{% url 'follow-user' user_follower.pk %}" method="POST"
+                                                            class="d-inline ml-md-2">
+                                                            {% csrf_token %}
+                                                            {% if user_follower in user.followed.all %}
+                                                            <button type="submit" name="redirect_path" value="{% url 'user-detail' user_for_page.pk %}" class="btn bbrder bg-white text-dark">Following</button>
+                                                            {% else %}
+                                                            <button type="submit" name="redirect_path" value="{% url 'user-detail' user_for_page.pk %}" class="btn border bg-primary text-white">Follow</button>
+                                                            {% endif %}
+                                                        </form>
+                                                    </article>
                                                 </div>
                                             </section>
                                             {% endfor %}
@@ -109,6 +120,18 @@
                                                         </div>
                                                         <small class="font-weight-light text-dark">{{user_following.first_name}}</small>
                                                     </article>
+						    <article class="d-inline float-right">
+							<form action="{% url 'follow-user' user_following.pk %}" method="POST"
+							    class="d-inline ml-md-2">
+							    {% csrf_token %}
+							    {% if  user_following == user  %}
+							    {% elif user_following in user.followed.all %}
+							    <button type="submit" name="redirect_path" value="{% url 'user-detail' user_following.pk %}" class="btn border bg-white text-dark">Following</button>
+							    {% else %}
+							    <button type="submit" name="redirect_path" value="{% url 'user-detail'  user_following.pk %}" class="btn border bg-primary text-white">Follow</button>
+							    {% endif %}
+							</form>
+						    </article>
                                                 </div>
                                             </section>
                                             {% endfor %}
@@ -123,7 +146,7 @@
                 </div>
                 <section class="d-none d-md-block">
                     <article>
-                        <p class="mb-1"><b>{{user.first_name}}</b></p>
+                        <p class="mb-1"><b>{{user_for_page.first_name}}</b></p>
                         <span>{% if user_for_page.bio %}{{user_for_page.bio|linebreaks}} {% endif %} </span>
                     </article>
                 </section>
@@ -135,7 +158,7 @@
     <div class="col-12">
         <section>
             <article>
-                <p class="mb-1"><b>{{user.first_name}}</b></p>
+                <p class="mb-1"><b>{{user_for_page.first_name}}</b></p>
                 <span>{% if user_for_page.bio %}{{user_for_page.bio|linebreaks}} {% endif %} </span>
             </article>
         </section>
@@ -149,7 +172,7 @@
                 <ul class="p-0 m-0">
                     <li class="d-inline-block">
                         <span classs="text-center">
-                            <span class="d-block text-center"><b>{{user.post_set.count}}</b></span>
+                            <span class="d-block text-center"><b>{{user_for_page.post_set.count}}</b></span>
                             Posts
                         </span>
                     </li>
@@ -233,12 +256,10 @@
                                                     class="font-weight-light text-dark">{{user.first_name}}</small>
                                             </article>
                                             <article class="d-inline float-right">
-                                                <form action="{% url 'follow-user-profpage' user.pk %}"
+                                                <form action="{% url 'follow-user' user.pk %}"
                                                     method="POST" class="d-inline ml-md-2">
                                                     {% csrf_token %}
-                                                    <button type="submit" name="user_id" value="{{user.pk}}"
-                                                        class="btn border btn-white bg-white"
-                                                        id="">Following</button>
+                                                    <button type="submit" name="redirect_path" value="{% url 'user-detail' user_for_page.pk %}" class="btn border btn-white bg-white"                                                        id="">Following</button>
                                                 </form>
                                             </article>
                                         </div>
