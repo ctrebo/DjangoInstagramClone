@@ -13,7 +13,6 @@ urlpatterns = [
     re_path(r"^user/(?P<pk>[0-9]+)/follow/$", views.followUser, name="follow-user"),
     re_path(r"^post/(?P<pk>[0-9]+)/like-list-view/$", views.blogPostLikeListView, name="like-post-for-list-view"),
     re_path(r"^user/(?P<pk>[0-9]+)/save/$", views.userSavePost, name="save-post"),
-    re_path(r"^user/(?P<pk>[0-9]+)/save-list-view/$", views.userSavePostListView, name="save-post-list-view"),
     re_path(r"^user/(?P<pk>[0-9]+)/update/$", views.updateUser, name="update-user"),
     re_path(r"^search/$", views.SearchResultsView.as_view(), name='search_results'),
     re_path(r"^search-page/$", views.SearchPageListView.as_view(), name='search_page'),

@@ -256,7 +256,7 @@
             <article>
                 <form action="{% url 'save-post' post.pk %}" method="POST">
                     {% csrf_token %}                
-                    <button type="submit" name="post_id" value="{{post.pk}}" class="btn bg-white" id="save-create-comment"><i class="fa fa-15 fa-bookmark{% if post_is_saved %} text-dark{% else %} text-white fontawesome-border{% endif %}"></i></button>
+                    <button type="submit" name="redirect_path" value="{% url 'create-comment' post.pk %}" class="btn bg-white" id="save-create-comment"><i class="fa fa-15 fa-bookmark{% if post_is_saved %} text-dark{% else %} text-white fontawesome-border{% endif %}"></i></button>
                 </form>
             </article>
         </section>

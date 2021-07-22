@@ -111,23 +111,16 @@ def blogPostLikeListView(request, pk):
 
     return HttpResponseRedirect(reverse('index'))
 
+@login_required
 def userSavePost(request, pk):
-    post = get_object_or_404(Post, id=request.POST.get('post_id'))
+    post = get_object_or_404(Post, id=pk)
+    redirect_path = request.POST.get('redirect_path')
     if request.user.saved_posts.filter(id=post.id).exists():
         request.user.saved_posts.remove(post)
     else:
         request.user.saved_posts.add(post)
             
-    return HttpResponseRedirect(reverse('create-comment', args=[str(pk)]))
-
-def userSavePostListView(request, pk):
-    post = get_object_or_404(Post, id=request.POST.get('post_id'))
-    if request.user.saved_posts.filter(id=post.id).exists():
-        request.user.saved_posts.remove(post)
-    else:
-        request.user.saved_posts.add(post)
-            
-    return HttpResponseRedirect(reverse('index'))
+    return HttpResponseRedirect(redirect_path)
 
 
 @login_required
