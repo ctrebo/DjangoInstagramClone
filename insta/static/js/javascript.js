@@ -77,16 +77,45 @@ function copyToClipboard(mydata) {
 function seePosts() {
     $("#seePosts").removeClass("d-none");
     $("#seeSavedPosts").addClass("d-none");
+    $("#seeMarkedPosts").addClass("d-none");
+    
     $("#buttonSeePosts").addClass("border-saved-or-posts");
     $("#buttonSeeSavedPosts").removeClass("border-saved-or-posts");
+    $("#buttonSeeMarkedPosts").removeClass("border-saved-or-posts");
 
+    $("#buttonMobilePosts").addClass("fontawesome-border-blue");
+    $("#buttonMobileSavedPosts").removeClass("fontawesome-border-blue");
+    $("#buttonMobileMarkedPosts").removeClass("fontawesome-border-blue");
+    
 }
 
 function seeSavedPosts() {
     $("#seeSavedPosts").removeClass("d-none");
     $("#seePosts").addClass("d-none");
+    $("#seeMarkedPosts").addClass("d-none");
+
     $("#buttonSeeSavedPosts").addClass("border-saved-or-posts");
     $("#buttonSeePosts").removeClass("border-saved-or-posts");
+    $("#buttonSeeMarkedPosts").removeClass("border-saved-or-posts");
+    
+    $("#buttonMobileSavedPosts").addClass("fontawesome-border-blue");
+    $("#buttonMobilePosts").removeClass("fontawesome-border-blue");
+    $("#buttonMobileMarkedPosts").removeClass("fontawesome-border-blue");
+
+}
+
+function seeMarkedPosts() {
+    $("#seeMarkedPosts").removeClass("d-none");
+    $("#seePosts").addClass("d-none");
+    $("#seeSavedPosts").addClass("d-none");
+
+    $("#buttonSeeMarkedPosts").addClass("border-saved-or-posts");
+    $("#buttonSeePosts").removeClass("border-saved-or-posts");
+    $("#buttonSeeSavedPosts").removeClass("border-saved-or-posts");
+    
+    $("#buttonMobileMarkedPosts").addClass("fontawesome-border-blue");
+    $("#buttonMobileSavedPosts").removeClass("fontawesome-border-blue");
+    $("#buttonMobilePosts").removeClass("fontawesome-border-blue");
 }
 
 function goToSavedPosts() {

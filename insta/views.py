@@ -220,12 +220,14 @@ class ProfilPageListView(LoginRequiredMixin, generic.ListView):
     
     def get_context_data(self, **kwargs):
         
+        user_is_marked_list = Post.objects.filter(tagged_people__id=self.request.user.id)
         user_follows_list = self.request.user.followed.all()
         # follows_user_list = self.request.user._set.all()
+        
 
         context = super(ProfilPageListView, self).get_context_data(**kwargs)
         context["user_follows_list"] = user_follows_list
-
+        context["user_is_marked_list"] = user_is_marked_list
         return context
 
 class PostCreateView(LoginRequiredMixin, CreateView):

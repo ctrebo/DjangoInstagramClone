@@ -91,7 +91,7 @@
                         <a class="px-2" href="{% url 'create-comment' post.pk %}"><i class="fa fa-15 fa-comment fontawesome-border text-white"></i></a>
                         <form class='float-right' action="{% url 'save-post' post.pk %}" method="POST">
                             {% csrf_token %}
-                            <button type="submit" name="redirect_path" value="{% url 'index' %}" class="btn bg-white" ><i class="fa fa-15 fa-bookmark{% if post in user.saved_posts.all %} text-dark{% else %} text-white fontawesome-border{% endif %}"></i></button>
+                            <button type="submit" name="redirect_path" value="{% url 'index' %}" class="btn bg-white"><i class="fa fa-15 fa-bookmark{% if post in user.saved_posts.all %} text-dark{% else %} text-white fontawesome-border{% endif %}"></i></button>
                         </form>
                     </article>
                 </section>

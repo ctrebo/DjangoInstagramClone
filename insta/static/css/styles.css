@@ -93,6 +93,12 @@ p {
 .fontawesome-border {
     text-shadow: -1px 0 #000, 0 1px #000, 1px 0 #000, 0 -1px #000;
 }
+.fontawesome-border-gray {
+    text-shadow: -1px 0 #909090, 0 1px #909090, 1px 0 #909090, 0 -1px #909090;
+}
+.fontawesome-border-blue {
+    text-shadow: -1px 0 #0275F4, 0 1px #0275F4, 1px 0 #0275F4, 0 -1px #0275F4 !important;
+}
 
 
 .color-black {
