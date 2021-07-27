@@ -184,23 +184,33 @@
                                     </button>
                                 </div>
                                 <div class="modal-body modal-body-subs pt-0">
-                                    {% for user in user.followed_field.all %}
+                                    {% for user_in_list in user.followed_field.all %}
                                     <section class="position-relative mb-1 section-search-page px-2 py-2">
                                         <div>
                                             <article class="d-inline my-auto">
-                                                <a href="{% url 'user-detail' user.pk %}">
-                                                    <img src="{{user.prof_pic.url}}" class="post-pp img-fluid">
+                                                <a href="{% url 'user-detail' user_in_list.pk %}">
+                                                    <img src="{{user_in_list.prof_pic.url}}" class="post-pp img-fluid">
                                                 </a>
 
                                             </article>
                                             <article class="d-inline search-article">
                                                 <div>
-                                                    <a href="{% url 'user-detail' user.pk %}">
-                                                        <b class="username-search text-dark">{{user.username}}</b>
+                                                    <a href="{% url 'user-detail' user_in_list.pk %}">
+                                                        <b class="username-search text-dark">{{user_in_list.username}}</b>
                                                     </a>
-
                                                 </div>
-                                                <small class="font-weight-light text-dark">{{user.first_name}}</small>
+                                                <small class="font-weight-light text-dark">{{user_in_list.first_name}}</small>
+                                            </article>
+                                            <article class="d-inline float-right">
+                                                <form action="{% url 'follow-user' user_in_list.pk %}"
+                                                    method="POST" class="d-inline ml-md-2">
+                                                    {% csrf_token %}
+                                                    {% if user_in_list in user.followed.all %}
+                                                    <button type="submit" name="redirect_path" value="{% url 'profpage-user' %}" class="btn border btn-white bg-white" id="">Following</button>
+                                                    {% else %}
+                                                    <button type="submit" name="redirect_path" value="{% url 'profpage-user' %}" class="btn border btn-white text-white bg-primary" id="">Follow</button>
+                                                    {% endif %}
+                                                </form>
                                             </article>
                                         </div>
                                     </section>
@@ -297,6 +307,18 @@
             </div>
         </div>
     </div>
+    {% empty %}
+    <div class="col-12 col-md-5 m-auto">
+        <section class="">
+            <article class="">
+                <div class="no-marked-posts-bookmark"><i class="fa fa-camera fa-3x fontawesome-border text-white"></i> </div>
+            </article>
+            <article class="mt-5 text-center">
+                <h3 class="font-weight-light">Share pictures</h3>
+                <small class="line-heightsaved-marked-posts d-block">If you share picture they will be in your profile</small>
+            </article>
+        </section>
+    </div>
     {% endfor %}
 </div>
 
@@ -313,6 +335,18 @@
             </div>
         </div>
     </div>
+    {% empty %}
+    <div class="col-12 col-md-5 m-auto">
+        <section class="">
+            <article class="">
+                <div class="no-marked-posts-bookmark"><i class="fa fa-bookmark fa-3x fontawesome-border text-white"></i> </div>
+            </article>
+            <article class="mt-5 text-center">
+                <h3 class="font-weight-light">Save</h3>
+                <small class="line-heightsaved-marked-posts d-block">Save pictres and videos which you want to watch agian. Nobody gets notified and only you can see what you saved</small>
+            </article>
+        </section>
+    </div>
     {% endfor %}
 </div>
 
@@ -328,6 +362,18 @@
                         class="fa fa-15 fa-heart"></i> {{post.number_of_likes}}</p>
             </div>
         </div>
+    </div>
+    {% empty %}
+    <div class="col-12 col-md-5 m-auto">
+        <section class="">
+            <article class="">
+                <div class="no-marked-posts-bookmark"><i class="fa fa-bookmark fa-3x fontawesome-border text-white"></i> </div>
+            </article>
+            <article class="mt-5 text-center">
+                <h3 class="font-weight-light">Pictures of you</h3>
+                <small class="line-heightsaved-marked-posts d-block">Here you will find pictures in which you were marked</small>
+            </article>
+        </section>
     </div>
     {% endfor %}
 </div>
