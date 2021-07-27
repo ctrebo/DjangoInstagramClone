@@ -983,6 +983,10 @@ nav  .img-profpic {
     line-height: 1.2rem;
 }
 
+.line-height-saved-marked-posts {
+ line-height: 1rem;
+}
+
 .border-radius-6px {
     border-radius: 6px;
 }
@@ -1028,6 +1032,12 @@ nav  .img-profpic {
 
 .w-10 {
     width: 10%;
+}
+.no-marked-posts-bookmark {
+    position: absolute;
+    top: 0;
+    right: 50%;
+    transform: translate(50%);
 }
 
 @media (max-width: 768px) {
