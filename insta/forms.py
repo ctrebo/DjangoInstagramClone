@@ -54,9 +54,7 @@ class CustomUserChangeForm(UserChangeForm):
 
     class Meta:
         model = CustomUser
-        fields = ('username', "last_name", "first_name")
-
-
+        fields = ("username", "last_name", "first_name", "is_private")
 
 class PostCommentCreateForm(ModelForm):
     def clean_description(self):
@@ -103,7 +101,7 @@ class UserUpdateForm(ModelForm):
 
     class Meta:
         model = user_model
-        fields = ["prof_pic", "first_name", "username", "bio", "email"]
+        fields = ["prof_pic", "first_name", "username", "bio", "email", "is_private"]
         labels = {"prof_pic":_('Profile Picture'), "bio":_('Description'), "username":_("Username"), "first_name":_('Name'), "email":_('E-Mail')}
         help_texts = {"username": _(""), "prof_pic":_("")}
         widgets = {

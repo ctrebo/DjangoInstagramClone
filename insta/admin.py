@@ -10,7 +10,7 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 class CustomUserAdmin(BaseUserAdmin):
     add_form = CustomUserCreationForm
     form = CustomUserChangeForm
-    list_display = ('username', 'first_name', 'last_name', "email", )
+    list_display = ('username', 'first_name', 'last_name', 'email', 'is_private')
     list_filter = ('date_joined', 'username')
 
     fieldsets = (
@@ -18,12 +18,13 @@ class CustomUserAdmin(BaseUserAdmin):
             'fields': ('username', "password")}),
         ('Personal info', {
             'fields': ('first_name', 'last_name', 'email', 'last_login',)}),
-        ('Permissions', {
-            'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions',)}),
+        ('Permissions',{
+            'fields': ('is_private', 'is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions',)}),
 
-        ('Custom user', {'fields': ('bio', 'prof_pic', 'followed', 'saved_posts')}),
+        ('Custom user', {'fields': ('bio', 'prof_pic', 'followed', 'saved_posts', 'pending_requests', )}),
     )
-    
+   
+   #variables that will be displayed on the creaet user side
     add_fieldsets = (
         (None, {
             'classes': ('wide',),

@@ -1,8 +1,4 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.shortcuts import render, get_object_or_404, redirect
-from django.shortcuts import render, get_object_or_404, redirect
-from django.shortcuts import render, get_object_or_404, redirect
-from django.shortcuts import render, get_object_or_404, redirect
 from django.conf import settings
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
@@ -60,9 +56,8 @@ class PostListView(LoginRequiredMixin, generic.ListView):
         #get list of id's of users that signed in user follows
         user_vars_values = self.request.user.followed.all().values_list("id")
 
-        #exclude signed in user and users that signed in user follows from recommandation list 
-        recommandation_list = user_model.objects.all().exclude(username=self.request.user.username).exclude(id__in=user_vars_values)[:7]
-
+        #exclude signed in user, people that user follows and people he send a follow request from recommandation list 
+        recommandation_list = user_model.objects.all().exclude(username=self.request.user.username).exclude(id__in=user_vars_values).exclude(id__in=self.request.user.private_requests.all())[:7]
 
         context = super(PostListView, self).get_context_data(**kwargs)
         context["recommandation_list"] = recommandation_list
@@ -93,14 +88,44 @@ def deleteCommentView(request, pk):
 def followUser(request, pk):
     user_to_follow = get_object_or_404(user_model, id=pk)
     redirect_path = request.POST.get('redirect_path')
-    if (request.user).followed.filter(id=user_to_follow.id).exists():
-        (request.user).followed.remove(user_to_follow)
-    else:
-        (request.user).followed.add(user_to_follow)
     
+    # If user already follows, remove follow
+    if request.user.followed.filter(id=user_to_follow.id).exists():
+        (request.user).followed.remove(user_to_follow)
+
+    else:
+        if user_to_follow.is_private:
+            # If user to follow is private and there is a request pending remove it
+            # because this means that he wants to withdraw it
+            if user_to_follow.pending_requests.filter(id=request.user.id).exists():
+                user_to_follow.pending_requests.remove(request.user)
+            # Else add request
+            else:
+                user_to_follow.pending_requests.add(request.user)
+        # If user i s public follow him
+        else:
+            (request.user).followed.add(user_to_follow)
+        
     return HttpResponseRedirect(redirect_path)
 
+def acceptOrDelteUsersRequest(request, pk):
+    user_who_has_requested = get_object_or_404(user_model, id=pk)
 
+    # Get value if user wants to delete or accept request
+    accept_or_delete = request.POST.get('accept_or_delete')
+
+    # If logged in user accpets(confirms) remove usre who requested out
+    # of pending requests field and add logged in user to requested users
+    # followed field(so he follows logged in user)
+    if accept_or_delete == "accept":
+        request.user.pending_requests.remove(user_who_has_requested)
+        user_who_has_requested.followed.add(request.user)
+    else:
+        request.user.pending_requests.remove(user_who_has_requested)
+    
+    return HttpResponseRedirect(reverse('activity-page'))
+
+    
 @csrf_exempt
 def blogPostLikeListView(request, pk):
     post = get_object_or_404(Post, id=request.POST.get('post_id'))
@@ -198,14 +223,10 @@ def updateUser(request, pk):
 
 def user_detail(request, pk):
     user_for_page = get_object_or_404(user_model, pk=pk)
-    followers_connected = get_object_or_404(user_model, pk=pk)
-    liked = False
-    if (request.user).followed.filter(id=followers_connected.id).exists():
-        liked = True
+    logged_in_user_is_following = request.user.followed.filter(id=user_for_page.id).exists()
     context = {
         'user_for_page': user_for_page,
-        # 'number_of_followers':  followers_connected.number_of_likes(),
-        'user_is_followed': liked,
+        'user_is_followed': logged_in_user_is_following,
          
     }
 
@@ -260,26 +281,32 @@ class SearchResultsView(LoginRequiredMixin, generic.ListView):
 
         return object_list 
 
-class SearchPageListView(generic.ListView):
+class SearchPageListView(LoginRequiredMixin, generic.ListView):
     model = Post
     template_name = "insta/search_page.html"
 
 
     def get_queryset(self):
         user_vars = self.request.user.followed.all()
+        private_users = user_model.objects.filter(is_private=True)
 
-        return Post.objects.exclude(author=self.request.user).exclude(author__in=user_vars).order_by("-likes")
+        return Post.objects.exclude(author=self.request.user).exclude(author__in=user_vars).exclude(author__in=private_users).order_by("-likes")
 
 @login_required
 def activityPage(request):
-
     post_list = request.user.post_set.all()
     followers_list = request.user.followed_field.all()
-    
+    # The last user who send a request to logged in user
+    # Used to display his pp
+    last_user_requested = request.user.pending_requests.last()    
+    user_number_requests = request.user.pending_requests.all().count()    
+    # If account is private, show pending follow requests for loged in user(if there are some)
 
     context = {
         'post_list': post_list,
         'followers_list': followers_list,
+        'last_user_requested': last_user_requested,
+        'user_number_requests': user_number_requests,
         
     }
     return render(request, 'insta/activity_page.html', context)
