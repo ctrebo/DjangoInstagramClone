@@ -230,7 +230,7 @@
                                     <td class="w-auto line-height-comments"><span class="font-size-username">
                                         <span class="font-size-username">
                                             {% load insta_extras %}
-                                            <b><a class="text-dark" href="{% if comment.author == user %}  {% url 'profpage-user'  %} {% else %} {% url 'user-detail' comment.author.pk %} {% endif %}">{{comment.author.username}}</a></b><span>&nbsp</span><span class="">{% for word in comment.description_to_array %} {% if "@" in word %} <a href="{% get_tagged_user word user %}">{{word}}  </a> {% else %}{{word}} {% endif %}{% endfor %}</span><p class="time-ago mb-0">{{comment.time_commented_ago}}</p>
+                                            <b><a class="text-dark" href="{% if comment.author == user %}  {% url 'profpage-user'  %} {% else %} {% url 'user-detail' comment.author.pk %} {% endif %}">{{comment.author.username}}</a></b><span>&nbsp</span><span class="">{% for word in comment.description_to_array %} {% if word == "<new_line_code/>" %} {% elif "@" in word %} <a href="{% get_tagged_user word user %}">{{word}}  </a> {% else %}{{word}} {% endif %}{% endfor %}</span><p class="time-ago mb-0">{{comment.time_commented_ago}}</p>
                                         </span>
                                     </td>
                                 </tr>

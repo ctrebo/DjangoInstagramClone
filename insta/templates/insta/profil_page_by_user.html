@@ -142,7 +142,9 @@
         <article class="d-none d-md-block">
             <p class="mb-1"><b>{% if user.first_name %}{{user.first_name}}{% endif %}</b></p>
             <div>
-                <span>{% if user.bio %}{{user.bio|linebreaks}}{% endif %}</span>
+                
+                {% load insta_extras %}
+                <span>{% if user.bio %} {% for word in user.bio_to_array %}  {% if word == "<new_line_code/>" %}<br/>{% elif "@" in word %} <a href="{% get_tagged_user word user %}">{{word}}  </a> {% else %}{{word}} {% endif %}{% endfor %} {% endif %}</span>
             </div>
         </article>
     </div>
@@ -151,8 +153,9 @@
     <div class="col-12">
         <section>
             <article>
+
                 <p class="mb-1"><b>{% if user.first_name %}{{user.first_name}}{% endif %}</b></p>
-                <span>{% if user.bio %}{{user.bio|linebreaks}}{% endif %}</span>
+                <span>{% if user.bio %} {% for word in user.bio_to_array %} {% if word == "<new_line_code/>" %}<br/>{% elif "@" in word %} <a href="{% get_tagged_user word user %}">{{word}}  </a> {% else %}{{word}} {% endif %}{% endfor %}{% endif %}</span>
             </article>
         </section>
     </div>

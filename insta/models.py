@@ -22,6 +22,12 @@ class CustomUser(AbstractUser):
     # request gets added to users account
     pending_requests = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='private_requests', blank=True) 
 
+    @property
+    def bio_to_array(self):
+        # Add "<new_line_code/>" after every newline. Then rejoin everything.
+        # At the end split the text again into words
+        return ("".join([s + " <new_line_code/> " for s in self.bio.splitlines()]).split())
+
 class Post(models.Model):
     """
     Model representing a Post
@@ -39,6 +45,9 @@ class Post(models.Model):
 
     def __str__(self):
         return self.author.username + " " + str(self.pk)
+
+    def caption_to_array(self):
+        return ("".join([s + " <new_line_code/> " for s in self.caption.splitlines()]).split())
 
     def get_absolute_url(self):
         """
@@ -144,8 +153,9 @@ class PostComment(models.Model):
 
     @property
     def description_to_array(self):
-        return self.description.split()
-
+        # Add "<new_line_code/>" after every newline. Then rejoin everything.
+        # At the end split the text again into words
+        return ("".join([s + " <new_line_code/> " for s in self.description.splitlines()]).split())
 
     @property
     def time_commented_ago(self):

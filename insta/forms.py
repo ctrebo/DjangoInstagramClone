@@ -70,7 +70,7 @@ class PostCommentCreateForm(ModelForm):
         labels = {"description":_('') }
         help_texts = {"description":_('')}
         widgets = {
-            'description': TextInput(attrs={'placeholder': 'Add comment...', "class": "border-0 d-inline comment-input",}),
+            'description': Textarea(attrs={'placeholder': 'Add comment...', "class": "border-0 d-inline comment-input",}),
         }
 
 class UserUpdateForm(ModelForm):
