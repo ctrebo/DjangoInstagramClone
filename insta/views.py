@@ -65,13 +65,14 @@ class PostListView(LoginRequiredMixin, generic.ListView):
 
 
 def blogPostLike(request, pk):
-    post = get_object_or_404(Post, id=request.POST.get('post_id'))
+    redirect_path = request.POST.get('redirect_path')
+    post = get_object_or_404(Post, id=pk)
     if post.likes.filter(id=request.user.id).exists():
         post.likes.remove(request.user)
     else:
         post.likes.add(request.user)
 
-    return HttpResponseRedirect(reverse('create-comment', args=[str(pk)]))
+    return HttpResponseRedirect(redirect_path)
 
 def deletePostView(request, pk):
     post = get_object_or_404(Post, id=pk)
@@ -124,17 +125,6 @@ def acceptOrDelteUsersRequest(request, pk):
         request.user.pending_requests.remove(user_who_has_requested)
     
     return HttpResponseRedirect(reverse('activity-page'))
-
-    
-@csrf_exempt
-def blogPostLikeListView(request, pk):
-    post = get_object_or_404(Post, id=request.POST.get('post_id'))
-    if post.likes.filter(id=request.user.id).exists():
-        post.likes.remove(request.user)
-    else:
-        post.likes.add(request.user)
-
-    return HttpResponseRedirect(reverse('index'))
 
 @login_required
 def userSavePost(request, pk):
