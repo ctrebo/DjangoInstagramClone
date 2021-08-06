@@ -53,5 +53,5 @@ class PostCommentAdmin(admin.ModelAdmin):
     list_display = ("author", "post_date", "description", "id", "post")
     list_filter = ("author", "post_date", "post")
 
-    fieldsets = (("Post Comment information", {'fields': ('author', 'description', "post")}),)
+    fieldsets = (("Post Comment information", {'fields': ('author', 'description', 'post', 'likes')}),)
 

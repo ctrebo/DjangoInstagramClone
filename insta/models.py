@@ -136,7 +136,7 @@ class PostComment(models.Model):
     post_date = models.DateTimeField(auto_now_add=True)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     likes = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='like_field', blank=True)
-    
+
     class Meta:
         ordering = ["-post_date"]
 
