@@ -96,14 +96,14 @@
                     </article>
                 </section>
                 <section class="px-3">
-                    <article>
+                    <article class="line-height-comments">
                         <span class="font-size-username">
                             <b><a class="text-dark" href="{% url 'user-detail' post.author.pk %}">{{post.author.username}}</a></b><span>&nbsp</span><span>{% for word in post.caption_to_array %}{% if word == "<new_line_code/>" %}<br/>{% elif "@" in word %} <a href="{% get_tagged_user word user %}">{{word}}  </a> {% else %}{{word}} {% endif %}{% endfor %}  </span>
                         </span>
                     </article>
                 </section>
                 <section class="px-3">
-                    <article>
+                    <article class="line-height-comments">
                         {% if post.postcomment_set.count > 1 %}
                         <p class="mb-1 mt-1"><a class="comment-post text-decoration-none" href="{% url 'create-comment' post.pk %}">Show all {{post.postcomment_set.count}} comments</a></p>
                         {% endif %}

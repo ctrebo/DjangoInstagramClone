@@ -289,8 +289,8 @@ def activityPage(request):
     # The last user who send a request to logged in user
     # Used to display his pp
     last_user_requested = request.user.pending_requests.last()    
-    user_number_requests = request.user.pending_requests.all().count()    
     # If account is private, show pending follow requests for loged in user(if there are some)
+    user_number_requests = request.user.pending_requests.all().count()    
 
     context = {
         'post_list': post_list,
