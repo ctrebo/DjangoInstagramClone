@@ -52,6 +52,13 @@ button:focus {
     transform: translate(-200px, 245px );
 }
 
+.modal-content-comment-likes {
+    border-radius: 12px;
+    width:400px;
+    height: 400px;
+
+}
+
 .modal-content-delete {
     border-radius: 15px;
     width: 400px;
@@ -175,6 +182,9 @@ nav  .img-profpic {
 .overflow-comments {
     overflow-y: auto;
     height: 100%;
+}
+.overflow-comments::-webkit-scrollbar {
+    display: none; /* for Chrome, Safari, and Opera */
 }
 
 .border-0 {
@@ -308,10 +318,6 @@ nav  .img-profpic {
     left: 0;
 }
 
-#save-create-comment {
-    position: absolute;
-    right:0;
-}
 
 .border-update-user-input {
     border: 1px solid rgb(207, 199, 199);
@@ -489,7 +495,7 @@ nav  .img-profpic {
 
 .comment-options {
     position: absolute;
-    right: 10px;
+    right: 50px;
     top: 50%;
     transform: translateY(-50%);
 }
@@ -502,6 +508,17 @@ nav  .img-profpic {
     top: 0;
     right: 50%;
     transform: translate(50%);
+}
+
+.comment-likes {
+    cursor:pointer;
+}
+
+@media (min-width: 769px) {
+    #save-create-comment {
+        position: absolute;
+        right:0;
+    }
 }
 
 @media (max-width: 768px) {
@@ -551,6 +568,4 @@ nav  .img-profpic {
         background-color: rgba(0, 0, 0, 0);
         color: rgba(0, 0, 0, 0);
     }
-
-    
 } 

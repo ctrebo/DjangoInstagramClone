@@ -74,6 +74,17 @@ def blogPostLike(request, pk):
 
     return HttpResponseRedirect(redirect_path)
 
+def postCommentLike(request, pk):
+    redirect_path = request.POST.get('redirect_path')
+    comment = get_object_or_404(PostComment, id=pk) 
+    if comment.likes.filter(id=request.user.id).exists():
+        comment.likes.remove(request.user)
+    else:
+        comment.likes.add(request.user)
+
+    return HttpResponseRedirect(redirect_path)
+
+
 def deletePostView(request, pk):
     post = get_object_or_404(Post, id=pk)
     post.delete()

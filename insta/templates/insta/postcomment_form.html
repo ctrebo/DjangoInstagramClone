@@ -194,7 +194,7 @@
         <section id="comment-section" class="d-none d-md-block w-100 border-add-comment position-absolute">
             <article class="overflow-comments">
                 {% for comment in comment_list %}
-                    <section class="px-3 pt-3 d-none d-md-block single-comment position-relative">
+                    <section class="pl-3 pt-3 d-none d-md-block single-comment position-relative">
                         <span class="position-absolute d-none comment-options" data-toggle="modal" data-target="#modal-comment-{{post.pk}}" >
                             <i class="fa fa-circle font-size-05" aria-hidden=""></i><i class="fa fa-circle font-size-05 margin-015rem" aria-hidden="true"></i><i class="fa fa-circle font-size-05" aria-hidden="true"></i>  
                         </span>
@@ -230,8 +230,65 @@
                                     <td class="w-auto line-height-comments"><span class="font-size-username">
                                         <span class="font-size-username">
                                             {% load insta_extras %}
-                                            <b><a class="text-dark" href="{% if comment.author == user %}  {% url 'profpage-user'  %} {% else %} {% url 'user-detail' comment.author.pk %} {% endif %}">{{comment.author.username}}</a></b><span>&nbsp</span><span class="">{% for word in comment.description_to_array %} {% if word == "<new_line_code/>" %} {% elif "@" in word %} <a href="{% get_tagged_user word user %}">{{word}}  </a> {% else %}{{word}} {% endif %}{% endfor %}</span><p class="time-ago mb-0">{{comment.time_commented_ago}}</p>
+                                            <b><a class="text-dark" href="{% if comment.author == user %}  {% url 'profpage-user'  %} {% else %} {% url 'user-detail' comment.author.pk %} {% endif %}">{{comment.author.username}}</a></b><span>&nbsp</span><span class="">{% for word in comment.description_to_array %} {% if word == "<new_line_code/>" %} {% elif "@" in word %} <a href="{% get_tagged_user word user %}">{{word}}  </a> {% else %}{{word}} {% endif %}{% endfor %}</span><p class="time-ago mb-0"><span>{{comment.time_commented_ago}}</span>{% if comment.likes.exists %}<b class="ml-2 comment-likes" data-toggle="modal" data-target="#modalLikesComment-{{comment.id}}">{{ comment.likes.count }} like{{ comment.likes.count|pluralize }} </b>{% endif %}</p>
                                         </span>
+                                    </td>
+                                    <div class="modal fade" id="modalLikesComment-{{comment.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                      <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="modal-content modal-content-comment-likes">
+                                            <div class="modal-header py-2">
+                                                <h5 class="modal-title ml-auto" id="exampleModalLongTitle">Users who Liked</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                  <span aria-hidden="true">&times;</span>
+                                                </button>
+                                              </div>
+                                              <div class="modal-body">
+                                                 
+                                                {% for user_in_list in comment.likes.all %}
+                                                <section class="position-relative mb-1 section-search-page px-2 py-2">
+                                                    <div>
+                                                        <article class="d-inline my-auto">
+                                                            <a href="{% if user_in_list == user %}{% url 'profpage-user' %}{% else %}{% url 'user-detail' user_in_list.pk %}{% endif %}">
+                                                                <img src="{{user_in_list.prof_pic.url}}" class="post-pp img-fluid">
+                                                            </a>
+
+                                                        </article>
+                                                        <article class="d-inline search-article">
+                                                            <div>
+                                                                <a href="{% if user_in_list == user %}{% url 'profpage-user' %}{% else %}{% url 'user-detail' user_in_list.pk %}{% endif %}">
+                                                                    <b class="username-search text-dark">{{user_in_list.username}}</b>
+                                                                </a>
+
+                                                            </div>
+                                                            <small class="font-weight-light text-dark">{{user_in_list.first_name}}</small>
+                                                        </article>
+                                                        <article class="d-inline float-right">
+                                                            <form action="{% url 'follow-user' user_in_list.pk %}" method="POST"
+                                                                class="d-inline ml-md-2">
+                                                                {% csrf_token %}
+                                                                {%  if user_in_list == user %}
+                                                                {% elif user_in_list in user.followed.all %}
+                                                                    <button type="submit" name="redirect_path" value="{% url 'create-comment' post.pk %}" class="btn border bg-white text-dark">Following</button>
+
+                                                                {% elif user in user_in_list.pending_requests.all %}
+                                                                    <button type="submit" name="redirect_path" value="{% url 'create-comment' post.pk %}" class="btn bg-white border text-dark">Requested</button>
+                                                                {% else %}
+                                                                    <button type="submit" name="redirect_path" value="{% url 'create-comment' post.pk %}" class="btn border bg-primary text-white">Follow</button>
+                                                                {% endif %}
+                                                            </form>
+                                                        </article>
+                                                    </div>
+                                                </section>
+                                                {% endfor %}
+                                              </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <td class="float-right">
+                                        <form action="{% url 'like-postcomment' comment.pk %}" method="POST">
+                                            {% csrf_token %}                
+                                            <button type="submit" name="redirect_path" value="{% url 'create-comment' post.pk %}" class="btn mt-2 bg-white" id=""><i class="fa fa-heart{% if user in comment.likes.all %} text-danger{% else %} text-white fontawesome-border{% endif %}"></i></button>
+                                        </form>
                                     </td>
                                 </tr>
                             </table>
@@ -244,15 +301,15 @@
             
             </article>
         </section>
-        <section>
+        <section class="d-inline-block d-md-block">
             <article>
                 <form action="{% url 'like-post' post.pk %}" method="POST">
                     {% csrf_token %}                
-                    <button type="submit" name="post_id" value="{{post.pk}}" class="btn mt-2 bg-white" id="like-create-comment"><i class="fa fa-15 fa-heart{% if post_is_liked %} text-danger{% else %} text-white fontawesome-border{% endif %}"></i></button>
+                    <button type="submit" name="redirect_path" value="{% url 'create-comment' post.pk %}" class="btn mt-2 bg-white" id="like-create-comment"><i class="fa fa-15 fa-heart{% if post_is_liked %} text-danger{% else %} text-white fontawesome-border{% endif %}"></i></button>
                 </form>
             </article>
         </section>
-        <section>
+        <section class="d-inline-block d-md-block float-right float-md-none">
             <article>
                 <form action="{% url 'save-post' post.pk %}" method="POST">
                     {% csrf_token %}                

@@ -10,6 +10,7 @@ urlpatterns = [
     re_path(r"^user/profilpage/$", views.ProfilPageListView.as_view(), name="profpage-user"),
     re_path(r"^post/create/$", views.PostCreateView.as_view(), name="create-post"),
     re_path(r"^post/(?P<pk>[0-9]+)/like/$", views.blogPostLike, name="like-post"),
+    re_path(r"^comment/(?P<pk>[0-9]+)/like/$", views.postCommentLike, name="like-postcomment"),
     re_path(r"^user/(?P<pk>[0-9]+)/follow/$", views.followUser, name="follow-user"),
     re_path(r"^user/(?P<pk>[0-9]+)/accpet-or-delete/$", views.acceptOrDelteUsersRequest, name="accpet-or-delete-request"),
     re_path(r"^user/(?P<pk>[0-9]+)/save/$", views.userSavePost, name="save-post"),
