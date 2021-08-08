@@ -1,9 +1,5 @@
 {% extends "base_generic.html" %}
 {% block content %}
-<!-- display users that user follows -->
-<!-- {% for userx in user_follows_list %}
-    <p>{{userx.username}}</p>
-{% endfor %} -->
 
 <!-- display users that follow user -->
 <!-- <h1>FOllowerd</h1>
@@ -70,9 +66,12 @@
                                                     class="d-inline ml-md-2">
                                                     {% csrf_token %}
                                                     {% if user_in_list in user.followed.all %}
-                                                    <button type="submit" name="redirect_path" value="{% url 'profpage-user' %}" class="btn border bg-white text-dark">Following</button>
+                                                        <button type="submit" name="redirect_path" value="{% url 'profpage-user' %}" class="btn border bg-white text-dark">Following</button>
+
+                                                    {% elif user in user_in_list.pending_requests.all %}
+                                                        <button type="submit" name="redirect_path" value="{% url 'profpage-user' %}" class="btn bg-white border text-dark">Requested</button>
                                                     {% else %}
-                                                    <button type="submit" name="redirect_path" value="{% url 'profpage-user' %}" class="btn border bg-primary text-white">Follow</button>
+                                                        <button type="submit" name="redirect_path" value="{% url 'profpage-user' %}" class="btn border bg-primary text-white">Follow</button>
                                                     {% endif %}
                                                 </form>
                                             </article>
