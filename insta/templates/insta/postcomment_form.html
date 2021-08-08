@@ -226,7 +226,7 @@
                         <article>
                             <table class="w-100">
                                 <tr>
-                                    <td style="width: 40px;"><a href="{% if user == post.author %} {% url 'profpage-user' %} {% else %} {% url 'user-detail' post.author.pk %} {% endif %}"><img class="post-pp"  src="{{comment.author.prof_pic.url}}" alt="alt"></a></td>
+                                    <td style="width: 40px;" class="align-top"><a href="{% if user == post.author %} {% url 'profpage-user' %} {% else %} {% url 'user-detail' post.author.pk %} {% endif %}"><img class="post-pp"  src="{{comment.author.prof_pic.url}}" alt="alt"></a></td>
                                     <td class="w-auto line-height-comments"><span class="font-size-username">
                                         <span class="font-size-username">
                                             {% load insta_extras %}
@@ -284,7 +284,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <td class="float-right">
+                                    <td class="float-right align-top">
                                         <form action="{% url 'like-postcomment' comment.pk %}" method="POST">
                                             {% csrf_token %}                
                                             <button type="submit" name="redirect_path" value="{% url 'create-comment' post.pk %}" class="btn mt-2 bg-white" id=""><i class="fa fa-heart{% if user in comment.likes.all %} text-danger{% else %} text-white fontawesome-border{% endif %}"></i></button>
