@@ -48,38 +48,70 @@
                             <div class="tagged-people" data-toggle="modal" data-target="#modaltagged-{{post.pk}}"><i class="fa text-white fa-user tagged-people-icon"></i></div>
                             <div class="modal fade" id="modaltagged-{{post.pk}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered" role="document">
-                                  <div class="modal-content">
-                                    <div class="modal-header">
-                                      <h5 class="modal-title" id="exampleModalLongTitle">In this Post</h5>
-                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                      </button>
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLongTitle">In this Post</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            {% for user_in_list in post.tagged_people.all %}
+                                            <a href="{% url 'user-detail' user_in_list.pk %}" class="">
+                                                <section class="position-relative mb-1 section-search-page px-2 py-2">
+                                                    <div>
+                                                        <article class="d-inline my-auto ">
+                                                            <a href="{% if user == user_in_list %}{% url 'profpage-user' %}{% else %}{% url 'user-detail' user_in_list.pk %}{% endif %}">
+                                                                <img src="{{user_in_list.prof_pic.url}}" class="post-pp img-fluid">
+                                                            </a>
+                                                        </article>
+                                                        <article class="d-inline search-article">
+                                                            <div>
+                                                                <b class="user_in_listname-search text-dark"><a class="text-dark" href="{% if user == user_in_list %}{% url 'profpage-user' %}{% else %}{% url 'user-detail' user_in_list.pk %}{% endif %}">{{user_in_list.username}}</a></b> 
+                                                            </div>
+                                                            <small class="font-weight-light text-dark"><a class="text-dark" href="{% if user == user_in_list %}{% url 'profpage-user' %}{% else %}{% url 'user-detail' user_in_list.pk %}{% endif %}">{{user_in_list.first_name}}</a></small>
+                                                        </article>
+                                                        {% if user_in_list == user %}
+                                                        <a class="option-tagged-people text-dark" data-dismiss="modal" data-toggle="modal" href="#remove-tagged-user-{{post.pk}}">
+                                                            <span class="float-right" >
+                                                                <i class="fa fa-circle font-size-05" aria-hidden=""></i><i class="fa fa-circle font-size-05 margin-015rem" aria-hidden="true"></i><i class="fa fa-circle font-size-05" aria-hidden="true"></i>  
+                                                            </span>
+                                                        </a>
+                                                        {% endif %}
+                                                    </div>
+                                                </section>
+                                            </a>
+                                            {% endfor %}
+                                        </div>
                                     </div>
-                                    <div class="modal-body">
-                                      {% for user in post.tagged_people.all %}
-                                        <a href="{% url 'user-detail' user.pk %}" class="">
-                                            <section class="position-relative mb-1 section-search-page px-2 py-2">
-                                                <div>
-                                                    <article class="d-inline my-auto ">
-                                                        <img src="{{user.prof_pic.url}}" class="post-pp img-fluid">
-                                                    </article>
-                                                    <article class="d-inline search-article">
-                                                        <div>
-                                                            <b class="username-search text-dark">{{user.username}}</b>
-                                                        </div>
-                                                        <small class="font-weight-light text-dark">{{user.first_name}}</small>
-                                                    </article>
-                                                </div>
-                                            </section>
-                                        </a>
-                                      {% endfor %}
-                                    </div>
-                                  </div>
                                 </div>
-                              </div>
+                            </div>
+                            <div class="modal fade" id="remove-tagged-user-{{post.pk}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content modal-content-delete">
+                                        <div class="modal-body px-0">
+                                            <section class="px-3 w-100">
+                                                <article>
+                                                    <form action="{% url 'remove-tag' post.pk %}" method="POST">
+                                                        {% csrf_token %}  
+                                                        <button type="submit" class="border-0 w-100 bg-white text-danger" name="redirect_path" value="{% url 'index' %}">Remove tag</button>
+                                                    </form>
+                                                </article>
+                                            </section>
+                                            <hr class="">
+                                            <section class="px-3 w-100">
+                                                <article>
+                                                    <p class="w-100 mb-0 text-center">Do not remove tag</p>
+                                                </article>
+                                            </section>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
                         {% endif %}
                     </article>
+                        
                 </section>
                 <section class="px-3 bg-white">
                     <article class="py-2">

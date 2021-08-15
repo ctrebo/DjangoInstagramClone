@@ -120,6 +120,14 @@ def followUser(request, pk):
         
     return HttpResponseRedirect(redirect_path)
 
+def removeTag(request, pk):
+    post = get_object_or_404(Post, id=pk)
+    redirect_path = request.POST.get('redirect_path')
+    if post.tagged_people.filter(id=request.user.id).exists():
+        post.tagged_people.remove(request.user)
+
+    return HttpResponseRedirect(redirect_path)
+
 def acceptOrDelteUsersRequest(request, pk):
     user_who_has_requested = get_object_or_404(user_model, id=pk)
 

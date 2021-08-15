@@ -513,6 +513,12 @@ nav  .img-profpic {
 .comment-likes {
     cursor:pointer;
 }
+.option-tagged-people {
+    position: absolute;
+    top: 45%;
+    right: 0;
+    transform: translateY(-50%);
+}
 
 @media (min-width: 769px) {
     #save-create-comment {
