@@ -46,6 +46,7 @@ class Post(models.Model):
     def __str__(self):
         return self.author.username + " " + str(self.pk)
 
+    @property
     def caption_to_array(self):
         return ("".join([s + " <new_line_code/> " for s in self.caption.splitlines()]).split())
 
@@ -55,6 +56,7 @@ class Post(models.Model):
         """
         return reverse('post-detail', args=[str(self.id)])
 
+    @property
     def number_of_likes(self):
         """
         return number of likes on post
