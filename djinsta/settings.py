@@ -41,7 +41,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_crontab',
     'insta',
+]
+
+CRONJOBS = [
+    ('@daily', 'insta.cron.delete_expired_stories')
 ]
 
 MIDDLEWARE = [

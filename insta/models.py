@@ -205,3 +205,29 @@ class PostComment(models.Model):
                 return result + " years ago"   
 
 
+class StoryManager(models.Manager):
+    def get_queryset(self):
+        """
+        return only stories that have been created in less than 24h
+        """
+        return super(StoryManager, self).get_queryset().filter(created_at__gt=(datetime.datetime.now()-datetime.timedelta(days=1)))
+
+class Story(models.Model):
+    """
+    Stories should only be visible for 24h
+    """
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    picture = models.ImageField(upload_to="images_stories", height_field=None, width_field=None)
+    # When using Story.active_story_objects.all() now the queryset
+    # of StoryManager gets used
+    active_story_objects = StoryManager()
+    objects = models.Manager()
+
+
+    def __str__(self):
+        """
+        String for representing the Model object.
+        """
+        return self.author.username + " " + str(self.pk)
+

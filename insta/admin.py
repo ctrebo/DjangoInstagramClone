@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from django.contrib import admin
-from .models import CustomUser, PostComment, Post
+from .models import CustomUser, PostComment, Post, Story
 from .forms import CustomUserCreationForm, CustomUserChangeForm
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
@@ -44,7 +44,7 @@ class PostAdmin(admin.ModelAdmin):
     # readonly_fields = ('id',)
 
 
-    fieldsets = (("Post information", {'fields': ('author', 'likes', 'picture', "caption", "tagged_people")}),)
+    fieldsets = (("Post information", {'fields': ('author', 'likes', 'picture', 'caption', 'tagged_people')}),)
 
     inlines = [PostCommentInline]
 
@@ -55,3 +55,10 @@ class PostCommentAdmin(admin.ModelAdmin):
 
     fieldsets = (("Post Comment information", {'fields': ('author', 'description', 'post', 'likes')}),)
 
+@admin.register(Story)
+class StoryAdmin(admin.ModelAdmin):
+    list_display = ("author", "created_at", "id")
+    list_filter = ("author", "created_at")
+
+
+    fieldsets = (("Story information", {'fields': ('author', 'picture')}),)
