@@ -1,8 +1,34 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
+
+<div class="row">
+    <div class="col-12 col-md-7 p-0 p-md-2">
+        <section class="border p-3 bg-white">
+            {% for user_in_list in users_with_active_stories %}
+            <article class="d-inline-block">
+                <img class="story-users grounded-radiants" src="{{user_in_list.prof_pic.url}}" alt="">
+                <p>{{user_in_list}}</p>
+            </article>
+            {% endfor %}
+        </section>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 col-md-7 p-0 p-md-2">
+        <section class="border p-3 bg-white">
+            <div class="gallery">
+            {% for user_in_list in users_with_active_stories %}
+            <a href="{{user_in_list.prof_pic.url}}">{{user_in_list.username}} profpage</a> <br>
+            {% endfor %}
+            </div>
+        </section>
+    </div>
+</div>
+
 {% for post in post_list %}
-    <div class="row mb-3 mb-3 mb-md-5">
+    <div class="row mb-3 mb-md-5">
         <div class="col-12 col-md-7 p-0 p-md-2">
             <section class="border-post">
                 <section>
