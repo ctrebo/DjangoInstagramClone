@@ -5,6 +5,8 @@ from django.conf import settings
 import datetime
 from datetime import timezone, timedelta
 from django.urls import reverse #Used to generate URLs by reversing the URL patterns
+from django.utils import timezone
+import pytz
 
 from django.db.models.signals import m2m_changed
 from django.core.exceptions import ValidationError
@@ -33,7 +35,7 @@ class Post(models.Model):
     Model representing a Post
     """
 
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
     post_date = models.DateTimeField(auto_now_add=True)
     likes = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='likes', blank=True)
     picture = models.ImageField(upload_to="images_post", height_field=None, width_field=None)
@@ -133,7 +135,7 @@ class PostComment(models.Model):
     Model representing a comment against a blog post.
     """
     description = models.TextField(max_length=1000, help_text="Enter comment about blog here.")
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
     # Foreign Key used because BlogComment can only have one author/User, but users can have multiple comments
     post_date = models.DateTimeField(auto_now_add=True)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
@@ -204,4 +206,31 @@ class PostComment(models.Model):
             else:
                 return result + " years ago"   
 
+
+class StoryManager(models.Manager):
+    def get_queryset(self):
+        """
+        return only stories that have been created in less than 24h
+        """
+        return super(StoryManager, self).get_queryset().filter(created_at__gt=(timezone.now()-datetime.timedelta(days=1)))
+
+class Story(models.Model):
+    """
+    Stories should only be visible for 24h
+    """
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    picture = models.ImageField(upload_to="images_stories", height_field=None, width_field=None)
+    # When using Story.active_story_objects.all() now the queryset
+    # of StoryManager gets used
+    objects = StoryManager()
+
+    class Meta:
+        ordering = ["created_at"]
+
+    def __str__(self):
+        """
+        String for representing the Model object.
+        """
+        return self.author.username + " " + str(self.pk)
 

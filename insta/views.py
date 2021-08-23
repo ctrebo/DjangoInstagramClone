@@ -9,13 +9,18 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
 from django.views.decorators.csrf import csrf_exempt,csrf_protect #Add this
 from django.db.models import Q # new
+# Libraries for timedelta...
+from django.utils import timezone
+import pytz
+import datetime
+
 
 #libraries for signup
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 
 
-from .models import Post, PostComment
+from .models import Post, PostComment, Story
 
 from insta.forms import PostCommentCreateForm, UserUpdateForm, CustomUserCreationForm
 
@@ -58,9 +63,17 @@ class PostListView(LoginRequiredMixin, generic.ListView):
 
         #exclude signed in user, people that user follows and people he send a follow request from recommandation list 
         recommandation_list = user_model.objects.all().exclude(username=self.request.user.username).exclude(id__in=user_vars_values).exclude(id__in=self.request.user.private_requests.all())[:7]
+        # Get all users who currently have an active story
+        # .distinct() removes duplictes 
+#        users_with_active_stories = []
+#        for user in self.request.user.followed.all():
+#            if user.story_set.all().exists():
 
+        users_with_active_stories = user_model.objects.filter(story__isnull=False, story__created_at__gt=(timezone.now()-datetime.timedelta(days=1))).filter(id__in=self.request.user.followed.all().values_list("id"))
         context = super(PostListView, self).get_context_data(**kwargs)
         context["recommandation_list"] = recommandation_list
+        context["users_with_active_stories"] = users_with_active_stories
+
         return context
 
 
@@ -198,7 +211,6 @@ def postCommentCreate(request, pk):
         'post': post_for_comment,
         'comment_list': comment_list, 
         'other_posts_of_author': other_posts_of_author,
-        'number_of_likes': likes_connected.number_of_likes(),
         'post_is_liked': liked, 
         'post_is_saved': post_is_saved, 
     }
