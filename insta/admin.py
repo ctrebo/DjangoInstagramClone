@@ -1,12 +1,12 @@
 from django.contrib import admin
 from .models import CustomUser, PostComment, Post, Story
-from .forms import CustomUserCreationForm, CustomUserChangeForm
+from .forms import CustomUserCreationForm, CustomUserCreationFormAdmin, CustomUserChangeForm
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
 
 @admin.register(CustomUser)
 class CustomUserAdmin(BaseUserAdmin):
-    add_form = CustomUserCreationForm
+    add_form = CustomUserCreationFormAdmin
     form = CustomUserChangeForm
     list_display = ('username', 'first_name', 'last_name', 'email', 'is_private')
     list_filter = ('date_joined', 'username')
@@ -26,7 +26,7 @@ class CustomUserAdmin(BaseUserAdmin):
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('username', 'password1', 'password2', 'is_staff', 'is_active')}
+            'fields': ('username', 'email', 'password1','password2', 'bio', 'is_staff', 'is_active', 'is_private')}
         ),
     )
 
