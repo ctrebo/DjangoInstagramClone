@@ -31,11 +31,16 @@
                         <section class="position-relative mb-1 section-search-page px-2 py-2">
                             <div>
                                 <article class="d-inline my-auto ">
-                                    <img src="{{user_who_requested.prof_pic.url}}" class="post-pp img-fluid">
+                                    <a href="{% url 'user-detail' user_who_requested.pk %}" class="">
+                                        <img src="{{user_who_requested.prof_pic.url}}" class="post-pp img-fluid">
+                                    </a>
+                                    
                                 </article>
                                 <article class="d-inline search-article">
                                     <div>
-                                        <b class="username-search text-dark">{{ user_who_requested.username }}</b>
+                                        <a href="{% url 'user-detail' user_who_requested.pk %}" class="">
+                                            <b class="username-search text-dark">{{ user_who_requested.username }}</b>
+                                        </a>
                                     </div>
                                     <small class="font-weight-light text-dark">{{user_who_requested.first_name}} </small>
                                 </article>
@@ -71,7 +76,7 @@
                 <article>
                     <table class="w-100">
                         <tr>
-                            <td style="width: 40px;" class="align-top"><img class="post-pp img-fluid" src="{{user_followers.prof_pic.url}}"></td>
+                            <td style="width: 40px;" class="align-top"><a href="{% url 'user-detail' user_followers.pk %}"> <img class="post-pp img-fluid" src="{{user_followers.prof_pic.url}}"></a></td>
                             <td class="w-auto"><span><b><a class="text-dark text-decoration-none" href="{% url 'user-detail' user_followers.pk %}">{{user_followers.username}}</a></b> started following you.</span></td>
                             <!-- <td style="width: 40px;"><img class="w-h-32 img-fluid" src="{{post.picture.url}}"></td> -->
                         </tr>
@@ -90,9 +95,9 @@
                   <article>
                     <table class="w-100">
                         <tr>
-                            <td style="width: 40px;" class="align-top"><img class="post-pp img-fluid" src="{{user_liked.prof_pic.url}}"></td>
+                            <td style="width: 40px;" class="align-top"><a href="{% url 'user-detail' user_liked.pk %}"><img class="post-pp img-fluid" src="{{user_liked.prof_pic.url}}"></a></td>
                             <td class="w-auto"><span><b><a class="text-dark text-decoration-none" href="{% url 'user-detail' user_liked.pk %}">{{user_liked.username}}</a></b> liked your post.</span></td>
-                            <td style="width: 40px;" class="align-top"><img class="w-h-32 img-fluid" src="{{post.picture.url}}"></td>
+                            <td style="width: 40px;" class="align-top"><a href="{% url 'create-comment' post.pk %}"><img class="w-h-32 img-fluid" src="{{post.picture.url}}"></a></td>
                         </tr>
                     </table>
                 </article>
@@ -107,16 +112,15 @@
               <article>
                 <table class="w-100">
                     <tr style="line-height: 1.1em;">
-                        <td style="width: 40px;" class="pt-0 align-top"><img class="post-pp img-fluid" src="{{comment.author.prof_pic.url}}"></td>
+                        <td style="width: 40px;" class="pt-0 align-top"><a href="{% url 'user-detail' comment.author.pk %}"><img class="post-pp img-fluid" src="{{comment.author.prof_pic.url}}"></a></td>
                         <td class="w-auto"><span><b>{{comment.author.username}}</b> commented your post: {{comment.description}}. <span class="time-ago">{{comment.time_commented_ago}}</span></span></td>
-                        <td style="width: 40px;" class="align-top"><img class="w-h-32 img-fluid" src="{{post.picture.url}}"></td>
+                        <td style="width: 40px;" class="align-top"><a href="{% url 'create-comment' post.pk %}"><img class="w-h-32 img-fluid" src="{{post.picture.url}}"></a></td>
                     </tr>
                 </table>
             </article>
           </section>  
         </div>
     </div>
-        <!-- </div> -->
     {% endfor %}
 {% endfor %}
 {% endblock %}

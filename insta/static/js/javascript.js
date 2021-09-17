@@ -136,4 +136,12 @@ $( ".single-comment" ).hover(
   }
 );
 
+$('.carousel').carousel({
+ pause: false 
+}) 
 
+
+function goToStories(username) {
+    var first_story_by_user = document.getElementsByClassName(username)[0];
+    $('#carouselExampleIndicators').carousel(parseInt(first_story_by_user.id));
+}

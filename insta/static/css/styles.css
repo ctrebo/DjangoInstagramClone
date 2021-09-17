@@ -116,7 +116,7 @@ p {
     border-radius: 3px;
 }
 
-body {
+.body-margin {
     margin-top: 60px;
 }
 
@@ -184,6 +184,10 @@ nav  .img-profpic {
     height: 100%;
 }
 .overflow-comments::-webkit-scrollbar {
+    display: none; /* for Chrome, Safari, and Opera */
+}
+
+.story-section::-webkit-scrollbar {
     display: none; /* for Chrome, Safari, and Opera */
 }
 
@@ -520,10 +524,20 @@ nav  .img-profpic {
     transform: translateY(-50%);
 }
 
+.story-section  {
+    white-space: nowrap;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+}
+
+.username-story-section {
+    font-size: .8rem;
+}
+
+
 .story-users {
-    --angle: 0deg;
-    width: 62px;
-    height: 62px;
+    width: 90px;
+    height: 90px;
     border-radius: 50%;
     border: 10px solid;
     border-image-slice: 1;
@@ -550,6 +564,62 @@ nav  .img-profpic {
     border-radius: 16px;
 }
 
+.height-stories {
+    height: 100%;
+    width: 350px;
+}
+
+.carousel-caption {
+    top: 0;
+    left: 5%;
+    right: 5%;
+    bottom: auto;
+}
+
+.carousel-indicators {
+    top:0;
+    margin-right:5px;
+    margin-left:5px;
+    bottom: 99%;
+}
+
+.close-stories {
+    position: absolute;
+    top: 1.5%;
+    right: 1.5%;
+    z-index: 9999999999;
+ }
+
+.carousel-inner {
+    border-radius: 10px;
+}
+
+ .border-radius-stories {
+     border-radius: 10px
+ }
+
+ #modal-dialog-stories {
+     width: 100%;
+     height: 100%;
+     margin: 0;
+     padding: 0;
+     min-width: 100% !important;
+ }
+
+ #modal-content-stories {
+     height: 100%;
+     min-height: 100%;
+     border-radius: 0;
+     border: none;
+ }
+
+.close-stories {
+    position: absolute;
+    top: 1.5%;
+    right: 1.5%;
+    color: white;
+}
+
 .section-stories {
     
 }
@@ -558,6 +628,14 @@ nav  .img-profpic {
     #save-create-comment {
         position: absolute;
         right:0;
+    }
+
+    .story-brand {
+        position: absolute;
+        left: 2%;
+        top: 2%;
+        z-index: 99999999999999999;
+        font-size: 1.5rem;
     }
 }
 
@@ -568,7 +646,30 @@ nav  .img-profpic {
     #like-create-comment {
         position: relative;
         left: auto;
+    }
 
+    .carousel-inner {
+        padding-top: 75px;
+    }
+    .carousel-caption {
+        top: -75px;
+        left: 5%;
+        bottom: auto;
+    }
+    
+    .height-stories {
+        height: 100%;
+        width: 100%;
+    }
+
+    .close-stories {
+        position: absolute;
+        top: 5%;
+        right: 3.5%;
+    }
+
+    .border-radius-stories {
+        border-radius: 0px
     }
 
     .modal-content-post-setting {

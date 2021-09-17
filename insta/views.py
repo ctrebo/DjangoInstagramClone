@@ -13,11 +13,12 @@ from django.db.models import Q # new
 from django.utils import timezone
 import pytz
 import datetime
-
+import numpy as np
 
 #libraries for signup
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
+
 
 
 from .models import Post, PostComment, Story
@@ -57,22 +58,31 @@ class PostListView(LoginRequiredMixin, generic.ListView):
 
     
     def get_context_data(self, **kwargs):
-        
+
         #get list of id's of users that signed in user follows
         user_vars_values = self.request.user.followed.all().values_list("id")
 
         #exclude signed in user, people that user follows and people he send a follow request from recommandation list 
         recommandation_list = user_model.objects.all().exclude(username=self.request.user.username).exclude(id__in=user_vars_values).exclude(id__in=self.request.user.private_requests.all())[:7]
-        # Get all users who currently have an active story
-        # .distinct() removes duplictes 
-#        users_with_active_stories = []
-#        for user in self.request.user.followed.all():
-#            if user.story_set.all().exists():
 
-        users_with_active_stories = user_model.objects.filter(story__isnull=False, story__created_at__gt=(timezone.now()-datetime.timedelta(days=1))).filter(id__in=self.request.user.followed.all().values_list("id"))
+        active_stories_exist = Story.objects.all().count() > 0
+        # .distinct removes duplicates
+        users_with_active_stories = user_model.objects.filter(story__isnull=False, story__created_at__gt=(timezone.now()-datetime.timedelta(days=1))).filter(id__in=self.request.user.followed.all().values_list("id")).distinct()
+
+        story_dict = {}
+        counter=0
+        for user_in_list in users_with_active_stories:
+            for story in user_in_list.story_set.all():
+                story_dict[counter] = story
+                counter += 1
+
         context = super(PostListView, self).get_context_data(**kwargs)
         context["recommandation_list"] = recommandation_list
+        context["active_stories_exist"] = active_stories_exist
         context["users_with_active_stories"] = users_with_active_stories
+        # Number of stories for carousel indicators
+        context["num_stories"] = np.arange(Story.objects.all().count())
+        context["story_dict"] = story_dict
 
         return context
 
@@ -172,7 +182,6 @@ def userSavePost(request, pk):
 
 @login_required
 def postCommentCreate(request, pk):
-    """View function for renewing a specific BookInstance by librarian."""
     
     post_for_comment = get_object_or_404(Post, pk=pk)
     other_posts_of_author = post_for_comment.author.post_set.all().exclude(pk=post_for_comment.pk)[:6]
@@ -339,3 +348,15 @@ def dontexistPage(request, string):
     }
     return render(request, 'insta/dont_exist_page.html', context)
 
+class StoryListView(LoginRequiredMixin, generic.ListView):
+    model = Story
+
+    def get_context_data(self, **kwargs):
+        users_with_active_stories = user_model.objects.filter(story__isnull=False, story__created_at__gt=(timezone.now()-datetime.timedelta(days=1))).filter(id__in=self.request.user.followed.all().values_list("id")).distinct()
+
+
+        context = super(StoryListView, self).get_context_data(**kwargs)
+        context["users_with_active_stories"] = users_with_active_stories 
+        context["num_stories"] = np.arange(Story.objects.all().count())
+        #context["user_is_marked_list"] = user_is_marked_list
+        return context

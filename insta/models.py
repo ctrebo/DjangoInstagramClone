@@ -84,7 +84,9 @@ class Post(models.Model):
         """
 
         difference = datetime.datetime.now(timezone.utc) - self.post_date 
-        if difference.total_seconds() < 60 and difference.total_seconds() > 1:
+        if difference.total_seconds() < 1:
+            return "Now"
+        elif difference.total_seconds() < 60 and difference.total_seconds() > 1:
             result= str(difference.total_seconds())[:-7]
             if result == "1":
                 return result + " second ago"
@@ -169,7 +171,9 @@ class PostComment(models.Model):
         """
 
         difference = datetime.datetime.now(timezone.utc) - self.post_date 
-        if difference.total_seconds() < 60 and difference.total_seconds() > 1:
+        if difference.total_seconds() < 1:
+            return "Now"
+        elif difference.total_seconds() < 60 and difference.total_seconds() > 1:
             result= str(difference.total_seconds())[:-7]
             if result == "1":
                 return result + " second ago"
@@ -234,3 +238,31 @@ class Story(models.Model):
         """
         return self.author.username + " " + str(self.pk)
 
+
+    @property
+    def time_posted_ago(self):
+        """
+        Function that return how long ago post was created
+        """
+
+        difference = datetime.datetime.now(timezone.utc) - self.created_at 
+        if difference.total_seconds() < 1:
+            return "Now"
+        elif difference.total_seconds() < 60 and difference.total_seconds() > 1:
+            result= str(difference.total_seconds())[:-7]
+            if result == "1":
+                return result + " s"
+            else:
+                return result + " s"                
+        elif difference.total_seconds()/60 < 60 and difference.total_seconds()/60 > 1:
+            result = str(divmod(difference.total_seconds(), 60)[0])[:-2]
+            if result == "1":
+                return result + " m"
+            else:
+                return result + " m"   
+        elif difference.total_seconds()/(60*60) < 24 and difference.total_seconds()/(60*60) >= 1:
+            result = str(divmod(difference.total_seconds(), (60*60))[0])[:-2]
+            if result == "1":
+                return result + " h"
+            else:
+                return result + " h"  

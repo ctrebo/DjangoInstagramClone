@@ -23,4 +23,5 @@ urlpatterns = [
     re_path(r"^user/(?P<string>[\w\-]+)/$", views.dontexistPage, name='user-dont-exist'),
     re_path(r"^post/(?P<pk>[0-9]+)/delete/$", views.deletePostView, name='delete-post'),
     re_path(r"^comment/(?P<pk>[0-9]+)/delete/$", views.deleteCommentView, name='delete-comment'),
+    re_path(r"^stories/view/$", views.StoryListView.as_view(), name='stories'),
 ]
