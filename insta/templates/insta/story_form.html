@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html class="w-100 h-100" lang="en">
+    <head>
+        {% block title %}<title>Instagram</title>{% endblock %}
+
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <!-- Font Awesome CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+        <!-- Add additional CSS in static file -->
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    </head>
+    <body class="w-100 h-100 bg-dark">
+        <div class="w-100 h-100">
+            <div class="container px-0 h-100 h-md-auto px-md-3">
+                <div class="row h-100 w-100 mx-0">
+                    <div id="pf_foto h-100 w-100"></div>
+                    <b class="story-brand text-white d-none d-md-block">Instagram</b>
+                    <button type="button" class="close close-stories">
+                        <a href="{{ request.META.HTTP_REFERER }}" class="text-white text-decoration-none" aria-hidden="true">×</a>
+                    </button>
+                    <div class="col-md-4 col-12 mt-md-5 m-md-auto height-stories p-0 p-md-2 py-md-5">
+                        <div class="height-stories border-radius-stories position-relative" id="pf-foto">
+                            <input type="button" value="Upload image" id="uploadButton" class="btn bg-transparent text-white">
+                            <form action='' method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <table class="px-3 px-md-0">
+                                    {{ form.as_table }}
+                                </table>
+                                <input type="submit" value="Post in your story" class="btn bg-transparent post-in-story text-white">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script
+                src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        <script src="{% static 'js/javascript.js' %}"></script>
+
+    </body>
+</html>

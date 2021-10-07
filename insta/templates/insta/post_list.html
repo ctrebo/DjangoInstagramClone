@@ -5,19 +5,31 @@
 <div class="row">
     <div class="col-12 col-md-7 p-0 p-md-2">
         <section class="border p-3 bg-white story-section">
+            <a href="{% if user.story_set.exists %}{% url 'stories-user' user.pk %}{% else %}{% url 'create-stories' %}{% endif %}" class="text-dark text-decoration-none">
+                <article class="d-inline-block h-100">
+                    <div class="position-relative">
+                        {% if not user.story_set.all.exists %}
+                        <i class="fa fa-circle fa-2x icon-background"></i>
+                        <i class="fa fa-plus icon-create-story text-white"></i>
+                        {% endif %}
+                        <img class="{% if user.story_set.all.exists %}story-users rounded-gradiants{% else %}story-users-without-border{% endif %}" src="{{user.prof_pic.url}}" alt=""> 
+                    </div>
+                    <p class="username-story-section text-center">Your stories</p>
+                </article>
+            </a>
         {% if active_stories_exist %}
             {% for user_in_list in users_with_active_stories %}
             <article class="d-inline-block h-100" onclick="goToStories('{{user_in_list}}')" data-toggle="modal" data-target="#exampleModalCenter">
-                     <img class="story-users grounded-radiants" src="{{user_in_list.prof_pic.url}}" alt=""> 
-                     {% if user_in_list.username|length < 14 %}
-                     <p class="username-story-section text-center">{{user_in_list.username}}</p>
-                     {% else %}
-                     <p class="username-story-section text-center">{{user_in_list.username|truncatechars:10}}</p>
-                     {% endif %}
+                <div>
+                     <img class="story-users rounded-gradiants" src="{{user_in_list.prof_pic.url}}" alt=""> 
+                </div>
+                 {% if user_in_list.username|length < 14 %}
+                 <p class="username-story-section text-center">{{user_in_list.username}}</p>
+                 {% else %}
+                 <p class="username-story-section text-center">{{user_in_list.username|truncatechars:10}}</p>
+                 {% endif %}
                 </article>
             {% endfor %}
-        {% else %}
-            <p>No stories</p>
         {% endif %}
     </div>
 </div>
@@ -82,7 +94,7 @@
                 <section>
                     <header class="px-3 p-075 bg-white">
                         <article>
-                            <a href="{% url 'user-detail' post.author.pk %}"><img class="post-pp img-fluid"  src="{{post.author.prof_pic.url}}" alt="alt"></a>
+                            <a href="{% if post.author.story_set.exists %} {% url 'stories-user' post.author.pk %} {% else %}{% url 'user-detail' post.author.pk %}{% endif %}"><img class="post-pp img-fluid {% if post.author.story_set.exists %}story-pp-in-header rounded-gradiants{% endif %}"  src="{{post.author.prof_pic.url}}" alt="alt"></a>
                             <span class="ml-2 font-size-username">
                                 <a class="text-dark" href="{% url 'user-detail' post.author.pk %}"><b>{{post.author.username}}</b></a>
                             </span>

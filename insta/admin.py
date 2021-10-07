@@ -8,7 +8,7 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 class CustomUserAdmin(BaseUserAdmin):
     add_form = CustomUserCreationFormAdmin
     form = CustomUserChangeForm
-    list_display = ('username', 'first_name', 'last_name', 'email', 'is_private')
+    list_display = ('username', 'first_name', 'last_name', 'email', 'is_private', 'id')
     list_filter = ('date_joined', 'username')
 
     fieldsets = (

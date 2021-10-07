@@ -140,8 +140,24 @@ $('.carousel').carousel({
  pause: false 
 }) 
 
-
 function goToStories(username) {
     var first_story_by_user = document.getElementsByClassName(username)[0];
     $('#carouselExampleIndicators').carousel(parseInt(first_story_by_user.id));
 }
+
+$("#pictureStory").hide();
+$('#uploadButton').on('click', function () {
+    $('#pictureStory').click();
+});
+
+$('#pictureStory').change(function () {
+    var file = this.files[0];
+    var reader = new FileReader();
+    reader.onloadend = function () {
+        $('#pf-foto').css('background-image', 'url("' + reader.result + '")');
+    }
+    if (file) {
+        reader.readAsDataURL(file);
+    } else {
+    }
+});

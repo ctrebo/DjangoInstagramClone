@@ -6,7 +6,7 @@
         <section class="d-block d-md-none">
             <header class="px-3 p-075 border-comments">
                 <article>
-                    <a href="{% if user == post.author %} {% url 'profpage-user' %} {% else %} {% url 'user-detail' post.author.pk %} {% endif %}">                    
+                    <a href="{% if user == post.author %}{% url 'profpage-user' %} {% else %} {% url 'user-detail' post.author.pk %} {% endif %}" class="">                    
                         <img class="post-pp"  src="{{post.author.prof_pic.url}}" alt="alt">
                     </a>
                     <span class="ml-2 font-size-username">
@@ -122,8 +122,8 @@
         <section class="d-none d-md-block">
             <header class="px-3 p-075 border-comments" id="header-create-comment">
                 <article>
-                    <a href="{% if user == post.author %} {% url 'profpage-user' %} {% else %} {% url 'user-detail' post.author.pk %} {% endif %}">                    
-                        <img class="post-pp"  src="{{post.author.prof_pic.url}}" alt="alt">
+                    <a href="{% if post.author.story_set.exists %} {% url 'stories-user' post.author.pk %} {% else %} {% if user == post.author %}{% url 'profpage-user' %}{% else %}{% url 'user-detail' post.author.pk %}{% endif %}{% endif %}" class="text-decoration-none">                    
+                        <img class="post-pp {% if post.author.story_set.exists %}story-pp-in-header rounded-gradiants{% endif %}" src="{{post.author.prof_pic.url}}" alt="alt">
                     </a>
                     <span class="ml-2 font-size-username">
                         <b><a class="text-dark" href="{% if user == post.author %} {% url 'profpage-user' %} {% else %} {% url 'user-detail' post.author.pk %} {% endif %}">{{post.author.username}}</a></b>

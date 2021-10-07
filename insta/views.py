@@ -23,7 +23,7 @@ from django.contrib.auth.forms import UserCreationForm
 
 from .models import Post, PostComment, Story
 
-from insta.forms import PostCommentCreateForm, UserUpdateForm, CustomUserCreationForm
+from insta.forms import PostCommentCreateForm, UserUpdateForm, CustomUserCreationForm, StoryCreateForm
 
 user_model = get_user_model()
 
@@ -31,7 +31,7 @@ user_model = get_user_model()
 #signup view
 def signup(request):
     """
-    view that signes user up and creates a BlogAuthor object for the user
+    view that signes user up and creates a User object for the user
     """
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
@@ -71,11 +71,15 @@ class PostListView(LoginRequiredMixin, generic.ListView):
 
         story_dict = {}
         counter=0
+        for story in self.request.user.story_set.all():
+            story_dict[counter] = story
+            counter += 1 
         for user_in_list in users_with_active_stories:
             for story in user_in_list.story_set.all():
                 story_dict[counter] = story
                 counter += 1
 
+        
         context = super(PostListView, self).get_context_data(**kwargs)
         context["recommandation_list"] = recommandation_list
         context["active_stories_exist"] = active_stories_exist
@@ -87,7 +91,7 @@ class PostListView(LoginRequiredMixin, generic.ListView):
         return context
 
 
-def blogPostLike(request, pk):
+def postLike(request, pk):
     redirect_path = request.POST.get('redirect_path')
     post = get_object_or_404(Post, id=pk)
     if post.likes.filter(id=request.user.id).exists():
@@ -287,7 +291,7 @@ class PostCreateView(LoginRequiredMixin, CreateView):
 
     def get_success_url(self):
         """
-        After posting comment return to blog page
+        After posting comment return to home page
         """
         return reverse("profpage-user")
 
@@ -348,15 +352,35 @@ def dontexistPage(request, string):
     }
     return render(request, 'insta/dont_exist_page.html', context)
 
-class StoryListView(LoginRequiredMixin, generic.ListView):
+@login_required
+def story_of_user(request, pk):
+    user_for_page = user_model.objects.all().get(id=pk)
+    stories_by_user = user_for_page.story_set.all()
+
+    context = {
+        'user_for_page': user_for_page,
+        'stories_by_user': stories_by_user,
+        'num_stories': np.arange(stories_by_user.count())
+    }
+    return render(request, 'insta/stories_by_user.html', context)
+
+class StoryCreateView(LoginRequiredMixin, CreateView):
+    form_class=StoryCreateForm
     model = Story
 
-    def get_context_data(self, **kwargs):
-        users_with_active_stories = user_model.objects.filter(story__isnull=False, story__created_at__gt=(timezone.now()-datetime.timedelta(days=1))).filter(id__in=self.request.user.followed.all().values_list("id")).distinct()
+    def get_success_url(self):
+        """
+        After posting comment return to home page
+        """
+        return reverse("index")
 
 
-        context = super(StoryListView, self).get_context_data(**kwargs)
-        context["users_with_active_stories"] = users_with_active_stories 
-        context["num_stories"] = np.arange(Story.objects.all().count())
-        #context["user_is_marked_list"] = user_is_marked_list
-        return context
+    def form_valid(self, form):
+        """
+        Add author form data before setting it as valid (so it is saved to model)
+        """
+        # Add logged-in user as author of post
+        form.instance.author = self.request.user
+        # Call super-class form validation behaviour
+        return super(StoryCreateView, self).form_valid(form)
+

@@ -9,7 +9,7 @@ urlpatterns = [
     re_path(r"^user/(?P<pk>[0-9]+)$", views.user_detail, name="user-detail"),
     re_path(r"^user/profilpage/$", views.ProfilPageListView.as_view(), name="profpage-user"),
     re_path(r"^post/create/$", views.PostCreateView.as_view(), name="create-post"),
-    re_path(r"^post/(?P<pk>[0-9]+)/like/$", views.blogPostLike, name="like-post"),
+    re_path(r"^post/(?P<pk>[0-9]+)/like/$", views.postLike, name="like-post"),
     re_path(r"^comment/(?P<pk>[0-9]+)/like/$", views.postCommentLike, name="like-postcomment"),
     re_path(r"^user/(?P<pk>[0-9]+)/follow/$", views.followUser, name="follow-user"),
     re_path(r"^user/(?P<pk>[0-9]+)/accpet-or-delete/$", views.acceptOrDelteUsersRequest, name="accpet-or-delete-request"),
@@ -23,5 +23,6 @@ urlpatterns = [
     re_path(r"^user/(?P<string>[\w\-]+)/$", views.dontexistPage, name='user-dont-exist'),
     re_path(r"^post/(?P<pk>[0-9]+)/delete/$", views.deletePostView, name='delete-post'),
     re_path(r"^comment/(?P<pk>[0-9]+)/delete/$", views.deleteCommentView, name='delete-comment'),
-    re_path(r"^stories/view/$", views.StoryListView.as_view(), name='stories'),
+    re_path(r"^stories/(?P<pk>[0-9]+)/view/$", views.story_of_user, name='stories-user'),
+    re_path(r"^stories/create/$", views.StoryCreateView.as_view(), name='create-stories'),
 ]

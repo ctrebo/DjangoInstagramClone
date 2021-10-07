@@ -7,7 +7,7 @@ from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
 
 from better_profanity import profanity
-from insta.models import PostComment, Post
+from insta.models import PostComment, Post, Story
 
 from .models import CustomUser
 
@@ -116,3 +116,11 @@ class UserUpdateForm(ModelForm):
             'email': TextInput(attrs={'placeholder': 'E-Mail', "class": "border-update-user-input d-block d-md-inline mb-3 ml-md-2 borderradius-input-field w-100 px-2 height-input-update-user",}),
         }
 
+class StoryCreateForm(ModelForm):
+    class Meta:
+        model = Story
+        fields = ["picture"]
+        labels= {"picture":_(""),}
+        widgets = {
+                "picture": FileInput(attrs={"id":'pictureStory'})
+        }
