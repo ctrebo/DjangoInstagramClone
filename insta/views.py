@@ -71,9 +71,6 @@ class PostListView(LoginRequiredMixin, generic.ListView):
 
         story_dict = {}
         counter=0
-        for story in self.request.user.story_set.all():
-            story_dict[counter] = story
-            counter += 1 
         for user_in_list in users_with_active_stories:
             for story in user_in_list.story_set.all():
                 story_dict[counter] = story
@@ -84,8 +81,8 @@ class PostListView(LoginRequiredMixin, generic.ListView):
         context["recommandation_list"] = recommandation_list
         context["active_stories_exist"] = active_stories_exist
         context["users_with_active_stories"] = users_with_active_stories
-        # Number of stories for carousel indicators
-        context["num_stories"] = np.arange(Story.objects.all().count())
+        # Number of stories for carousel indicators without logged in user as author
+        context["num_stories"] = np.arange(Story.objects.all().exclude(author=self.request.user).count())
         context["story_dict"] = story_dict
 
         return context

@@ -6,7 +6,10 @@
         <section>
             <article>
                 <div class="img-user-detail">
-                    <img class="border-50" src="{{user_for_page.prof_pic.url}}" alt=""></img>
+                    {% if user_is_followed and user_for_page.story_set.exists %} <a href="{% url 'stories-user' user_for_page.pk %}">{% endif %}
+                        <img class="border-50 {% if user_is_followed and user_for_page.story_set.exists %}  rounded-gradiants{% endif %}" src="{{user_for_page.prof_pic.url}}" alt="">
+                    </a>
+
                 </div>
             </article>
         </section>
