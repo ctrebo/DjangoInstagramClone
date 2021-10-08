@@ -75,7 +75,6 @@ class PostListView(LoginRequiredMixin, generic.ListView):
             for story in user_in_list.story_set.all():
                 story_dict[counter] = story
                 counter += 1
-
         
         context = super(PostListView, self).get_context_data(**kwargs)
         context["recommandation_list"] = recommandation_list
