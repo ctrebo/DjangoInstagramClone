@@ -90,6 +90,12 @@ class PostListView(LoginRequiredMixin, generic.ListView):
 def postLike(request, pk):
     redirect_path = request.POST.get('redirect_path')
     post = get_object_or_404(Post, id=pk)
+
+    # If logged in user has no permission to like post
+    # redirect him to previous page without liking
+    if (post.author.is_private and post.author not in request.user.followed.all() and post.author != request.user):
+        return HttpResponseRedirect(reverse("user-detail", args=[str(pk)]))
+
     if post.likes.filter(id=request.user.id).exists():
         post.likes.remove(request.user)
     else:
@@ -110,6 +116,10 @@ def postCommentLike(request, pk):
 
 def deletePostView(request, pk):
     post = get_object_or_404(Post, id=pk)
+
+    # Without lines below everyone could delete every post
+    if request.user != post.author:
+        return HttpResponseRedirect(reverse("index")) 
     post.delete()
     
     return HttpResponseRedirect(reverse('profpage-user'))
@@ -145,6 +155,7 @@ def followUser(request, pk):
 
 def removeTag(request, pk):
     post = get_object_or_404(Post, id=pk)
+
     redirect_path = request.POST.get('redirect_path')
     if post.tagged_people.filter(id=request.user.id).exists():
         post.tagged_people.remove(request.user)
@@ -171,6 +182,12 @@ def acceptOrDelteUsersRequest(request, pk):
 @login_required
 def userSavePost(request, pk):
     post = get_object_or_404(Post, id=pk)
+
+    # Without following 2 lines logged in user could save every post
+    # even form people he doesnt follows and are private
+    if (post.author.is_private and post.author not in request.user.followed.all() and post.author != request.user):
+        return HttpResponseRedirect(reverse("index"))
+
     redirect_path = request.POST.get('redirect_path')
     if request.user.saved_posts.filter(id=post.id).exists():
         request.user.saved_posts.remove(post)
@@ -186,6 +203,11 @@ def postCommentCreate(request, pk):
     post_for_comment = get_object_or_404(Post, pk=pk)
     other_posts_of_author = post_for_comment.author.post_set.all().exclude(pk=post_for_comment.pk)[:6]
     comment_list = PostComment.objects.filter(post=post_for_comment).order_by("post_date")
+
+    # Logged in user can only see his own pictures, pictures of
+    # non private users and private users he follows
+    if (post_for_comment.author.is_private and post_for_comment.author not in request.user.followed.all() and post_for_comment.author != request.user):
+        return HttpResponseRedirect(reverse("user-detail", args=[str(post_for_comment.author.pk)]))
 
     likes_connected = get_object_or_404(Post, id=pk)
     liked = False
@@ -254,9 +276,12 @@ def updateUser(request, pk):
 def user_detail(request, pk):
     user_for_page = get_object_or_404(user_model, pk=pk)
     logged_in_user_is_following = request.user.followed.filter(id=user_for_page.id).exists()
+    # True if logged in user can see story of user_for_page
+    has_and_show_story = (not user_for_page.is_private or logged_in_user_is_following) and user_for_page.story_set.exists()
     context = {
         'user_for_page': user_for_page,
         'user_is_followed': logged_in_user_is_following,
+        'has_and_show_story': has_and_show_story,
          
     }
 
@@ -352,6 +377,11 @@ def dontexistPage(request, string):
 def story_of_user(request, pk):
     user_for_page = user_model.objects.all().get(id=pk)
     stories_by_user = user_for_page.story_set.all()
+
+    # If user has no permission to see story redirect him to
+    # user-detail page of story author
+    if (user_for_page.is_private and (user_for_page not in request.user.followed.all()) and user_for_page != request.user):
+        return HttpResponseRedirect(reverse("user-detail", args=[str(pk)]))
 
     context = {
         'user_for_page': user_for_page,

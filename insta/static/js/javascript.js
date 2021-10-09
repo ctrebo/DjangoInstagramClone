@@ -31,7 +31,6 @@ var t0;
 var copiedMessageInFrame = false;
 //variable that saves if this is the first time something gets copied
 var copiedAgain = false;
-// var timeLastTimeFun;
 
 function openAndCloseCopyMessage(mydata) {
     navigator.clipboard.writeText(mydata);
@@ -119,7 +118,7 @@ function seeMarkedPosts() {
 }
 
 function goToSavedPosts() {
-  window.location.href ="http://127.0.0.1:8000/insta/profilpage#execute";
+  window.location.href ="http://127.0.0.1:8000/insta/user/profilpage#execute";
 }
 
 if (window.location.hash === '#execute') {

@@ -6,8 +6,8 @@
         <section>
             <article>
                 <div class="img-user-detail">
-                    {% if user_is_followed and user_for_page.story_set.exists %} <a href="{% url 'stories-user' user_for_page.pk %}">{% endif %}
-                        <img class="border-50 {% if user_is_followed and user_for_page.story_set.exists %}  rounded-gradiants{% endif %}" src="{{user_for_page.prof_pic.url}}" alt="">
+                    {% if has_and_show_story %} <a href="{% url 'stories-user' user_for_page.pk %}">{% endif %}
+                        <img class="border-50 {% if has_and_show_story %}  rounded-gradiants{% endif %}" src="{{user_for_page.prof_pic.url}}" alt="">
                     </a>
 
                 </div>
