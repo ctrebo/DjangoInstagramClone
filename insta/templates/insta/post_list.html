@@ -94,7 +94,7 @@
                 <section>
                     <header class="px-3 p-075 bg-white">
                         <article>
-                            <a href="{% if post.author.story_set.exists %} {% url 'stories-user' post.author.pk %} {% else %}{% url 'user-detail' post.author.pk %}{% endif %}"><img class="post-pp img-fluid {% if post.author.story_set.exists %}story-pp-in-header rounded-gradiants{% endif %}"  src="{{post.author.prof_pic.url}}" alt="alt"></a>
+                            <a href="{% if post.author.story_set.exists %} {% url 'stories-user' post.author.pk %} {% else %}{% url 'user-detail' post.author.pk %}{% endif %}"><img class="post-pp img-fluid {% if post.author.story_set.exists %}story-pp-in-header rounded-gradiants-small-pp{% endif %}"  src="{{post.author.prof_pic.url}}" alt="alt"></a>
                             <span class="ml-2 font-size-username">
                                 <a class="text-dark" href="{% url 'user-detail' post.author.pk %}"><b>{{post.author.username}}</b></a>
                             </span>

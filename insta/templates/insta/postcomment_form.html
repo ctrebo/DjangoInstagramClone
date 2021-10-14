@@ -123,7 +123,7 @@
             <header class="px-3 p-075 border-comments" id="header-create-comment">
                 <article>
                     <a href="{% if post.author.story_set.exists %} {% url 'stories-user' post.author.pk %} {% else %} {% if user == post.author %}{% url 'profpage-user' %}{% else %}{% url 'user-detail' post.author.pk %}{% endif %}{% endif %}" class="text-decoration-none">                    
-                        <img class="post-pp {% if post.author.story_set.exists %}story-pp-in-header rounded-gradiants{% endif %}" src="{{post.author.prof_pic.url}}" alt="alt">
+                        <img class="post-pp {% if post.author.story_set.exists %}story-pp-in-header rounded-gradiants-small-pp{% endif %}" src="{{post.author.prof_pic.url}}" alt="alt">
                     </a>
                     <span class="ml-2 font-size-username">
                         <b><a class="text-dark" href="{% if user == post.author %} {% url 'profpage-user' %} {% else %} {% url 'user-detail' post.author.pk %} {% endif %}">{{post.author.username}}</a></b>
@@ -226,7 +226,7 @@
                         <article>
                             <table class="w-100">
                                 <tr>
-                                    <td style="width: 40px;" class="align-top"><a href="{% if user == post.author %} {% url 'profpage-user' %} {% else %} {% url 'user-detail' post.author.pk %} {% endif %}"><img class="post-pp"  src="{{comment.author.prof_pic.url}}" alt="alt"></a></td>
+                                    <td style="width: 40px;" class="align-top"><a href="{% if comment.author.story_set.exists and not comment.author.is_private or comment.author.story_set.exists and comment.author in user.followed.all or comment.author.story_set.exists and comment.author == user %} {% url 'stories-user' comment.author.pk %} {% else %}{% if user == comment.author %} {% url 'profpage-user' %} {% else %} {% url 'user-detail' comment.author.pk %} {% endif %}{% endif %}"><img class="post-pp {% if comment.author.story_set.exists and not comment.author.is_private or comment.author.story_set.exists and comment.author in user.followed.all or comment.author.story_set.exists and comment.author == user %}story-pp-in-header rounded-gradiants-small-pp{% endif %}"  src="{{comment.author.prof_pic.url}}" alt="alt"></a></td>
                                     <td class="w-auto line-height-comments"><span class="font-size-username">
                                         <span class="font-size-username">
                                             {% load insta_extras %}
