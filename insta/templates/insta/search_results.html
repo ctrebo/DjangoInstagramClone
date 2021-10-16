@@ -7,22 +7,22 @@
         <!-- <h2 class="text-center d-md-none">Search Results</h2> -->
         {% if object_list %}
         <!-- <ul class="mt-5"> -->
-          {% for user in object_list %}
-            <a href="{% url 'user-detail' user.pk %}" class="">
+          {% for user_in_list in object_list %}
                 <section class="position-relative mb-1 section-search-page px-2 py-2">
                     <div>
                         <article class="d-inline my-auto ">
-                                <img src="{{user.prof_pic.url}}" class="post-pp img-fluid">
+                            <a href="{% if user_in_list.story_set.exists and not user_in_list.is_private or user_in_list.story_set.exists and user_in_list in user.followed.all %}{% url 'stories-user' user_in_list.pk %}{% else %}{% url 'user-detail' user_in_list.pk %}{% endif %}"><img src="{{user_in_list.prof_pic.url}}" class="post-pp img-fluid{% if user_in_list.story_set.exists and not user_in_list.is_private or user_in_list.story_set.exists and user_in_list in user.followed.all %}story-pp-in-header rounded-gradiants-small-pp{% endif %}"></a>
                         </article>
-                        <article class="d-inline search-article">
-                            <div>
-                                <b class="username-search text-dark">{{user.username}}</b>
-                            </div>
-                            <small class="font-weight-light text-dark">{{user.first_name}}</small>
+                            <a href="{% url 'user-detail' user_in_list.pk %}">
+                        <article class="d-inline search-article w-100">
+                                <div>
+                                    <b class="username-search text-dark">{{user_in_list.username}}</b>
+                                </div>
+                                <small class="font-weight-light text-dark">{{user_in_list.first_name}}</small>
                         </article>
+                            </a>
                     </div>
                 </section>
-            </a>
           {% endfor %}
         <!-- </ul> -->
         {% else %}
