@@ -341,10 +341,6 @@ nav  .img-profpic {
     background-color: rgba(255, 251, 251, 0.774) !important;
 }
 
-#like-create-comment {
-    position: absolute;
-    left: 0;
-}
 
 
 .border-update-user-input {
@@ -682,6 +678,10 @@ nav  .img-profpic {
     
 }
 
+.w-23 {
+    width: 23%;
+}
+
 #pf-foto {
     background-image: url('');
     background-size: cover;
@@ -696,11 +696,6 @@ nav  .img-profpic {
 }
 
 @media (min-width: 769px) {
-    #save-create-comment {
-        position: absolute;
-        right:0;
-    }
-
     .story-brand {
         position: absolute;
         left: 2%;

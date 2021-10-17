@@ -79,7 +79,7 @@
         </section>
         <section>                
             <article>
-                <img class="w-100 h-auto"  src="{{post.picture.url}}" alt="alt">
+                <img class="w-100 h-auto" id="main-image-postcommentform" src="{{post.picture.url}}" alt="alt">
                 {% if post.tagged_people.exists %}
                 <div class="tagged-people" data-toggle="modal" data-target="#modaltagged-{{post.pk}}"><i class="fa text-white fa-user tagged-people-icon"></i></div>
                 <div class="modal fade" id="modaltagged-{{post.pk}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -191,7 +191,7 @@
                 </article>
             </header>
         </section>
-        <section id="comment-section" class="d-none d-md-block w-100 border-add-comment position-absolute">
+        <section id="comment-section" class="d-none d-md-block w-100 border-add-comment">
             <article class="overflow-comments">
                 {% for comment in comment_list %}
                     <section class="pl-3 pt-3 d-none d-md-block single-comment position-relative">
@@ -301,22 +301,19 @@
             
             </article>
         </section>
-        <section class="d-inline-block d-md-block">
+        <section class="mt-1">
             <article>
-                <form action="{% url 'like-post' post.pk %}" method="POST">
+                <form class="d-inline-block" action="{% url 'like-post' post.pk %}" method="POST">
                     {% csrf_token %}                
-                    <button type="submit" name="redirect_path" value="{% url 'create-comment' post.pk %}" class="btn mt-2 bg-white" id="like-create-comment"><i class="fa fa-15 fa-heart{% if post_is_liked %} text-danger{% else %} text-white fontawesome-border{% endif %}"></i></button>
+                    <button type="submit" name="redirect_path" value="{% url 'create-comment' post.pk %}" class="btn bg-white" id="like-create-comment"><i class="fa fa-15 fa-heart{% if post_is_liked %} text-danger{% else %} text-white fontawesome-border{% endif %}"></i></button>
                 </form>
-            </article>
-        </section>
-        <section class="d-inline-block d-md-block float-right float-md-none">
-            <article>
-                <form action="{% url 'save-post' post.pk %}" method="POST">
+                <form class="d-inline-block float-right" action="{% url 'save-post' post.pk %}" method="POST">
                     {% csrf_token %}                
                     <button type="submit" name="redirect_path" value="{% url 'create-comment' post.pk %}" class="btn bg-white" id="save-create-comment"><i class="fa fa-15 fa-bookmark{% if post_is_saved %} text-dark{% else %} text-white fontawesome-border{% endif %}"></i></button>
                 </form>
             </article>
         </section>
+                
         <section class="px-3 d-none d-md-block">
             <article>
                 <form action="" method="post" class="">
@@ -328,12 +325,12 @@
                 </form>
             </article>
         </section>
-        <section class="px-3 d-block d-md-none" id="id-for-inline-p">
+        <section class="pl-3 d-block d-md-none" id="id-for-inline-p">
             <article>
                 <form action="" method="post" class="">
                     {% csrf_token %}
                         {{ form.as_p }}
-                    <input type="submit" class="btn text-info w-25 bg-white" value="Submit" />
+                    <input type="submit" class="btn text-info bg-white w-23" value="Submit" />
                 </form>
             </article>
         </section>

@@ -1,8 +1,5 @@
-var variable_height = ($("#row-create-comment").height() - $("#header-create-comment").outerHeight() - $("#submit-comment").outerHeight() - $("#like-create-comment").outerHeight() - 8);
+var variable_height = ($("#main-image-postcommentform").height() - $("#header-create-comment").outerHeight() - $("#submit-comment").outerHeight() - $("#like-create-comment").outerHeight() - 8);
 $("#comment-section").css("height", variable_height.toString() + "px");
-
-$("#like-create-comment").css("bottom", ($("#submit-comment").outerHeight() + 7).toString() + "px");
-$("#save-create-comment").css("bottom", ($("#submit-comment").outerHeight() + 7).toString() + "px");
 
 
 $( ".fontawesome-border" ).click(function() {
