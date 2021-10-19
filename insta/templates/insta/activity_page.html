@@ -76,7 +76,7 @@
                 <article>
                     <table class="w-100">
                         <tr>
-                            <td style="width: 40px;" class="align-top"><a href="{% url 'user-detail' user_followers.pk %}"> <img class="post-pp img-fluid" src="{{user_followers.prof_pic.url}}"></a></td>
+                            <td style="width: 40px;" class="align-top"><a href="{% if user_followers.story_set.exists and not user_followers.is_private or user_followers.story_set.exists and user_followers in user.followed.all or user_followers == user %}{% url 'stories-user' user_followers.pk %}{% else %} {% if user_followers != user%}{% url 'user-detail' user_followers.pk %}{% else %} {% url 'profpage-user' %} {% endif %}{% endif %}"> <img class="post-pp img-fluid {% if user_followers.story_set.exists and not user_followers.is_private or user_followers.story_set.exists and user_followers in user.followed.all or user_followers == user %}story-pp-in-header rounded-gradiants-small-pp{% endif %}" src="{{user_followers.prof_pic.url}}"></a></td>
                             <td class="w-auto"><span><b><a class="text-dark text-decoration-none" href="{% url 'user-detail' user_followers.pk %}">{{user_followers.username}}</a></b> started following you.</span></td>
                             <!-- <td style="width: 40px;"><img class="w-h-32 img-fluid" src="{{post.picture.url}}"></td> -->
                         </tr>
@@ -95,7 +95,7 @@
                   <article>
                     <table class="w-100">
                         <tr>
-                            <td style="width: 40px;" class="align-top"><a href="{% url 'user-detail' user_liked.pk %}"><img class="post-pp img-fluid" src="{{user_liked.prof_pic.url}}"></a></td>
+                            <td style="width: 40px;" class="align-top"><a href="{% if user_liked.story_set.exists and not user_liked.is_private or user_liked.story_set.exists and user_liked in user.followed.all or user_liked == user %}{% url 'stories-user' user_liked.pk %}{% else %} {% if user_liked != user%}{% url 'user-detail' user_liked.pk %}{% else %} {% url 'profpage-user' %} {% endif %}{% endif %}"><img class="post-pp img-fluid {% if user_liked.story_set.exists and not user_liked.is_private or user_liked.story_set.exists and user_liked in user.followed.all or user_liked == user %}story-pp-in-header rounded-gradiants-small-pp{% endif %}" src="{{user_liked.prof_pic.url}}"></a></td>
                             <td class="w-auto"><span><b><a class="text-dark text-decoration-none" href="{% url 'user-detail' user_liked.pk %}">{{user_liked.username}}</a></b> liked your post.</span></td>
                             <td style="width: 40px;" class="align-top"><a href="{% url 'create-comment' post.pk %}"><img class="w-h-32 img-fluid" src="{{post.picture.url}}"></a></td>
                         </tr>
@@ -112,7 +112,7 @@
               <article>
                 <table class="w-100">
                     <tr style="line-height: 1.1em;">
-                        <td style="width: 40px;" class="pt-0 align-top"><a href="{% url 'user-detail' comment.author.pk %}"><img class="post-pp img-fluid" src="{{comment.author.prof_pic.url}}"></a></td>
+                        <td style="width: 40px;" class="pt-0 align-top"><a href="{% if comment.author.story_set.exists and not comment.author.is_private or comment.author.story_set.exists and comment.author in user.followed.all or comment.author == user %}{% url 'stories-user' comment.author.pk %}{% else %} {% if comment.author != user%}{% url 'user-detail' comment.author.pk %}{% else %} {% url 'profpage-user' %} {% endif %}{% endif %}"><img class="post-pp img-fluid {% if comment.author.story_set.exists and not comment.author.is_private or comment.author.story_set.exists and comment.author in user.followed.all or comment.author == user %}story-pp-in-header rounded-gradiants-small-pp{% endif %}" src="{{comment.author.prof_pic.url}}"></a></td>
                         <td class="w-auto"><span><b>{{comment.author.username}}</b> commented your post: {{comment.description}}. <span class="time-ago">{{comment.time_commented_ago}}</span></span></td>
                         <td style="width: 40px;" class="align-top"><a href="{% url 'create-comment' post.pk %}"><img class="w-h-32 img-fluid" src="{{post.picture.url}}"></a></td>
                     </tr>
