@@ -695,6 +695,38 @@ nav  .img-profpic {
     transform: translateX(50%);
 }
 
+.resize-none {
+    resize: none;
+}
+.z-index-9999 {
+    z-index:9999;
+}
+
+.border-radius-30px {
+    border-radius: 30px;
+}
+
+.position-fixed-createcomment-mobile {
+    position: fixed;
+}
+
+.h-22px {
+    height: 22px;
+}
+
+#table-wrap {
+    display:table;
+}
+
+.table-cell-wrap {
+    float: none;
+    display: table-cell;
+    vertical-align: middle;
+}
+.table-cell-wrap-pp {
+    width:32px;
+}
+
 @media (min-width: 769px) {
     .story-brand {
         position: absolute;

@@ -6,6 +6,7 @@ from . import views
 urlpatterns = [
     re_path(r"^$", views.PostListView.as_view(), name="index"),
     re_path(r"^comment/(?P<pk>[0-9]+)/create/$", views.postCommentCreate, name="create-comment"),
+    re_path(r"^comment/(?P<pk>[0-9]+)/create/mobile/$", views.postCommentCreateMobile, name="create-comment-mobile"),
     re_path(r"^user/(?P<pk>[0-9]+)$", views.user_detail, name="user-detail"),
     re_path(r"^user/profilpage/$", views.ProfilPageListView.as_view(), name="profpage-user"),
     re_path(r"^post/create/$", views.PostCreateView.as_view(), name="create-post"),

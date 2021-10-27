@@ -157,3 +157,8 @@ $('#pictureStory').change(function () {
     } else {
     }
 });
+
+function textAreaAdjust(element) {
+  element.style.height = "1px";
+  element.style.height = (element.scrollHeight - 6)+"px";
+}

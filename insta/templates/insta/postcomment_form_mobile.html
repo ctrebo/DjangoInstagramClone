@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        {% block title %}<title>Instagram</title>{% endblock %}
+
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <!-- Font Awesome CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+        <!-- Add additional CSS in static file -->
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    </head>
+    <body class="body-margin">
+        <nav class="navbar fixed-top navbar-expand shadow1 border-navbar bg-white">
+            <div class="container">
+                <a class="navbar-brand text-dark" href="#"><strong>Instagram</strong></a>
+                <form class="d-none d-md-block" action="{% url 'search_results' %}" method="get">
+                    <input class="px-2 borderradius-input-field border-search-field" name="q" type="text" placeholder="Search...">
+                </form>
+
+                <div class="" id="navbarNavDropdown">
+                    <!-- <ul class="navbar-nav d-inline"> -->
+                    <!-- <form action="{% url 'search_results' %}" method="get"> -->
+                    <!-- <input class="d-inline" name="q" type="text" placeholder="Search..."> -->
+                    <!-- </form> -->
+                    <!-- </ul> -->
+                    <ul class="navbar-nav mb-2 mb-lg-0 navbar-right ml-auto my-auto">
+                        <li class="nav-item">
+                            {% url 'index' as index_url %}
+                            {% url 'create-post' as createpost_url %}
+                            {% url 'search_page' as search_page %}
+                            {% url 'activity-page' as activity_page %}
+
+                            <a class="nav-link" href="{{createpost_url}}"><i class="fa fa-15 fa-plus fontawesome-border text-white {% ifequal request.path createpost_url %} color-black {% endifequal %}"></i></a>          
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{index_url}}"><i class="fa fa-15 fa-home fontawesome-border text-white {% ifequal request.path index_url %} color-black {% endifequal %}"></i></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{activity_page}}"><i class="fa fa-15 fa-heart fontawesome-border text-white {% ifequal request.path activity_page %} color-black {% endifequal %}"></i></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{search_page}}"><i class="fa fa-15 fa-compass fontawesome-border text-white {% ifequal request.path search_page %} color-black {% endifequal %}"></i></a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle position-relative mr-3 mr-md-0" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <img class="img-profpic" src="{{user.prof_pic.url}}" alt="url">
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right border-radius-6px" aria-labelledby="navbarDropdownMenuLink">
+                                <a class="dropdown-item change-color-link-navbar pl-3" href="{% url 'profpage-user' %}"><i class="fa fa-user fa-15 fontawesome-border text-white mr-3"></i>Profil</a>
+                                <button class="border-0 bg-white dropdown-item change-color-link-navbar mt-1 pl-3" onclick="goToSavedPosts()"><i class="fa fa-bookmark fa-15 fontawesome-border text-white mr-3"></i>Saved</button>
+                                <hr class="mt-1 mb-1">
+                                <a class="dropdown-item change-color-link-navbar pl-3" href="{% url 'login'%}">
+                                    Logout</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div class="container-fluid">
+            <div class="row bg-dark py-1 position-fixed-createcomment-mobile w-100 z-index-9999" style="height: auto">
+                <div class="col-12 h-100">
+                    <section class="h-100">
+                        <article class="h-100 w-100" id="table-wrap">
+                            <div class="table-cell-wrap table-cell-wrap-pp mx-3">
+                                <a href="{% if user.story_set.exists %} {% url 'stories-user' user.pk %} {% else %}{% url 'profpage-user' %}{% endif %}"><img class="post-pp {% if user.story_set.exists %}story-pp-in-header rounded-gradiants-small-pp{% endif %}" src="{{user.prof_pic.url}}" alt="alt"></a>
+                            </div>
+                            <form class="border-radius-30px py-2 px-3 bg-white overflow-hidden w-100 float-right" method="post" >
+                                {% csrf_token %}
+                                <div class="table-cell-wrap">
+                                    {{ form.description }}
+                                </div>
+                                <div class="table-cell-wrap">
+                                    <input type="submit" class="btn text-info p-0 h-20px" value="Submit" />
+                                </div>
+                            </form>
+                        </article>
+                    </section>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <section>
+                        <article>
+                            {% for comment in comment_list %}
+                            <section class="pt-3 single-comment position-relative">
+                                <article>
+                                    <table class="w-100">
+                                        <tr>
+                                            <td style="width: 40px;" class="align-top"><a href="{% if comment.author.story_set.exists and not comment.author.is_private or comment.author.story_set.exists and comment.author in user.followed.all or comment.author.story_set.exists and comment.author == user %} {% url 'stories-user' comment.author.pk %} {% else %}{% if user == comment.author %} {% url 'profpage-user' %} {% else %} {% url 'user-detail' comment.author.pk %} {% endif %}{% endif %}"><img class="post-pp {% if comment.author.story_set.exists and not comment.author.is_private or comment.author.story_set.exists and comment.author in user.followed.all or comment.author.story_set.exists and comment.author == user %}story-pp-in-header rounded-gradiants-small-pp{% endif %}"  src="{{comment.author.prof_pic.url}}" alt="alt"></a></td>
+                                            <td class="w-auto line-height-comments"><span class="font-size-username">
+                                                    <span class="font-size-username">
+                                                        {% load insta_extras %}
+                                                        <b><a class="text-dark" href="{% if comment.author == user %}  {% url 'profpage-user'  %} {% else %} {% url 'user-detail' comment.author.pk %} {% endif %}">{{comment.author.username}}</a></b><span>&nbsp</span><span class="">{% for word in comment.description_to_array %} {% if word == "<new_line_code/>" %} {% elif "@" in word %} <a href="{% get_tagged_user word user %}">{{word}}  </a> {% else %}{{word}} {% endif %}{% endfor %}</span><p class="time-ago mb-0"><span>{{comment.time_commented_ago}}</span>{% if comment.likes.exists %}<b class="ml-2 comment-likes" data-toggle="modal" data-target="#modalLikesComment-{{comment.id}}">{{ comment.likes.count }} like{{ comment.likes.count|pluralize }} </b>{% endif %}</p>
+                                                    </span>
+                                            </td>
+                                            <div class="modal fade" id="modalLikesComment-{{comment.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                                    <div class="modal-content modal-content-comment-likes">
+                                                        <div class="modal-header py-2">
+                                                            <h5 class="modal-title ml-auto" id="exampleModalLongTitle">Users who Liked</h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+
+                                                            {% for user_in_list in comment.likes.all %}
+                                                            <section class="position-relative mb-1 section-search-page px-2 py-2">
+                                                                <div>
+                                                                    <article class="d-inline my-auto">
+                                                                        <a href="{% if user_in_list == user %}{% url 'profpage-user' %}{% else %}{% url 'user-detail' user_in_list.pk %}{% endif %}">
+                                                                            <img src="{{user_in_list.prof_pic.url}}" class="post-pp img-fluid">
+                                                                        </a>
+
+                                                                    </article>
+                                                                    <article class="d-inline search-article">
+                                                                        <div>
+                                                                            <a href="{% if user_in_list == user %}{% url 'profpage-user' %}{% else %}{% url 'user-detail' user_in_list.pk %}{% endif %}">
+                                                                                <b class="username-search text-dark">{{user_in_list.username}}</b>
+                                                                            </a>
+
+                                                                        </div>
+                                                                        <small class="font-weight-light text-dark">{{user_in_list.first_name}}</small>
+                                                                    </article>
+                                                                    <article class="d-inline float-right">
+                                                                        <form action="{% url 'follow-user' user_in_list.pk %}" method="POST"
+                                                                                                                                                                                                                                                                                                                      class="d-inline ml-md-2">
+                                                                            {% csrf_token %}
+                                                                            {%  if user_in_list == user %}
+                                                                            {% elif user_in_list in user.followed.all %}
+                                                                            <button type="submit" name="redirect_path" value="{% url 'create-comment' post.pk %}" class="btn border bg-white text-dark">Following</button>
+
+                                                                            {% elif user in user_in_list.pending_requests.all %}
+                                                                            <button type="submit" name="redirect_path" value="{% url 'create-comment' post.pk %}" class="btn bg-white border text-dark">Requested</button>
+                                                                            {% else %}
+                                                                            <button type="submit" name="redirect_path" value="{% url 'create-comment' post.pk %}" class="btn border bg-primary text-white">Follow</button>
+                                                                            {% endif %}
+                                                                        </form>
+                                                                    </article>
+                                                                </div>
+                                                            </section>
+                                                            {% endfor %}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <td class="float-right align-top">
+                                                <form action="{% url 'like-postcomment' comment.pk %}" method="POST">
+                                                    {% csrf_token %}                
+                                                    <button type="submit" name="redirect_path" value="{% url 'create-comment' post.pk %}" class="btn mt-2 bg-white" id=""><i class="fa fa-heart{% if user in comment.likes.all %} text-danger{% else %} text-white fontawesome-border{% endif %}"></i></button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    </table>
+
+                                </article>
+                            </section>
+                            {% empty %}
+                            <p class="p-3">No comments</p> 
+                            {% endfor %}
+
+                        </article>
+                    </section>
+
+
+                </div>
+            </div>
+        </div>
+
+        <div class="w-100 copy-link-slider fixed-bottom bg-dark text-white"><p class="p-2 ml-4">Copied link to clipboard</p></div>
+        <script
+                src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        <script src="{% static 'js/javascript.js' %}"></script>
+
+    </body>
+</html>

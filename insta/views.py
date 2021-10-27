@@ -23,7 +23,7 @@ from django.contrib.auth.forms import UserCreationForm
 
 from .models import Post, PostComment, Story
 
-from insta.forms import PostCommentCreateForm, UserUpdateForm, CustomUserCreationForm, StoryCreateForm
+from insta.forms import PostCommentCreateForm, PostCommentCreateMobileForm, UserUpdateForm, CustomUserCreationForm, StoryCreateForm
 
 user_model = get_user_model()
 
@@ -247,6 +247,55 @@ def postCommentCreate(request, pk):
     }
 
     return render(request, 'insta/postcomment_form.html', context)
+
+@login_required
+def postCommentCreateMobile(request, pk):
+    
+    post_for_comment = get_object_or_404(Post, pk=pk)
+    comment_list = PostComment.objects.filter(post=post_for_comment).order_by("post_date")
+
+    # Logged in user can only see his own pictures, pictures of
+    # non private users and private users he follows
+    if (post_for_comment.author.is_private and post_for_comment.author not in request.user.followed.all() and post_for_comment.author != request.user):
+        return HttpResponseRedirect(reverse("user-detail", args=[str(post_for_comment.author.pk)]))
+
+    likes_connected = get_object_or_404(Post, id=pk)
+    liked = False
+    if likes_connected.likes.filter(id=request.user.id).exists():
+        liked = True
+    
+    post_is_saved = True if request.user.saved_posts.filter(id=post_for_comment.id).count() == 1 else False
+
+    # If this is a POST request then process the Form data
+    if request.method == 'POST':
+
+        # Create a form instance and populate it with data from the request (binding):
+        form = PostCommentCreateMobileForm(request.POST)
+
+        # Check if the form is valid:
+        if form.is_valid():
+            #create new object with data from form
+            comment=PostComment.objects.create(description=form.cleaned_data["description"], author=request.user, post=post_for_comment)
+
+            comment.save()
+
+            # redirect to a new URL:
+            return HttpResponseRedirect(reverse('create-comment-mobile', args=[str(pk)]) )
+
+    # If this is a GET (or any other method) create the default form.
+    else:
+        comment = ""
+        form = PostCommentCreateMobileForm(initial={"description":comment})
+
+    context = {
+        'form': form,
+        'post': post_for_comment,
+        'comment_list': comment_list, 
+        'post_is_liked': liked, 
+        'post_is_saved': post_is_saved, 
+    }
+
+    return render(request, 'insta/postcomment_form_mobile.html', context)
 
 
 @login_required
