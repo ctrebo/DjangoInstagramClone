@@ -698,9 +698,6 @@ nav  .img-profpic {
 .resize-none {
     resize: none;
 }
-.z-index-9999 {
-    z-index:9999;
-}
 
 .border-radius-30px {
     border-radius: 30px;
@@ -708,10 +705,19 @@ nav  .img-profpic {
 
 .position-fixed-createcomment-mobile {
     position: fixed;
+    z-index: 1;
 }
 
-.h-22px {
+.bg-createcomment-mobile {
+    background: #dfe4e6;
+}
+
+.height-textarea-createcomment-mobile {
     height: 22px;
+    max-height: 90px;
+}
+#commentsection-createcomment-mobile {
+    position:absolute;
 }
 
 #table-wrap {

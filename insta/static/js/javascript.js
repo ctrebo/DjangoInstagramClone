@@ -162,3 +162,17 @@ function textAreaAdjust(element) {
   element.style.height = "1px";
   element.style.height = (element.scrollHeight - 6)+"px";
 }
+
+var width_textarea = $("#create-comment-mobile-form").width() - $(".table-cell-wrap>input").width();
+$("#textarea-mobile-createcomment").css("width", width_textarea.toString()+"px");
+$("#table-cell-wrap-textarea").css("width", width_textarea.toString()+"px");
+
+var height_navbar = $("nav").outerHeight();
+var height_createcomment = $(".bg-createcomment-mobile").outerHeight();
+$("#commentsection-createcomment-mobile").css("top", (height_navbar + height_createcomment).toString() + "px");
+
+$('#textarea-mobile-createcomment').on('input paste keyup change', function() {
+    var height_navbar = $("nav").outerHeight();
+    var height_createcomment = $(".bg-createcomment-mobile").outerHeight();
+    $("#commentsection-createcomment-mobile").css("top", (height_navbar + height_createcomment).toString() + "px");
+});

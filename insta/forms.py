@@ -91,7 +91,7 @@ class PostCommentCreateMobileForm(ModelForm):
         labels = {"description":_('') }
         help_texts = {"description":_('')}
         widgets = {
-                'description': Textarea(attrs={'placeholder': 'Add comment...', "class": "border-0 resize-none overflow-hidden h-22px","id":"textarea-mobile-createcomment","onkeyup":"textAreaAdjust(this)", "cols":"", "rows":"" }),
+                'description': Textarea(attrs={'placeholder': 'Add comment...', "class": "border-0 resize-none height-textarea-createcomment-mobile","id":"textarea-mobile-createcomment","onkeyup":"textAreaAdjust(this)", "cols":"", "rows":"" }),
         }
 
 class UserUpdateForm(ModelForm):
