@@ -307,6 +307,7 @@
                     {% csrf_token %}                
                     <button type="submit" name="redirect_path" value="{% url 'create-comment' post.pk %}" class="btn bg-white" id="like-create-comment"><i class="fa fa-15 fa-heart{% if post_is_liked %} text-danger{% else %} text-white fontawesome-border{% endif %}"></i></button>
                 </form>
+                <a class="px-2 d-inline d-md-none" href="{% url 'create-comment-mobile' post.pk %}"><i class="fa fa-15 fa-comment fontawesome-border text-white"></i></a>
                 <form class="d-inline-block float-right" action="{% url 'save-post' post.pk %}" method="POST">
                     {% csrf_token %}                
                     <button type="submit" name="redirect_path" value="{% url 'create-comment' post.pk %}" class="btn bg-white" id="save-create-comment"><i class="fa fa-15 fa-bookmark{% if post_is_saved %} text-dark{% else %} text-white fontawesome-border{% endif %}"></i></button>
@@ -322,15 +323,6 @@
                     {{ form.as_table }}
                     </table>
                     <input id="submit-comment" type="submit" class="btn text-info submit-comment" value="Submit" />
-                </form>
-            </article>
-        </section>
-        <section class="pl-3 d-block d-md-none" id="id-for-inline-p">
-            <article>
-                <form action="" method="post" class="">
-                    {% csrf_token %}
-                        {{ form.as_p }}
-                    <input type="submit" class="btn text-info bg-white w-23" value="Submit" />
                 </form>
             </article>
         </section>
