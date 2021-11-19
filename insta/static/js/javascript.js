@@ -159,8 +159,8 @@ $('#pictureStory').change(function () {
 });
 
 function textAreaAdjust(element) {
-  element.style.height = "1px";
-  element.style.height = (element.scrollHeight - 6)+"px";
+    element.style.height = "1px";
+    element.style.height = (element.scrollHeight - 6)+"px";
 }
 
 var width_textarea = $("#create-comment-mobile-form").width() - $(".table-cell-wrap>input").width();
@@ -176,3 +176,26 @@ $('#textarea-mobile-createcomment').on('input paste keyup change', function() {
     var height_createcomment = $(".bg-createcomment-mobile").outerHeight();
     $("#commentsection-createcomment-mobile").css("top", (height_navbar + height_createcomment).toString() + "px");
 });
+
+var original_text;
+$('.show-child-comments').on('click', function(evt) {
+    var sibling_section = $(this).next("section");
+    children_span = $(this).children("span");
+    var has_d_none_class = sibling_section.hasClass("d-none"); 
+    if(has_d_none_class) {
+        original_text = children_span.text();
+        children_span.text("Antworten verbergen");
+        sibling_section.removeClass("d-none");
+    } else {
+        sibling_section.addClass("d-none");
+        children_span.text(original_text);
+    }
+}); 
+
+$('.write-to-modal-textarea').on('click', function(evt) {
+    var name = $(this).attr("name");
+    var textarea = $(this).closest(".wrap-parent-and-child").find("div[id^='answerToParentComment']").find("textarea");
+    //alert($(this).closest(".wrap-parent-and-child").find("div[id^='answerToParentComment']").find("textarea").attr("class"));
+    textarea.val("@"+name);
+
+}); 

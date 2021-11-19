@@ -48,10 +48,10 @@ class PostAdmin(admin.ModelAdmin):
 
 @admin.register(PostComment)
 class PostCommentAdmin(admin.ModelAdmin):
-    list_display = ("author", "post_date", "description", "id", "post")
+    list_display = ("author", "post_date", "description", "id", "post",)
     list_filter = ("author", "post_date", "post")
 
-    fieldsets = (("Post Comment information", {'fields': ('author', 'description', 'post', 'likes')}),)
+    fieldsets = (("Post Comment information", {'fields': ('author', 'description', 'post', 'likes', 'parent')}),)
 
 @admin.register(Story)
 class StoryAdmin(admin.ModelAdmin):

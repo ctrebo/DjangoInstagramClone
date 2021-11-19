@@ -142,9 +142,10 @@ class PostComment(models.Model):
     post_date = models.DateTimeField(auto_now_add=True)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     likes = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='like_field', blank=True)
+    parent = models.ForeignKey("PostComment", related_name="replies", null=True, blank=True, on_delete=models.CASCADE)
 
     class Meta:
-        ordering = ["-post_date"]
+        ordering = ["post_date"]
 
     def __str__(self):
         """

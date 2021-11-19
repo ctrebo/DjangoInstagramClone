@@ -77,6 +77,24 @@ class PostCommentCreateForm(ModelForm):
                 'description': Textarea(attrs={'placeholder': 'Add comment...', "class": "border-0 d-inline comment-input w-75 resize-none",}),
         }
 
+# Form to answer to parent comments
+class PostCommentAnswerCreateForm(ModelForm):
+    def clean_description(self):
+        data = self.cleaned_data["description"]
+        #check if there are no swearwords in comment
+        if profanity.contains_profanity(data):
+           raise ValidationError(_('Please do not use swear words!'))
+        return data
+
+    class Meta:
+        model = PostComment
+        fields = ["description"]
+        labels = {"description":_('') }
+        help_texts = {"description":_('')}
+        widgets = {
+                'description': Textarea(attrs={'placeholder': 'Add comment...', "class": "border-0 resize-none height-textarea-createcomment-mobile w-75","onkeyup":"textAreaAdjust(this)", "cols":"", "rows":"", "autofocus":"autofocus"}),
+        }
+
 class PostCommentCreateMobileForm(ModelForm):
     def clean_description(self):
         data = self.cleaned_data["description"]

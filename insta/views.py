@@ -8,7 +8,7 @@ from django.http import Http404, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
 from django.views.decorators.csrf import csrf_exempt,csrf_protect #Add this
-from django.db.models import Q # new
+from django.db.models import Q, Count
 # Libraries for timedelta...
 from django.utils import timezone
 import pytz
@@ -20,10 +20,9 @@ from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 
 
-
 from .models import Post, PostComment, Story
 
-from insta.forms import PostCommentCreateForm, PostCommentCreateMobileForm, UserUpdateForm, CustomUserCreationForm, StoryCreateForm
+from insta.forms import PostCommentAnswerCreateForm, PostCommentCreateForm, PostCommentCreateMobileForm, UserUpdateForm, CustomUserCreationForm, StoryCreateForm
 
 user_model = get_user_model()
 
@@ -199,10 +198,12 @@ def userSavePost(request, pk):
 
 @login_required
 def postCommentCreate(request, pk):
-    
     post_for_comment = get_object_or_404(Post, pk=pk)
     other_posts_of_author = post_for_comment.author.post_set.all().exclude(pk=post_for_comment.pk)[:6]
-    comment_list = PostComment.objects.filter(post=post_for_comment).order_by("post_date")
+
+    # Sort parent comments by number of likes
+    comment_list = PostComment.objects.annotate(num_likes=Count("likes")).order_by("-num_likes")
+
 
     # Logged in user can only see his own pictures, pictures of
     # non private users and private users he follows
@@ -221,11 +222,21 @@ def postCommentCreate(request, pk):
 
         # Create a form instance and populate it with data from the request (binding):
         form = PostCommentCreateForm(request.POST)
-
+        form_answer = PostCommentAnswerCreateForm(request.POST)
         # Check if the form is valid:
-        if form.is_valid():
+        if form.is_valid() and form_answer.is_valid():
+            parent_obj = None
+            # get parent comment id from hidden input
+            try:
+                # id integer e.g. 15
+                parent_id = int(request.POST.get('parent_id'))
+            except:
+                parent_id = None
+            if parent_id:
+                parent_obj = get_object_or_404(PostComment, id=parent_id)
+
             #create new object with data from form
-            comment=PostComment.objects.create(description=form.cleaned_data["description"], author=request.user, post=post_for_comment)
+            comment=PostComment.objects.create(description=form.cleaned_data["description"], author=request.user, post=post_for_comment, parent=parent_obj)
 
             comment.save()
 
@@ -236,9 +247,11 @@ def postCommentCreate(request, pk):
     else:
         comment = ""
         form = PostCommentCreateForm(initial={"description":comment})
+        form_answer = PostCommentAnswerCreateForm(initial={"description":comment})
 
     context = {
         'form': form,
+        'form_answer': form_answer,
         'post': post_for_comment,
         'comment_list': comment_list, 
         'other_posts_of_author': other_posts_of_author,
@@ -250,10 +263,9 @@ def postCommentCreate(request, pk):
 
 @login_required
 def postCommentCreateMobile(request, pk):
-    
     post_for_comment = get_object_or_404(Post, pk=pk)
-    comment_list = PostComment.objects.filter(post=post_for_comment).order_by("post_date")
-
+    # Sort parent comments by number of likes
+    comment_list = PostComment.objects.annotate(num_likes=Count("likes")).order_by("-num_likes")
     # Logged in user can only see his own pictures, pictures of
     # non private users and private users he follows
     if (post_for_comment.author.is_private and post_for_comment.author not in request.user.followed.all() and post_for_comment.author != request.user):
@@ -271,11 +283,21 @@ def postCommentCreateMobile(request, pk):
 
         # Create a form instance and populate it with data from the request (binding):
         form = PostCommentCreateMobileForm(request.POST)
-
+        form_answer = PostCommentAnswerCreateForm(request.POST)
         # Check if the form is valid:
-        if form.is_valid():
+        if form.is_valid() and form_answer.is_valid():
+            parent_obj = None
+            # get parent comment id from hidden input
+            try:
+                # id integer e.g. 15
+                parent_id = int(request.POST.get('parent_id'))
+            except:
+                parent_id = None
+            if parent_id:
+                parent_obj = get_object_or_404(PostComment, id=parent_id)
+
             #create new object with data from form
-            comment=PostComment.objects.create(description=form.cleaned_data["description"], author=request.user, post=post_for_comment)
+            comment=PostComment.objects.create(description=form.cleaned_data["description"], author=request.user, post=post_for_comment, parent=parent_obj)
 
             comment.save()
 
@@ -286,9 +308,11 @@ def postCommentCreateMobile(request, pk):
     else:
         comment = ""
         form = PostCommentCreateMobileForm(initial={"description":comment})
+        form_answer = PostCommentAnswerCreateForm(initial={"description":comment})
 
     context = {
         'form': form,
+        'form_answer': form_answer,
         'post': post_for_comment,
         'comment_list': comment_list, 
         'post_is_liked': liked, 
