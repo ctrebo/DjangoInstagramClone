@@ -156,8 +156,7 @@
                                                                     <small class="font-weight-light text-dark">{{user_in_list.first_name}}</small>
                                                                 </article>
                                                                 <article class="d-inline float-right">
-                                                                    <form action="{% url 'follow-user' user_in_list.pk %}" method="POST"
-                                                                                                                                                                                                                                                                                          class="d-inline ml-md-2">
+                                                                    <form action="{% url 'follow-user' user_in_list.pk %}" method="POST" class="d-inline ml-md-2">
                                                                         {% csrf_token %}
                                                                         {%  if user_in_list == user %}
                                                                         {% elif user_in_list in user.followed.all %}
