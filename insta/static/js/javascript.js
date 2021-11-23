@@ -192,10 +192,20 @@ $('.show-child-comments').on('click', function(evt) {
     }
 }); 
 
-$('.write-to-modal-textarea').on('click', function(evt) {
-    var name = $(this).attr("name");
-    var textarea = $(this).closest(".wrap-parent-and-child").find("div[id^='answerToParentComment']").find("textarea");
-    //alert($(this).closest(".wrap-parent-and-child").find("div[id^='answerToParentComment']").find("textarea").attr("class"));
-    textarea.val("@"+name);
+// If 'Answer' gets clicked write 'parent_id' into
+// the input(to signal that it is a childcomment) and 
+// write the the username of author as value of input
+$('.write-to-textarea').on('click', function(evt) {
+    
+    // Tomorow find way to pass id of parent comment to input as value
+    var name_of_author = $(this).attr("name");
+    var parent_id = $(this).next().attr("name");
+    var form_textarea = $("#form-write-comment");
+    var textarea = form_textarea.find("textarea");
+    var input_child_comment = $("#parent_id");
+    input_child_comment.attr("name", "parent_id");
+    input_child_comment.attr("value", parent_id);
+
+    textarea.val("@"+name_of_author);
 
 }); 

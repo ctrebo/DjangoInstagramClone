@@ -202,7 +202,7 @@ def postCommentCreate(request, pk):
     other_posts_of_author = post_for_comment.author.post_set.all().exclude(pk=post_for_comment.pk)[:6]
 
     # Sort parent comments by number of likes
-    comment_list = PostComment.objects.annotate(num_likes=Count("likes")).order_by("-num_likes")
+    comment_list = PostComment.objects.filter(post=post_for_comment, parent=None).annotate(num_likes=Count("likes")).order_by("-num_likes")
 
 
     # Logged in user can only see his own pictures, pictures of
@@ -265,7 +265,7 @@ def postCommentCreate(request, pk):
 def postCommentCreateMobile(request, pk):
     post_for_comment = get_object_or_404(Post, pk=pk)
     # Sort parent comments by number of likes
-    comment_list = PostComment.objects.annotate(num_likes=Count("likes")).order_by("-num_likes")
+    comment_list = PostComment.objects.filter(post=post_for_comment).annotate(num_likes=Count("likes")).order_by("-num_likes")
     # Logged in user can only see his own pictures, pictures of
     # non private users and private users he follows
     if (post_for_comment.author.is_private and post_for_comment.author not in request.user.followed.all() and post_for_comment.author != request.user):

@@ -241,25 +241,11 @@
                                                 {% for word in comment.description_to_array %} {% if word == "<new_line_code/>" %} {% elif "@" in word %} <a href="{% get_tagged_user word user %}">{{word}}  </a> {% else %}{{word}} {% endif %}{% endfor %}
                                             </span>
                                             <p class="time-ago mb-0">
-                                            <span>{{comment.time_commented_ago}}</span>{% if comment.likes.exists %}<b class="ml-2 comment-likes" data-toggle="modal" data-target="#modalLikesComment-{{comment.id}}">{{ comment.likes.count }} like{{ comment.likes.count|pluralize }}</b>{% endif %}<b class="ml-1 cursor-pointer write-to-modal-textarea" name="{{comment.author.username}}" data-toggle="modal" data-target="#answerToParentComment-{{comment.id}}">Answer</b> 
+                                            <span>{{comment.time_commented_ago}}</span>{% if comment.likes.exists %}<b class="ml-2 comment-likes" data-toggle="modal" data-target="#modalLikesComment-{{comment.id}}">{{ comment.likes.count }} like{{ comment.likes.count|pluralize }}</b>{% endif %}<b class="ml-1 cursor-pointer write-to-textarea" name="{{comment.author.username}}">Answer</b><b name="{{comment.id}}"></b>  
+                                            
                                             </p>
                                         </span>
                                     </td>
-                                    <div class="modal fade modal-answer-parentcomment" id="answerToParentComment-{{comment.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                                        <div class="modal-dialog modal-dialog-centered" role="document">
-                                            <div class="modal-content">
-                                                <div class="modal-body py-1">
-                                                    <form action="" method="POST" class="answer-forms">
-                                                        {% csrf_token %}
-                                                        {{form_answer.description}}
-                                                        <input class="btn text-info bg-transparent float-right w-25 py-0" type="submit" value="Submit">
-                                                        <input type="hidden" name="parent_id" value="{{ comment.id }}">
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
                                     <div class="modal fade" id="modalLikesComment-{{comment.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-centered" role="document">
                                             <div class="modal-content modal-content-comment-likes">
@@ -464,13 +450,12 @@
                 
         <section class="px-3 d-none d-md-block">
             <article>
-                <form action="" method="post" class="">
+                <form action="" method="post" id="form-write-comment">
                     {% csrf_token %}
                     <table class="table-form w-75">
                     {{ form.as_table }}
                     </table>
-
-                    <input type="hidden" name="parent_id" value="45">
+                    <input type="hidden" value="" id="parent_id">
                     <input id="submit-comment" type="submit" class="btn text-info submit-comment" value="Submit" />
                 </form>
             </article>
