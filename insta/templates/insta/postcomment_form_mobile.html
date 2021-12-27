@@ -70,6 +70,7 @@
                                 </div>
                                 <div class="table-cell-wrap">
                                     <input type="submit" class="btn text-info p-0 h-20px" value="Submit" />
+                                    <input type="hidden" value="" id="parent_id">
                                 </div>
                             </form>
                         </article>
@@ -108,24 +109,12 @@
                                         <td class="w-auto line-height-comments"><span class="font-size-username">
                                                 <span class="font-size-username">
                                                     {% load insta_extras %}
-                                                    <b><a class="text-dark" href="{% if comment.author == user %}  {% url 'profpage-user'  %} {% else %} {% url 'user-detail' comment.author.pk %} {% endif %}">{{comment.author.username}}</a></b><span>&nbsp</span><span class="">{% for word in comment.description_to_array %} {% if word == "<new_line_code/>" %} {% elif "@" in word %} <a href="{% get_tagged_user word user %}">{{word}}  </a> {% else %}{{word}} {% endif %}{% endfor %}</span><p class="time-ago mb-0"><span>{{comment.time_commented_ago}}</span>{% if comment.likes.exists %}<b class="ml-2 comment-likes" data-toggle="modal" data-target="#modalLikesComment-{{comment.id}}">{{ comment.likes.count }} like{{ comment.likes.count|pluralize }} </b>{% endif %}<b class="ml-1 cursor-pointer write-to-modal-textarea" name="{{comment.author.username}}" data-toggle="modal" data-target="#answerToParentComment-{{comment.id}}">Answer</b></p>
+                                                    <b><a class="text-dark" href="{% if comment.author == user %}  {% url 'profpage-user'  %} {% else %} {% url 'user-detail' comment.author.pk %} {% endif %}">{{comment.author.username}}</a></b><span>&nbsp</span><span class="">{% for word in comment.description_to_array %} {% if word == "<new_line_code/>" %} {% elif "@" in word %} <a href="{% get_tagged_user word user %}">{{word}}  </a> {% else %}{{word}} {% endif %}{% endfor %}</span>
+                                                    <p class="time-ago mb-0">
+                                                        <span>{{comment.time_commented_ago}}</span>{% if comment.likes.exists %}<b class="ml-2 comment-likes" data-toggle="modal" data-target="#modalLikesComment-{{comment.id}}">{{ comment.likes.count }} like{{ comment.likes.count|pluralize }} </b>{% endif %}<b class="ml-1 cursor-pointer write-to-textarea" name="{{comment.author.username}}">Answer</b><b name="{{comment.id}}"></b>
+                                                    </p>
                                                 </span>
                                         </td>
-
-                                        <div class="modal fade modal-answer-parentcomment" id="answerToParentComment-{{comment.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                                            <div class="modal-dialog modal-dialog-centered" role="document">
-                                                <div class="modal-content">
-                                                    <div class="modal-body py-1">
-                                                        <form action="" method="POST" class="answer-forms">
-                                                            {% csrf_token %}
-                                                            {{form_answer.description}}
-                                                            <input class="btn text-info bg-transparent float-right w-25 py-0" type="submit" value="Submit">
-                                                            <input type="hidden" name="parent_id" value="{{ comment.id }}">
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
                                         <div class="modal fade" id="modalLikesComment-{{comment.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                                             <div class="modal-dialog modal-dialog-centered" role="document">
                                                 <div class="modal-content modal-content-comment-likes">
@@ -238,7 +227,7 @@
                                                             {% for word in childcomment.description_to_array %} {% if word == "<new_line_code/>" %} {% elif "@" in word %} <a href="{% get_tagged_user word user %}">{{word}}  </a> {% else %}{{word}} {% endif %}{% endfor %}
                                                         </span>
                                                         <p class="time-ago mb-0">
-                                                        <span>{{childcomment.time_commented_ago}}</span>{% if childcomment.likes.exists %}<b class="ml-2 comment-likes" data-toggle="modal" data-target="#modalLikesComment-{{childcomment.id}}">{{ childcomment.likes.count }} like{{ childcomment.likes.count|pluralize }}</b>{% endif %}<b class="ml-1 write-to-modal-textarea cursor-pointer" name="{{comment.author.username}}" data-toggle="modal" data-target="#answerToParentComment-{{comment.id}}">Answer</b> 
+                                                            <span>{{childcomment.time_commented_ago}}</span>{% if childcomment.likes.exists %}<b class="ml-2 comment-likes" data-toggle="modal" data-target="#modalLikesComment-{{childcomment.id}}">{{ childcomment.likes.count }} like{{ childcomment.likes.count|pluralize }}</b>{% endif %}<b class="ml-1 cursor-pointer write-to-textarea" name="{{comment.author.username}}">Answer</b><b name="{{comment.id}}"></b>
                                                         </p>
                                                     </span>
                                                 </td>

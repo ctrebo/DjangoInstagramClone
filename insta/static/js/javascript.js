@@ -196,7 +196,6 @@ $('.show-child-comments').on('click', function(evt) {
 // the input(to signal that it is a childcomment) and 
 // write the the username of author as value of input
 $('.write-to-textarea').on('click', function(evt) {
-    
     // Tomorow find way to pass id of parent comment to input as value
     var name_of_author = $(this).attr("name");
     var parent_id = $(this).next().attr("name");
@@ -208,4 +207,21 @@ $('.write-to-textarea').on('click', function(evt) {
 
     textarea.val("@"+name_of_author);
 
+}); 
+
+
+$('.write-to-textarea').on('click', function(evt) {
+    // Tomorow find way to pass id of parent comment to input as value
+    var name_of_author = $(this).attr("name");
+    var parent_id = $(this).next().attr("name");
+    var form_textarea = $("#form-write-comment");
+    var form_textarea_mobile = $("#create-comment-mobile-form");
+    var textarea = form_textarea.find("textarea");
+    var textarea_mobile = form_textarea_mobile.find("textarea");
+    var input_child_comment = $("#parent_id");
+    input_child_comment.attr("name", "parent_id");
+    input_child_comment.attr("value", parent_id);
+
+    textarea.val("@"+name_of_author);
+    textarea_mobile.val("@"+name_of_author);
 }); 
