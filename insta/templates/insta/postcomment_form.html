@@ -79,7 +79,14 @@
         </section>
         <section>                
             <article>
-                <img class="w-100 h-auto" id="main-image-postcommentform" src="{{post.picture.url}}" alt="alt">
+                {% if post.is_image %} 
+                    <img class="w-100 h-auto" id="main-image-postcommentform" src="{{post.picture.url}}" alt="alt">
+                {% else %}
+                    <video class="video-post" controls id="main-image-postcommentform">
+                        <source src="{{post.picture.url}}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                {% endif %}
                 {% if post.tagged_people.exists %}
                 <div class="tagged-people" data-toggle="modal" data-target="#modaltagged-{{post.pk}}"><i class="fa text-white fa-user tagged-people-icon"></i></div>
                 <div class="modal fade" id="modaltagged-{{post.pk}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -476,7 +483,14 @@
 {% for post in other_posts_of_author %}
     <div class="col-4 p-15px mb-for-user-detail position-relative">
         <div class="img-user-detail">
-            <img src="{{post.picture.url}}" alt="">
+            {% if post.is_image %} 
+                <img class="media-on-profilpage" src="{{post.picture.url}}" alt="alt">
+            {% else %}
+                <video class="media-on-profilpage" controls> 
+                    <source src="{{post.picture.url}}" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            {% endif %}
             <div onclick="location.href='{% url 'create-comment' post.pk %}';" class="hover h-100 w-100 mx-auto">
                 <p class="px-3 center-comment-symbol"
                     href="{% url 'create-comment' post.pk %}"><i class="fa fa-15 fa-comment"></i> {{post.postcomment_set.count}}</p>

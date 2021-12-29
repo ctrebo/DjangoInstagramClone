@@ -1,3 +1,6 @@
+import pytz
+import os
+
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils import timezone
@@ -6,11 +9,13 @@ import datetime
 from datetime import timezone, timedelta
 from django.urls import reverse #Used to generate URLs by reversing the URL patterns
 from django.utils import timezone
-import pytz
+
 
 from django.db.models.signals import m2m_changed
 from django.core.exceptions import ValidationError
 
+
+from .validators import validate_file_extension
 
 class CustomUser(AbstractUser):
     date_joined      = models.DateTimeField(auto_now_add=True)
@@ -38,7 +43,7 @@ class Post(models.Model):
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
     post_date = models.DateTimeField(auto_now_add=True)
     likes = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='likes', blank=True)
-    picture = models.ImageField(upload_to="images_post", height_field=None, width_field=None)
+    picture = models.FileField(upload_to="images_post", validators=[validate_file_extension])
     caption = models.TextField(max_length=1500, blank=True, null=True)
     tagged_people = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="tagging", blank=True)
 
@@ -124,8 +129,16 @@ class Post(models.Model):
                 return result + " years ago"
         else:
             return "undefined"
-    
-       
+
+    @property
+    def is_image(self):
+        """
+        returns true if Post has image as, not video.
+        Used is template to select right html tags
+        """
+        ext = os.path.splitext(self.picture.url)[1]
+        image_extensions = [".jpg", ".png", ".jpeg"]
+        return (ext in image_extensions)
 
 def tagged_people_changed(sender, **kwargs):
     if kwargs['instance'].tagged_people.count() > 20:

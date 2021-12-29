@@ -6,6 +6,7 @@ main {
     bottom: 0;
 }
 
+
 .modal.fade .modal-dialog {
 -webkit-transform: scale(0.1);
 -moz-transform: scale(0.1);
@@ -264,8 +265,8 @@ textarea::-webkit-scrollbar {
     display: block;
     padding-bottom: 100%; /* The padding depends on the width, not on the height, so with a padding-bottom of 100% you will get a square */
 }
-  
-.img-user-detail img {
+
+.media-on-profilpage {
     position: absolute; /* Take your picture out of the flow */
     top: 0;
     bottom: 0;
@@ -276,6 +277,7 @@ textarea::-webkit-scrollbar {
     object-fit: cover; /* Equivalent of the background-size: cover; of a background-image */
     object-position: center;
 }
+
 .border-50 {
     border-radius: 50%;
 }
@@ -559,7 +561,6 @@ textarea::-webkit-scrollbar {
     font-size: .8rem;
 }
 
-
 .story-users {
     width: 90px;
     height: 90px;
@@ -704,6 +705,11 @@ textarea::-webkit-scrollbar {
     resize: none;
 }
 
+.video-post {
+    height: auto;
+    width: 100%;
+    display: block;
+}
 .border-radius-30px {
     border-radius: 30px;
 }

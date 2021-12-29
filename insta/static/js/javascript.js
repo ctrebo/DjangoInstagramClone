@@ -1,7 +1,6 @@
 var variable_height = ($("#main-image-postcommentform").height() - $("#header-create-comment").outerHeight() - $("#submit-comment").outerHeight() - $("#like-create-comment").outerHeight() - 8);
 $("#comment-section").css("height", variable_height.toString() + "px");
 
-
 $( ".fontawesome-border" ).click(function() {
     $(this).css("text-shadow", "-1px 0 rgb(136, 128, 128), 0 1px rgb(136, 128, 128), 1px 0 rgb(136, 128, 128), 0 -1px rgb(136, 128, 128)")
   });

@@ -129,7 +129,14 @@
                 </section>
                 <section class="position-relative">
                     <article>
-                        <img class="w-100 h-auto img-fluid"  src="{{post.picture.url}}" alt="alt">
+                        {% if post.is_image %} 
+                            <img class="w-100 h-auto img-fluid"  src="{{post.picture.url}}" alt="alt">
+                        {% else %}
+                            <video class="w-100 h-auto" controls> 
+                                <source src="{{post.picture.url}}" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                        {% endif %}
                         {% if post.tagged_people.exists %}
                             <div class="tagged-people" data-toggle="modal" data-target="#modaltagged-{{post.pk}}"><i class="fa text-white fa-user tagged-people-icon"></i></div>
                             <div class="modal fade" id="modaltagged-{{post.pk}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
