@@ -5,9 +5,9 @@
     <div class="col-4 col-md-3">
         <section>
             <article>
-                <div class="img-user-detail">
+                <div class="position-relative w-100">
                     {% if has_and_show_story %} <a href="{% url 'stories-user' user_for_page.pk %}">{% endif %}
-                        <img class="border-50 {% if has_and_show_story %}  rounded-gradiants{% endif %}" src="{{user_for_page.prof_pic.url}}" alt="">
+                        <img class="border-50 media-on-profilpage {% if has_and_show_story %}  rounded-gradiants{% endif %}" src="{{user_for_page.prof_pic.url}}" alt="">
                     </a>
 
                 </div>
