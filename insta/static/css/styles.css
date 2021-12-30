@@ -255,11 +255,11 @@ textarea::-webkit-scrollbar {
     top: 60px;
 }
 
-
 .img-user-detail {
     position: relative;
     width: 100%; /* The size you want */
   }
+
 .img-user-detail:after {
     content: "";
     display: block;

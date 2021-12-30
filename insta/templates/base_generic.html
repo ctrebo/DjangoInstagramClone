@@ -27,16 +27,15 @@
         <!-- </form> -->
       <!-- </ul> -->
       <ul class="navbar-nav mb-2 mb-lg-0 navbar-right ml-auto my-auto">
-        <li class="nav-item">
         {% url 'index' as index_url %}
         {% url 'create-post' as createpost_url %}
         {% url 'search_page' as search_page %}
         {% url 'activity-page' as activity_page %}
-
-          <a class="nav-link" href="{{createpost_url}}"><i class="fa fa-15 fa-plus fontawesome-border text-white {% ifequal request.path createpost_url %} color-black {% endifequal %}"></i></a>          
-        </li>
         <li class="nav-item">
           <a class="nav-link" href="{{index_url}}"><i class="fa fa-15 fa-home fontawesome-border text-white {% ifequal request.path index_url %} color-black {% endifequal %}"></i></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{createpost_url}}"><i class="fa fa-15 fa-plus fontawesome-border text-white {% ifequal request.path createpost_url %} color-black {% endifequal %}"></i></a>          
         </li>
         <li class="nav-item">
             <a class="nav-link" href="{{activity_page}}"><i class="fa fa-15 fa-heart fontawesome-border text-white {% ifequal request.path activity_page %} color-black {% endifequal %}"></i></a>

@@ -445,7 +445,7 @@
             <article>
                 <form class="d-inline-block" action="{% url 'like-post' post.pk %}" method="POST">
                     {% csrf_token %}                
-                    <button type="submit" name="redirect_path" value="{% url 'create-comment' post.pk %}" class="btn bg-white" id="like-create-comment"><i class="fa fa-15 fa-heart{% if post_is_liked %} text-danger{% else %} text-white fontawesome-border{% endif %}"></i></button>
+                    <button type="submit" name="redirect_path" value="{% url 'create-comment' post.pk %}" class="btn bg-white pb-md-0" id="like-create-comment"><i class="fa fa-15 fa-heart{% if post_is_liked %} text-danger{% else %} text-white fontawesome-border{% endif %}"></i></button>
                 </form>
                 <a class="px-2 d-inline d-md-none" href="{% url 'create-comment-mobile' post.pk %}"><i class="fa fa-15 fa-comment fontawesome-border text-white"></i></a>
                 <form class="d-inline-block float-right" action="{% url 'save-post' post.pk %}" method="POST">
@@ -454,7 +454,11 @@
                 </form>
             </article>
         </section>
-                
+        <section class="px-3" id="like-count">
+            <article>
+                <b>{{post.likes.count}} Like{{post.likes.count|pluralize}}</b>
+            </article>
+        </section>
         <section class="px-3 d-none d-md-block">
             <article>
                 <form action="" method="post" id="form-write-comment">

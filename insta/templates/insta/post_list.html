@@ -207,7 +207,7 @@
                         
                 </section>
                 <section class="px-3 bg-white">
-                    <article class="py-2">
+                    <article class="pt-2">
                         {% load insta_extras %}
                         <form action="{% url 'like-post' post.pk %}" class="d-inline like-form" method="POST">
                             {% csrf_token %}
@@ -219,6 +219,11 @@
                             {% csrf_token %}
                             <button type="submit" name="redirect_path" value="{% url 'index' %}" class="btn bg-white"><i class="fa fa-15 fa-bookmark{% if post in user.saved_posts.all %} text-dark{% else %} text-white fontawesome-border{% endif %}"></i></button>
                         </form>
+                    </article>
+                </section>
+                <section class="px-3">
+                    <article>
+                        <b>{{post.likes.count}} Like{{post.likes.count|pluralize}}</b>
                     </article>
                 </section>
                 <section class="px-3">
