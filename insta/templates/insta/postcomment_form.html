@@ -361,7 +361,7 @@
                                                             &nbsp
                                                         </span>
                                                         <span class="">
-                                                            {% for word in childcomment.description_to_array %} {% if word == "<new_line_code/>" %} {% elif "@" in word %} <a href="{% get_tagged_user word user %}">{{word}}  </a> {% else %}{{word}} {% endif %}{% endfor %}
+                                                            {% for word in childcomment.description_to_array %} {% if word == "<new_line_code/>" %}<br>{% elif "@" in word %} <a href="{% get_tagged_user word user %}">{{word}}  </a> {% else %}{{word}} {% endif %}{% endfor %}
                                                         </span>
                                                         <p class="time-ago mb-0">
                                                         <span>{{childcomment.time_commented_ago}}</span>{% if childcomment.likes.exists %}<b class="ml-2 comment-likes" data-toggle="modal" data-target="#modalLikesComment-{{childcomment.id}}">{{ childcomment.likes.count }} like{{ childcomment.likes.count|pluralize }}</b>{% endif %}<b class="ml-1 write-to-modal-textarea cursor-pointer" name="{{comment.author.username}}" data-toggle="modal" data-target="#answerToParentComment-{{comment.id}}">Answer</b> 
