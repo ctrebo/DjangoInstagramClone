@@ -90,7 +90,7 @@
                                     <td class="w-auto line-height-posts"><span class="font-size-username">
                                             <span class="font-size-username">
                                                 {% load insta_extras %}
-                                                <b><a class="text-dark" href="{% if post.author == user %}  {% url 'profpage-user'  %} {% else %} {% url 'user-detail' post.author.pk %} {% endif %}">{{post.author.username}}</a></b><span>&nbsp</span><span class="">{% for word in post.caption_to_array %} {% if word == "<new_line_code/>" %} {% elif "@" in word %} <a href="{% get_tagged_user word user %}">{{word}}  </a> {% else %}{{word}} {% endif %}{% endfor %}</span><p class="time-ago mb-0"><span>{{post.time_posted_ago}}</span></p>
+                                                <b><a class="text-dark" href="{% if post.author == user %}  {% url 'profpage-user'  %} {% else %} {% url 'user-detail' post.author.pk %} {% endif %}">{{post.author.username}}</a></b><span>&nbsp</span><span class="">{% for word in post.caption_to_array %} {% if word == "<new_line_code/>" %}<br>{% elif "@" in word %} <a href="{% get_tagged_user word user %}">{{word}}  </a> {% else %}{{word}} {% endif %}{% endfor %}</span><p class="time-ago mb-0"><span>{{post.time_posted_ago}}</span></p>
                                             </span>
                                     </td>
                                 </tr>
