@@ -6,11 +6,11 @@
         <section class="d-block d-md-none">
             <header class="px-3 p-075 border-comments">
                 <article>
-                    <a href="{% url 'user-detail' post.author.pk %}">                    
+                    <a href="{% if user == post.author %}{% url 'profpage-user' %} {% else %} {% url 'user-detail' post.author.pk %} {% endif %}" class="">                    
                         <img class="post-pp"  src="{{post.author.prof_pic.url}}" alt="alt">
                     </a>
                     <span class="ml-2 font-size-username">
-                        <a href="{% url 'user-detail' post.author.pk %}">
+                        <a href="{% if user == post.author %} {% url 'profpage-user' %} {% else %} {% url 'user-detail' post.author.pk %} {% endif %}">
                             <b class="text-dark">{{post.author.username}}</b>
                         </a>
                     </span>
@@ -20,40 +20,120 @@
                       <!-- Modal -->
                       <div class="modal fade" id="modal-{{post.pk}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog" role="document">
-                          <div class="modal-content">
+                          <div class="modal-content modal-content-post-setting">
                             <div class="modal-body px-0">
                                 <section class="px-3">
                                     {% url 'create-comment' post.pk as url_to_copy %}
                                     {% with full_url=request.META.HTTP_HOST|add:url_to_copy %}
-                                    <article><p data-dismiss="modal" class="w-100 d-block text-dark text-decoration-none text-center" onclick='copyToClipboard("{{full_url}}")'>Copy link</p></article>
+                                    <article><p data-dismiss="modal" class="w-100 d-block text-dark text-decoration-none text-center cursor-pointer" onclick='copyToClipboard("{{full_url}}")'>Copy link</p></article>
                                     {% endwith %}
                                 </section>
                                 <hr>
+                                {% if user == post.author %}
+                                <section>
+                                    <article><a data-dismiss="modal" class="w-100 d-block text-danger font-weight-bold text-decoration-none text-center" data-toggle="modal" href="#modalDeletePost2">Delete</a></article>
+                                </section>
+                                <hr>
+                                {% endif %}
                                 <section class="px-3">
                                     <article><a data-dismiss="modal" class="w-100 d-block text-dark text-decoration-none text-center" href="">Abort</a></article>
                                 </section>
                             </div>
                           </div>
                         </div>
-                      </div>        
+                      </div>
+                      <div class="modal fade" id="modalDeletePost2" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                          <div class="modal-content modal-content-delete">
+                            <div class="modal-header">
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-12 m-auto">
+                                            <h5 class="modal-title text-center mb-2" id="exampleModalLongTitle">Delete this post?</h5>
+                                            <p class="text-muted">You won't be able to restore this post if you delete it!</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-body px-0">
+                                <section class="px-3 w-100">
+                                    <article><form action="{% url 'delete-post' post.pk %}" method="POST">
+                                        {% csrf_token %}
+                                        <div class="text-center">
+                                            <button type="submit" name="post_delete_id" value="{{post.pk}}" class="bg-white p-0 border-0 m-auto font-weight-bold text-danger">Delete Post</button>
+                                        </div>                
+                                    </form></article>
+                                </section>
+                                <hr>
+                                <section class="px-3 w-100">
+                                    <article>
+                                        <a data-dismiss="modal" class="w-100 d-block text-dark text-decoration-none text-center" href="">Don't delete</a>
+                                    </article>
+                                </section>
+                            </div>
+                          </div>
+                        </div>
+                      </div>            
                 </article>
             </header>
         </section>
         <section>                
             <article>
-                <img class="w-100 h-auto"  src="{{post.picture.url}}" alt="alt">
+                {% if post.is_image %} 
+                    <img class="w-100 h-auto" id="main-image-postcommentform" src="{{post.picture.url}}" alt="alt">
+                {% else %}
+                    <video class="video-post" controls id="main-image-postcommentform">
+                        <source src="{{post.picture.url}}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                {% endif %}
+                {% if post.tagged_people.exists %}
+                <div class="tagged-people" data-toggle="modal" data-target="#modaltagged-{{post.pk}}"><i class="fa text-white fa-user tagged-people-icon"></i></div>
+                <div class="modal fade" id="modaltagged-{{post.pk}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="exampleModalLongTitle">In this Post</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          {% for user in post.tagged_people.all %}
+                            <a href="{% url 'user-detail' user.pk %}" class="">
+                                <section class="position-relative mb-1 section-search-page px-2 py-2">
+                                    <div>
+                                        <article class="d-inline my-auto ">
+                                            <img src="{{user.prof_pic.url}}" class="post-pp img-fluid">
+                                        </article>
+                                        <article class="d-inline search-article">
+                                            <div>
+                                                <b class="username-search text-dark">{{user.username}}</b>
+                                            </div>
+                                            <small class="font-weight-light text-dark">{{user.first_name}}</small>
+                                        </article>
+                                    </div>
+                                </section>
+                            </a>
+                          {% endfor %}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+            
+                {% endif %}
             </article>
         </section>
     </div>
-    <div class="col-md-5 col-12 px-0">
+    <div class="col-md-5 col-12 px-0 bg-white">
         <section class="d-none d-md-block">
             <header class="px-3 p-075 border-comments" id="header-create-comment">
                 <article>
-                    <a href="{% url 'user-detail' post.author.pk %}">                    
-                        <img class="post-pp"  src="{{post.author.prof_pic.url}}" alt="alt">
+                    <a href="{% if post.author.story_set.exists %} {% url 'stories-user' post.author.pk %} {% else %} {% if user == post.author %}{% url 'profpage-user' %}{% else %}{% url 'user-detail' post.author.pk %}{% endif %}{% endif %}" class="text-decoration-none">                    
+                        <img class="post-pp {% if post.author.story_set.exists %}story-pp-in-header rounded-gradiants-small-pp{% endif %}" src="{{post.author.prof_pic.url}}" alt="alt">
                     </a>
                     <span class="ml-2 font-size-username">
-                        <b><a class="text-dark" href="{% url 'user-detail' post.author.pk %}">{{post.author.username}}</a></b>
+                        <b><a class="text-dark" href="{% if user == post.author %} {% url 'profpage-user' %} {% else %} {% url 'user-detail' post.author.pk %} {% endif %}">{{post.author.username}}</a></b>
                     </span>
                     <span class="float-right" data-toggle="modal" data-target="#modal-{{post.pk}}-2">
                         <i class="fa fa-circle font-size-05" aria-hidden=""></i><i class="fa fa-circle font-size-05 margin-015rem" aria-hidden="true"></i><i class="fa fa-circle font-size-05" aria-hidden="true"></i>  
@@ -61,17 +141,55 @@
                       <!-- Modal -->
                       <div class="modal fade" id="modal-{{post.pk}}-2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog" role="document">
-                          <div class="modal-content">
+                          <div class="modal-content modal-content-post-setting">
                             <div class="modal-body px-0">
                                 <section class="px-3">
                                     {% url 'create-comment' post.pk as url_to_copy %}
                                     {% with full_url=request.META.HTTP_HOST|add:url_to_copy %}
-                                    <article><p data-dismiss="modal" class="w-100 d-block text-dark text-decoration-none text-center" onclick='copyToClipboard("{{full_url}}")'>Copy link</p></article>
+                                    <article><p data-dismiss="modal" class="w-100 d-block text-dark text-decoration-none text-center cursor-pointer" onclick='copyToClipboard("{{full_url}}")'>Copy link</p></article>
                                     {% endwith %}
                                 </section>
                                 <hr>
+                                {% if user == post.author %}
+                                <section>
+                                    <article><a data-dismiss="modal" class="w-100 d-block font-weight-bold text-danger text-decoration-none text-center" data-toggle="modal" href="#modalDeletePost">Delete</a></article>
+                                </section>
+                                <hr>
+                                {% endif %}
                                 <section class="px-3">
                                     <article><a data-dismiss="modal" class="w-100 d-block text-dark text-decoration-none text-center" href="">Abort</a></article>
+                                </section>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="modal fade" id="modalDeletePost" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                          <div class="modal-content modal-content-delete">
+                            <div class="modal-header">
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-6 m-auto">
+                                            <h5 class="modal-title text-center mb-2" id="exampleModalLongTitle">Delete this post?</h5>
+                                            <p class="text-muted">You won't be able to restore this post if you delete it!</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-body px-0">
+                                <section class="px-3 w-100">
+                                    <article><form action="{% url 'delete-post' post.pk %}" method="POST">
+                                        {% csrf_token %}
+                                        <div class="text-center">
+                                            <button type="submit" name="post_delete_id" value="{{post.pk}}" class="bg-white p-0 font-weight-bold text-danger border-0 m-auto">Delete Post</button>
+                                        </div>                
+                                    </form></article>
+                                </section>
+                                <hr>
+                                <section class="px-3 w-100">
+                                    <article>
+                                        <a data-dismiss="modal" class="w-100 d-block text-dark text-decoration-none text-center" href="">Don't delete</a>
+                                    </article>
                                 </section>
                             </div>
                           </div>
@@ -80,49 +198,275 @@
                 </article>
             </header>
         </section>
-        <section id="comment-section" class="d-none d-md-block w-100 border-add-comment position-absolute">
+        <section id="comment-section" class="d-none d-md-block w-100 border-add-comment">
             <article class="overflow-comments">
                 {% for comment in comment_list %}
-                    <section class="px-3 pt-3 d-none d-md-block">
+                <section class="wrap-parent-and-child">
+                    <section class="pl-3 pt-3 d-none d-sm-block single-comment position-relative">
+                        <span class="position-absolute d-none comment-options" data-toggle="modal" data-target="#modal-comment-{{post.pk}}" >
+                            <i class="fa fa-circle font-size-05" aria-hidden=""></i><i class="fa fa-circle font-size-05 margin-015rem" aria-hidden="true"></i><i class="fa fa-circle font-size-05" aria-hidden="true"></i>  
+                        </span>
+                        <div class="modal fade" id="modal-comment-{{post.pk}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content modal-content-delete">
+
+                                    <div class="modal-body px-0">
+                                        <section class="px-3 w-100">
+                                            <!-- put pk of post into url so user can be redirected to the same page -->
+                                            <article><form action="{% url 'delete-comment' post.pk %}" method="POST">
+                                                    {% csrf_token %}
+                                                    <div class="text-center">
+                                                        <button type="submit" name="comment_delete_id" value="{{comment.pk}}" class="bg-white p-0 font-weight-bold text-danger border-0 m-auto">Delete Comment</button>
+                                                    </div>                
+                                                </form></article>
+                                        </section>
+                                        <hr>
+                                        <section class="px-3 w-100">
+                                            <article>
+                                                <a data-dismiss="modal" class="w-100 d-block text-dark text-decoration-none text-center" href="">Abort</a>
+                                            </article>
+                                        </section>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <article>
-                            <img class="post-pp"  src="{{comment.author.prof_pic.url}}" alt="alt">
-                            <span class="ml-3 font-size-username">
-                                <b><a class="text-dark" href="{% url 'user-detail' comment.author.pk %}">{{comment.author.username}}</a></b><span>&nbsp</span><span>{% for word in comment.description_to_array %} {% if "@" in word %} <a href="{% comment %} insert here link to user-detail page {% endcomment %}">{{word}}  </a> {% else %}{{word}} {% endif %}{% endfor %}</span>
-                            </span>
-                            <p class="time-ago ml-5 mb-0">{{comment.time_commented_ago}}</p>
+                            <table class="w-100">
+                                <tr>
+                                    <td style="width: 40px;" class="align-top"><a href="{% if comment.author.story_set.exists and not comment.author.is_private or comment.author.story_set.exists and comment.author in user.followed.all or comment.author.story_set.exists and comment.author == user %} {% url 'stories-user' comment.author.pk %} {% else %}{% if user == comment.author %} {% url 'profpage-user' %} {% else %} {% url 'user-detail' comment.author.pk %} {% endif %}{% endif %}"><img class="post-pp {% if comment.author.story_set.exists and not comment.author.is_private or comment.author.story_set.exists and comment.author in user.followed.all or comment.author.story_set.exists and comment.author == user %}story-pp-in-header rounded-gradiants-small-pp{% endif %}"  src="{{comment.author.prof_pic.url}}" alt="alt"></a></td>
+                                    <td class="w-auto line-height-comments">
+                                        <span class="font-size-username">
+                                            {% load insta_extras %}
+                                            <b>
+                                                <a class="text-dark" href="{% if comment.author == user %}  {% url 'profpage-user'  %} {% else %} {% url 'user-detail' comment.author.pk %} {% endif %}">{{comment.author.username}}</a>
+                                            </b>
+                                            <span>
+                                                &nbsp
+                                            </span>
+                                        </span>
+                                        <span class="">
+                                            {% for word in comment.description_to_array %} {% if word == "<new_line_code/>" %}<br>{% elif "@" in word %} <a href="{% get_tagged_user word user %}">{{word}}  </a> {% else %}{{word}} {% endif %}{% endfor %}
+                                        </span>
+                                        <p class="time-ago mb-0">
+                                        <span>{{comment.time_commented_ago}}</span>{% if comment.likes.exists %}<b class="ml-2 comment-likes" data-toggle="modal" data-target="#modalLikesComment-{{comment.id}}">{{ comment.likes.count }} like{{ comment.likes.count|pluralize }}</b>{% endif %}<b class="ml-1 cursor-pointer write-to-textarea" name="{{comment.author.username}}">Answer</b><b name="{{comment.id}}"></b>  
+                                        </p>
+                                    </td>
+                                    <div class="modal fade" id="modalLikesComment-{{comment.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                            <div class="modal-content modal-content-comment-likes">
+                                                <div class="modal-header py-2">
+                                                    <h5 class="modal-title ml-auto" id="exampleModalLongTitle">Users who Liked</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body overflow-y-auto">
+
+                                                    {% for user_in_list in comment.likes.all %}
+                                                    <section class="position-relative mb-1 section-search-page px-2 py-2">
+                                                        <div>
+                                                            <article class="d-inline my-auto">
+                                                                <a href="{% if user_in_list == user %}{% url 'profpage-user' %}{% else %}{% url 'user-detail' user_in_list.pk %}{% endif %}">
+                                                                    <img src="{{user_in_list.prof_pic.url}}" class="post-pp img-fluid">
+                                                                </a>
+
+                                                            </article>
+                                                            <article class="d-inline search-article">
+                                                                <div>
+                                                                    <a href="{% if user_in_list == user %}{% url 'profpage-user' %}{% else %}{% url 'user-detail' user_in_list.pk %}{% endif %}">
+                                                                        <b class="username-search text-dark">{{user_in_list.username}}</b>
+                                                                    </a>
+
+                                                                </div>
+                                                                <small class="font-weight-light text-dark">{{user_in_list.first_name}}</small>
+                                                            </article>
+                                                            <article class="d-inline float-right">
+                                                                <form action="{% url 'follow-user' user_in_list.pk %}" method="POST"
+                                                                                                                                                                                                                                                                                      class="d-inline ml-md-2">
+                                                                    {% csrf_token %}
+                                                                    {%  if user_in_list == user %}
+                                                                    {% elif user_in_list in user.followed.all %}
+                                                                    <button type="submit" name="redirect_path" value="{% url 'create-comment' post.pk %}" class="btn border bg-white text-dark">Following</button>
+
+                                                                    {% elif user in user_in_list.pending_requests.all %}
+                                                                    <button type="submit" name="redirect_path" value="{% url 'create-comment' post.pk %}" class="btn bg-white border text-dark">Requested</button>
+                                                                    {% else %}
+                                                                    <button type="submit" name="redirect_path" value="{% url 'create-comment' post.pk %}" class="btn border bg-primary text-white">Follow</button>
+                                                                    {% endif %}
+                                                                </form>
+                                                            </article>
+                                                        </div>
+                                                    </section>
+                                                    {% endfor %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <td class="float-right align-top">
+                                        <form action="{% url 'like-postcomment' comment.pk %}" method="POST">
+                                            {% csrf_token %}                
+                                            <button type="submit" name="redirect_path" value="{% url 'create-comment' post.pk %}" class="btn mt-2 bg-white" id=""><i class="fa fa-heart{% if user in comment.likes.all %} text-danger{% else %} text-white fontawesome-border{% endif %}"></i></button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            </table>        
                         </article>
                     </section>
+                    {% if comment.replies.exists %}
+                        <button class="show-child-comments mx-auto btn bg=transparent pl-5 py-0"><div class="_7mCbS"></div><span class="show-answers">View answers ({{comment.replies.all.count}})</span></button>
+                        <section class="d-none">
+                            {% for childcomment in comment.replies.all %} 
+                            <section class="">
+                                <section class="pl-5 pt-2 d-none d-md-block single-comment position-relative">
+                                    <span class="position-absolute d-none comment-options" data-toggle="modal" data-target="#modal-comment-{{post.pk}}" >
+                                        <i class="fa fa-circle font-size-05" aria-hidden=""></i><i class="fa fa-circle font-size-05 margin-015rem" aria-hidden="true"></i><i class="fa fa-circle font-size-05" aria-hidden="true"></i>  
+                                    </span>
+                                    <div class="modal fade" id="modal-comment-{{post.pk}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                            <div class="modal-content modal-content-delete">
+
+                                                <div class="modal-body px-0">
+                                                    <section class="px-3 w-100">
+                                                        <!-- put pk of post into url so user can be redirected to the same page -->
+                                                        <article><form action="{% url 'delete-comment' post.pk %}" method="POST">
+                                                                {% csrf_token %}
+                                                                <div class="text-center">
+                                                                    <button type="submit" name="comment_delete_id" value="{{childcomment.pk}}" class="bg-white p-0 font-weight-bold text-danger border-0 m-auto">Delete Comment</button>
+                                                                </div>                
+                                                            </form></article>
+                                                    </section>
+                                                    <hr>
+                                                    <section class="px-3 w-100">
+                                                        <article>
+                                                            <a data-dismiss="modal" class="w-100 d-block text-dark text-decoration-none text-center" href="">Abort</a>
+                                                        </article>
+                                                    </section>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <article>
+                                        <table class="w-100">
+                                            <tr>
+                                                <td style="width: 40px;" class="align-top"><a href="{% if childcomment.author.story_set.exists and not childcomment.author.is_private or childcomment.author.story_set.exists and childcomment.author in user.followed.all or childcomment.author.story_set.exists and childcomment.author == user %} {% url 'stories-user' childcomment.author.pk %} {% else %}{% if user == childcomment.author %} {% url 'profpage-user' %} {% else %} {% url 'user-detail' childcomment.author.pk %} {% endif %}{% endif %}"><img class="post-pp {% if childcomment.author.story_set.exists and not childcomment.author.is_private or childcomment.author.story_set.exists and childcomment.author in user.followed.all or childcomment.author.story_set.exists and childcomment.author == user %}story-pp-in-header rounded-gradiants-small-pp{% endif %}"  src="{{childcomment.author.prof_pic.url}}" alt="alt"></a></td>
+                                                <td class="w-auto line-height-comments">
+                                                    <span class="font-size-username">
+                                                        {% load insta_extras %}
+                                                        <b>
+                                                            <a class="text-dark" href="{% if childcomment.author == user %}  {% url 'profpage-user'  %} {% else %} {% url 'user-detail' childcomment.author.pk %} {% endif %}">{{childcomment.author.username}}</a>
+                                                        </b>
+                                                        <span>
+                                                            &nbsp
+                                                        </span>
+                                                        <span class="">
+                                                            {% for word in childcomment.description_to_array %} {% if word == "<new_line_code/>" %} {% elif "@" in word %} <a href="{% get_tagged_user word user %}">{{word}}  </a> {% else %}{{word}} {% endif %}{% endfor %}
+                                                        </span>
+                                                        <p class="time-ago mb-0">
+                                                        <span>{{childcomment.time_commented_ago}}</span>{% if childcomment.likes.exists %}<b class="ml-2 comment-likes" data-toggle="modal" data-target="#modalLikesComment-{{childcomment.id}}">{{ childcomment.likes.count }} like{{ childcomment.likes.count|pluralize }}</b>{% endif %}<b class="ml-1 write-to-modal-textarea cursor-pointer" name="{{comment.author.username}}" data-toggle="modal" data-target="#answerToParentComment-{{comment.id}}">Answer</b> 
+                                                        </p>
+                                                    </span>
+                                                </td>
+                                                <div class="modal fade modal-answer-form" id="modalLikesComment-{{childcomment.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                                        <div class="modal-content modal-content-comment-likes">
+                                                            <div class="modal-header py-2">
+                                                                <h5 class="modal-title ml-auto" id="exampleModalLongTitle">Users who Liked</h5>
+                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="modal-body">
+
+                                                                {% for user_in_list in childcomment.likes.all %}
+                                                                <section class="position-relative mb-1 section-search-page px-2 py-2">
+                                                                    <div>
+                                                                        <article class="d-inline my-auto">
+                                                                            <a href="{% if user_in_list == user %}{% url 'profpage-user' %}{% else %}{% url 'user-detail' user_in_list.pk %}{% endif %}">
+                                                                                <img src="{{user_in_list.prof_pic.url}}" class="post-pp img-fluid">
+                                                                            </a>
+
+                                                                        </article>
+                                                                        <article class="d-inline search-article">
+                                                                            <div>
+                                                                                <a href="{% if user_in_list == user %}{% url 'profpage-user' %}{% else %}{% url 'user-detail' user_in_list.pk %}{% endif %}">
+                                                                                    <b class="username-search text-dark">{{user_in_list.username}}</b>
+                                                                                </a>
+
+                                                                            </div>
+                                                                            <small class="font-weight-light text-dark">{{user_in_list.first_name}}</small>
+                                                                        </article>
+                                                                        <article class="d-inline float-right">
+                                                                            <form action="{% url 'follow-user' user_in_list.pk %}" method="POST"
+                                                                                                                                   class="d-inline ml-md-2">
+                                                                                {% csrf_token %}
+                                                                                {%  if user_in_list == user %}
+                                                                                {% elif user_in_list in user.followed.all %}
+                                                                                <button type="submit" name="redirect_path" value="{% url 'create-comment' post.pk %}" class="btn border bg-white text-dark">Following</button>
+
+                                                                                {% elif user in user_in_list.pending_requests.all %}
+                                                                                <button type="submit" name="redirect_path" value="{% url 'create-comment' post.pk %}" class="btn bg-white border text-dark">Requested</button>
+                                                                                {% else %}
+                                                                                <button type="submit" name="redirect_path" value="{% url 'create-comment' post.pk %}" class="btn border bg-primary text-white">Follow</button>
+                                                                                {% endif %}
+                                                                            </form>
+                                                                        </article>
+                                                                    </div>
+                                                                </section>
+                                                                {% endfor %}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <td class="float-right align-top">
+                                                    <form action="{% url 'like-postcomment' childcomment.pk %}" method="POST">
+                                                        {% csrf_token %}                
+                                                        <button type="submit" name="redirect_path" value="{% url 'create-comment' post.pk %}" class="btn mt-2 bg-white" id=""><i class="fa fa-heart{% if user in childcomment.likes.all %} text-danger{% else %} text-white fontawesome-border{% endif %}"></i></button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                        </table>        
+                                    </article>
+                                </section>
+                            </section>      
+                        {% endfor %} 
+                        </section>
+                    {% endif %}
+                </section>
                 {% empty %}
                     <p class="p-3">No comments</p> 
                 {% endfor %}
             
             </article>
         </section>
-        <section>
+        <section class="mt-1">
             <article>
-                <form action="{% url 'like-post' post.pk %}" method="POST">
+                <form class="d-inline-block" action="{% url 'like-post' post.pk %}" method="POST">
                     {% csrf_token %}                
-                    <button type="submit" name="post_id" value="{{post.pk}}" class="btn mt-3 bg-white" id="like-create-comment"><i class="fa fa-15 fa-heart{% if post_is_liked %} text-danger{% else %} text-white fontawesome-border{% endif %}"></i></button>
+                    <button type="submit" name="redirect_path" value="{% url 'create-comment' post.pk %}" class="btn bg-white pb-md-0" id="like-create-comment"><i class="fa fa-15 fa-heart{% if post_is_liked %} text-danger{% else %} text-white fontawesome-border{% endif %}"></i></button>
                 </form>
+                <a class="px-2 d-inline d-md-none" href="{% url 'create-comment-mobile' post.pk %}"><i class="fa fa-15 fa-comment fontawesome-border text-white"></i></a>
+                <form class="d-inline-block float-right" action="{% url 'save-post' post.pk %}" method="POST">
+                    {% csrf_token %}                
+                    <button type="submit" name="redirect_path" value="{% url 'create-comment' post.pk %}" class="btn bg-white" id="save-create-comment"><i class="fa fa-15 fa-bookmark{% if post_is_saved %} text-dark{% else %} text-white fontawesome-border{% endif %}"></i></button>
+                </form>
+            </article>
+        </section>
+        <section class="px-3" id="like-count">
+            <article>
+                <b>{{post.likes.count}} Like{{post.likes.count|pluralize}}</b>
             </article>
         </section>
         <section class="px-3 d-none d-md-block">
             <article>
-                <form action="" method="post" class="">
+                <form action="" method="post" id="form-write-comment">
                     {% csrf_token %}
                     <table class="table-form w-75">
                     {{ form.as_table }}
                     </table>
+                    <input type="hidden" value="" id="parent_id">
                     <input id="submit-comment" type="submit" class="btn text-info submit-comment" value="Submit" />
-                </form>
-            </article>
-        </section>
-        <section class="px-3 d-block d-md-none" id="id-for-inline-p">
-            <article>
-                <form action="" method="post" class="">
-                    {% csrf_token %}
-                        {{ form.as_p }}
-                    <input type="submit" class="btn text-info w-25 bg-white" value="Submit" />
                 </form>
             </article>
         </section>
@@ -142,7 +486,14 @@
 {% for post in other_posts_of_author %}
     <div class="col-4 p-15px mb-for-user-detail position-relative">
         <div class="img-user-detail">
-            <img src="{{post.picture.url}}" alt="">
+            {% if post.is_image %} 
+                <img class="media-on-profilpage" src="{{post.picture.url}}" alt="alt">
+            {% else %}
+                <video class="media-on-profilpage" controls> 
+                    <source src="{{post.picture.url}}" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            {% endif %}
             <div onclick="location.href='{% url 'create-comment' post.pk %}';" class="hover h-100 w-100 mx-auto">
                 <p class="px-3 center-comment-symbol"
                     href="{% url 'create-comment' post.pk %}"><i class="fa fa-15 fa-comment"></i> {{post.postcomment_set.count}}</p>
