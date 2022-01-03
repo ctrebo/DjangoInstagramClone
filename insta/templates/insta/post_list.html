@@ -1,113 +1,320 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-{% for post in post_list %}
-<div class="row mb-3 mb-3 mb-md-5">
-    <div class="col-12 col-md-7 p-0 p-md-2">
-        <section class="border-post">
-            <section>
-                <header class="px-3 p-075">
-                    <article>
-                        <a href="{% url 'user-detail' post.author.pk %}"><img class="post-pp img-fluid"  src="{{post.author.prof_pic.url}}" alt="alt"></a>
-                        <span class="ml-2 font-size-username">
-                            <a class="text-dark" href="{% url 'user-detail' post.author.pk %}"><b>{{post.author.username}}</b></a>
-                        </span>
-                        <span class="float-right" data-toggle="modal" data-target="#modal-{{post.pk}}">
-                            <i class="fa fa-circle font-size-05" aria-hidden=""></i><i class="fa fa-circle font-size-05 margin-015rem" aria-hidden="true"></i><i class="fa fa-circle font-size-05" aria-hidden="true"></i>  
-                        </span>
-                          <!-- Modal -->
-                          <div class="modal fade" id="modal-{{post.pk}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                              <div class="modal-content">
-                                <div class="modal-body px-0">
-                                    <section class="px-3">
-                                        <article><a class="w-100 d-block text-dark text-decoration-none text-center" href=" {% url 'create-comment' post.pk %}">View post</a></article>
-                                    </section>
-                                    <hr>
-                                    <section class="px-3">
-                                        {% url 'create-comment' post.pk as url_to_copy %}
-                                        {% with full_url=request.META.HTTP_HOST|add:url_to_copy %}
-                                        <article><p data-dismiss="modal" class="w-100 d-block text-dark text-decoration-none text-center" onclick='copyToClipboard("{{full_url}}")'>Copy link</p></article>
-                                        {% endwith %}
-                                    </section>
-                                    <hr>
-                                    <section class="px-3">
-                                        <article><a data-dismiss="modal" class="w-100 d-block text-dark text-decoration-none text-center" href="">Abort</a></article>
-                                    </section>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                    </article>
-                </header>
-            </section>
-            <section>
-                <article>
-                    <img class="w-100 h-auto img-fluid"  src="{{post.picture.url}}" alt="alt">
-                </article>
-            </section>
-            <section class="px-3">
-                <article class="py-2">
-                    {% load insta_extras %}
-                    <form action="{% url 'like-post-for-list-view' post.pk %}" class="d-inline like-form" method="POST">
-                        {% csrf_token %}
-                        <button type="submit" name="post_id" value="{{post.pk}}" class="btn bg-white px-0 like-submit-bottom-home"><i class="fa fa-15 fa-heart{% cycle_list list_liked %}"></i></button>
-                    </form>
-                    <!-- <a class="" href=""><i class="fa fa-15 fa-heart text-danger"></i></a> -->
-                    <a class="px-2" href="{% url 'create-comment' post.pk %}"><i class="fa fa-15 fa-comment fontawesome-border text-white"></i></a>
-                </article>
-            </section>
-            <section class="px-3">
-                <article>
-                    <span class="font-size-username">
-                        <b><a class="text-dark" href="{% url 'user-detail' post.author.pk %}">{{post.author.username}}</a></b><span>&nbsp</span><span>{{post.caption}}</span>
-                    </span>
-                </article>
-            </section>
-            <section class="px-3">
-                <article>
-                    {% if post.postcomment_set.count > 1%}
-                    <p class="mb-1 mt-1"><a class="comment-post text-decoration-none" href="{% url 'create-comment' post.pk %}">Show all {{post.postcomment_set.count}} comments</a></p>
-                    {% endif %}
-                    {% if post.postcomment_set.all %}
-                    <span class="font-size-username">
-                        {% with first_comment=post.postcomment_set.all|first %}
-                        <b><a href="{% url 'user-detail' first_comment.author.pk %}" class="text-dark">{{first_comment.author.username}}</a></b>    
-                        <span>&nbsp</span><span>{% for word in first_comment.description_to_array %}{% if "@" in word %} <a href="{% url 'user-detail' first_comment.author.pk  %}">{{word}}  </a> {% else %}{{word}} {% endif %}{% endfor %}</span>
-                        {% endwith %}
-                    </span>
-                    {% endif %}
 
+<div class="row">
+    <div class="col-12 col-md-7 p-0 p-md-2">
+        <section class="border p-3 bg-white story-section">
+            <a href="{% if user.story_set.exists %}{% url 'stories-user' user.pk %}{% else %}{% url 'create-stories' %}{% endif %}" class="text-dark text-decoration-none">
+                <article class="d-inline-block h-100">
+                    <div class="position-relative">
+                        {% if not user.story_set.all.exists %}
+                        <i class="fa fa-circle fa-2x icon-background"></i>
+                        <i class="fa fa-plus icon-create-story text-white"></i>
+                        {% endif %}
+                        <img class="{% if user.story_set.all.exists %}story-users rounded-gradiants{% else %}story-users-without-border{% endif %}" src="{{user.prof_pic.url}}" alt=""> 
+                    </div>
+                    <p class="username-story-section text-center">Your stories</p>
                 </article>
-            </section>
-            <section class="px-3">
-                <article class="">
-                    <p class="time-ago">{{post.time_posted_ago}}</p>
+            </a>
+        {% if active_stories_exist %}
+            {% for user_in_list in users_with_active_stories %}
+            <article class="d-inline-block h-100" onclick="goToStories('{{user_in_list}}')" data-toggle="modal" data-target="#exampleModalCenter">
+                <div>
+                     <img class="story-users rounded-gradiants" src="{{user_in_list.prof_pic.url}}" alt=""> 
+                </div>
+                 {% if user_in_list.username|length < 14 %}
+                 <p class="username-story-section text-center">{{user_in_list.username}}</p>
+                 {% else %}
+                 <p class="username-story-section text-center">{{user_in_list.username|truncatechars:10}}</p>
+                 {% endif %}
                 </article>
+            {% endfor %}
+        {% endif %}
+    </div>
+</div>
+
+<div class="modal fade pr-0" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" id="modal-dialog-stories" role="document">
+       <div class="modal-content" id="modal-content-stories">
+            <b class="story-brand text-white">Instagram</b>
+            <button type="button" class="close close-stories" data-dismiss="modal" aria-label="Close">
+                <span class="text-white" aria-hidden="true">&times;</span>
+            </button>
+            <div class="modal-body p-0 p-md-2 bg-dark">
+                <div class="container px-0 h-100 h-md-auto px-md-3">
+                    <div class="row h-100 w-100 mx-0">
+                        <div class="col-md-4 col-12 mt-md-5 m-md-auto height-stories p-0 p-md-2 py-md-5">
+                            <div id="carouselExampleIndicators" class="carousel slide height-stories" data-ride="carousel">
+                                <ol class="carousel-indicators">
+                                    {% for number in num_stories %}
+                                    <li name="" data-target="#carouselExampleIndicators" data-slide-to="{{number}}" class="{% if forloop.first %}active{% endif %} w-100"></li>
+                                    {% endfor %}
+                                </ol>
+                                <div class="carousel-inner height-stories">
+                                    {% for key, story in story_dict.items %}
+                                    <div class="carousel-item {% if forloop.first %}active{% endif %} height-stories" >
+                                        <img class="d-block height-stories border-radius-stories {{story.author.username}}" name="{{story.author.username}}" id="{{key}}" src="{{story.picture.url}}" alt="First slide">
+                                        <div class="carousel-caption">
+                                            <table>
+                                                <tr>
+                                                    <td>
+                                                        <a href="{% url 'user-detail' story.author.pk %}"><img class="post-pp img-fluid" src="{{story.author.prof_pic.url}}" alt="Author picture"></a>
+                                                    </td>
+                                                    <td class="text-white pr-3"><a href="{% url 'user-detail' story.author.pk %}" class="text-white text-decoration-none">{{story.author.username}}</a></td>
+                                        <td class="text-white font-weight-light">{{story.time_posted_ago}}</td>
+                                        <td class="width-auto"> </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    {% endfor %} 
+                                </div>
+                                <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                                <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="sr-only">Next</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% for post in post_list %}
+    <div class="row mb-3 mb-md-5">
+        <div class="col-12 col-md-7 p-0 p-md-2">
+            <section class="border-post">
+                <section>
+                    <header class="px-3 p-075 bg-white">
+                        <article>
+                            <a href="{% if post.author.story_set.exists %} {% url 'stories-user' post.author.pk %} {% else %}{% url 'user-detail' post.author.pk %}{% endif %}"><img class="post-pp img-fluid {% if post.author.story_set.exists %}story-pp-in-header rounded-gradiants-small-pp{% endif %}"  src="{{post.author.prof_pic.url}}" alt="alt"></a>
+                            <span class="ml-2 font-size-username">
+                                <a class="text-dark" href="{% url 'user-detail' post.author.pk %}"><b>{{post.author.username}}</b></a>
+                            </span>
+                            <span class="float-right" data-toggle="modal" data-target="#modal-{{post.pk}}">
+                                <i class="fa fa-circle font-size-05" aria-hidden=""></i><i class="fa fa-circle font-size-05 margin-015rem" aria-hidden="true"></i><i class="fa fa-circle font-size-05" aria-hidden="true"></i>
+                            </span>
+                            <!-- Modal -->
+                            <div class="modal fade" id="modal-{{post.pk}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                <div class="modal-content modal-content-post-setting">
+                                    <div class="modal-body px-0">
+                                        <section class="px-3">
+                                            <article><a class="w-100 d-block text-dark text-decoration-none text-center" href=" {% url 'create-comment' post.pk %}">View post</a></article>
+                                        </section>
+                                        <hr>
+                                        <section class="px-3">
+                                            {% url 'create-comment' post.pk as url_to_copy %}
+                                            {% with full_url=request.META.HTTP_HOST|add:url_to_copy %}
+                                            <article><p data-dismiss="modal" class="w-100 d-block text-dark text-decoration-none text-center cursor-pointer" onclick='copyToClipboard("{{full_url}}")'>Copy link</p></article>
+                                            {% endwith %}
+                                        </section>
+                                        <hr>
+                                        <section class="px-3">
+                                            <article><a data-dismiss="modal" class="w-100 d-block text-dark text-decoration-none text-center" href="">Abort</a></article>
+                                        </section>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        </article>
+                    </header>
+                </section>
+                <section class="position-relative">
+                    <article>
+                        {% if post.is_image %} 
+                            <img class="w-100 h-auto img-fluid"  src="{{post.picture.url}}" alt="alt">
+                        {% else %}
+                            <video class="w-100 h-auto" controls> 
+                                <source src="{{post.picture.url}}" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                        {% endif %}
+                        {% if post.tagged_people.exists %}
+                            <div class="tagged-people" data-toggle="modal" data-target="#modaltagged-{{post.pk}}"><i class="fa text-white fa-user tagged-people-icon"></i></div>
+                            <div class="modal fade" id="modaltagged-{{post.pk}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLongTitle">In this Post</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            {% for user_in_list in post.tagged_people.all %}
+                                            <a href="{% url 'user-detail' user_in_list.pk %}" class="">
+                                                <section class="position-relative mb-1 section-search-page px-2 py-2">
+                                                    <div>
+                                                        <article class="d-inline my-auto ">
+                                                            <a href="{% if user == user_in_list %}{% url 'profpage-user' %}{% else %}{% url 'user-detail' user_in_list.pk %}{% endif %}">
+                                                                <img src="{{user_in_list.prof_pic.url}}" class="post-pp img-fluid">
+                                                            </a>
+                                                        </article>
+                                                        <article class="d-inline search-article">
+                                                            <div>
+                                                                <b class="user_in_listname-search text-dark"><a class="text-dark" href="{% if user == user_in_list %}{% url 'profpage-user' %}{% else %}{% url 'user-detail' user_in_list.pk %}{% endif %}">{{user_in_list.username}}</a></b> 
+                                                            </div>
+                                                            <small class="font-weight-light text-dark"><a class="text-dark" href="{% if user == user_in_list %}{% url 'profpage-user' %}{% else %}{% url 'user-detail' user_in_list.pk %}{% endif %}">{{user_in_list.first_name}}</a></small>
+                                                        </article>
+                                                        {% if user_in_list == user %}
+                                                        <a class="option-tagged-people text-dark" data-dismiss="modal" data-toggle="modal" href="#remove-tagged-user-{{post.pk}}">
+                                                            <span class="float-right" >
+                                                                <i class="fa fa-circle font-size-05" aria-hidden=""></i><i class="fa fa-circle font-size-05 margin-015rem" aria-hidden="true"></i><i class="fa fa-circle font-size-05" aria-hidden="true"></i>  
+                                                            </span>
+                                                        </a>
+                                                        {% endif %}
+                                                    </div>
+                                                </section>
+                                            </a>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal fade" id="remove-tagged-user-{{post.pk}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content modal-content-delete">
+                                        <div class="modal-body px-0">
+                                            <section class="px-3 w-100">
+                                                <article>
+                                                    <form action="{% url 'remove-tag' post.pk %}" method="POST">
+                                                        {% csrf_token %}  
+                                                        <button type="submit" class="border-0 w-100 bg-white text-danger" name="redirect_path" value="{% url 'index' %}">Remove tag</button>
+                                                    </form>
+                                                </article>
+                                            </section>
+                                            <hr class="">
+                                            <section class="px-3 w-100">
+                                                <article>
+                                                    <p class="w-100 mb-0 text-center">Do not remove tag</p>
+                                                </article>
+                                            </section>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        {% endif %}
+                    </article>
+                        
+                </section>
+                <section class="px-3 bg-white">
+                    <article class="pt-2">
+                        {% load insta_extras %}
+                        <form action="{% url 'like-post' post.pk %}" class="d-inline like-form" method="POST">
+                            {% csrf_token %}
+                            <button type="submit" name="redirect_path" value="{% url 'index' %}" class="btn bg-white px-0 like-submit-bottom-home"><i class="fa fa-15 fa-heart {% if user in post.likes.all %} text-danger {% else %} text-white fontawesome-border {% endif %} "></i></button>
+                        </form>
+                        <a class="px-2 d-none d-md-inline" href="{% url 'create-comment' post.pk %}"><i class="fa fa-15 fa-comment fontawesome-border text-white"></i></a>
+                        <a class="px-2 d-inline d-md-none" href="{% url 'create-comment-mobile' post.pk %}"><i class="fa fa-15 fa-comment fontawesome-border text-white"></i></a>
+                        <form class='float-right' action="{% url 'save-post' post.pk %}" method="POST">
+                            {% csrf_token %}
+                            <button type="submit" name="redirect_path" value="{% url 'index' %}" class="btn bg-white"><i class="fa fa-15 fa-bookmark{% if post in user.saved_posts.all %} text-dark{% else %} text-white fontawesome-border{% endif %}"></i></button>
+                        </form>
+                    </article>
+                </section>
+                <section class="px-3">
+                    <article>
+                        <b>{{post.likes.count}} Like{{post.likes.count|pluralize}}</b>
+                    </article>
+                </section>
+                <section class="px-3">
+                    <article class="line-height-comments">
+                        <span class="font-size-username">
+                            <b><a class="text-dark" href="{% url 'user-detail' post.author.pk %}">{{post.author.username}}</a></b><span>&nbsp</span><span>{% for word in post.caption_to_array %}{% if word == "<new_line_code/>" %}<br/>{% elif "@" in word %} <a href="{% get_tagged_user word user %}">{{word}}  </a> {% else %}{{word}} {% endif %}{% endfor %}  </span>
+                        </span>
+                    </article>
+                </section>
+                <section class="px-3">
+                    <article class="line-height-comments">
+                        {% if post.postcomment_set.count > 1 %}
+                        <p class="mb-1 mt-1"><a class="comment-post text-decoration-none" href="{% url 'create-comment' post.pk %}">Show all {{post.postcomment_set.count}} comments</a></p>
+                        {% endif %}
+                        {% if post.postcomment_set.all %}
+                        <span class="font-size-username">
+                            {% with first_comment=post.postcomment_set.all|first %}
+                            <b><a href="{% if first_comment.author == user %}  {% url 'profpage-user'  %} {% else %} {% url 'user-detail' first_comment.author.pk %} {% endif %}" class="text-dark">{{first_comment.author.username}}</a></b>
+                            <span>&nbsp</span><span>{% for word in first_comment.description_to_array %}{% if word == "<new_line_code/>" %}{% elif "@" in word %} <a href="{% get_tagged_user word user %}">{{word}}  </a> {% else %}{{word}} {% endif %}{% endfor %}</span>
+                            {% endwith %}
+                        </span>
+                        {% endif %}
+
+                    </article>
+                </section>
+                <section class="px-3">
+                    <article class="">
+                        <p class="time-ago">{{post.time_posted_ago}}</p>
+                    </article>
+                </section>
             </section>
-        </section>
+
+        </div>
 
     </div>
-     {% if forloop.first %}
+    {% if forloop.first %}
     <div class="col-md-5 d-none d-md-block recommendations-fixed">
-    <section class="vh-100">
-        <article>
-            <div class="py-4">
-                {% for user in recommandation_list %}
-                <div class="mb-3">
-                    <a href="{% url 'user-detail' user.pk %}"><img class="post-pp img-fluid" src="{{user.prof_pic.url}}"></a>
-                    <!-- <img class="post-pp" src="{{user.prof_pic.url}}"> -->
-                    <b><a class="text-dark" href="{% url 'user-detail' user.pk %}">{{user.username}}</a></b>
+        <section class="vh-100">
+            <article>
+                <div class="py-4">
+                    <p class="font-weight-light mb-4">Recommandations for you</p>
+                    {% for user in recommandation_list %}
+                    <div class="mb-3">
+                        <table class="w-100">
+                            <tr>
+                                <td class="w-10"><a href="{% url 'user-detail' user.pk %}"><img class="post-pp img-fluid" src="{{user.prof_pic.url}}"></a></td>
+                                <td class="w-50"><b><a class="text-dark" href="{% url 'user-detail' user.pk %}">{{user.username}}</a></b></td>
+                                <td>
+                                    <form action="{% url 'follow-user' user.pk %}" method="POST">
+                                        {% csrf_token %}
+
+                                        <button class="bg-white border-0 text-info" type="submit" name="redirect_path" value="{% url 'user-detail' user.pk %}">Follow</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    {% endfor %}
                 </div>
-                {% endfor %}
-            </div>
-        </article>
-    </section>
+            </article>
+        </section>
     </div>
     {% endif %}
-</div>
-<!-- <input class="text-copy height-width-0" value="{% url 'create-comment' post.pk %}">  -->
+    {% empty %}
+    <div class="col-md-5 d-none d-md-block recommendations-fixed">
+        <section class="vh-100">
+            <article>
+                <div class="py-4">
+                    <p class="font-weight-light mb-4">Recommandations for you</p>
+
+                    {% for user in recommandation_list %}
+                    <div class="mb-3">
+
+                        <table class="w-100">
+                            <tr>
+                                <td class="w-10"><a href="{% url 'user-detail' user.pk %}"><img class="post-pp img-fluid" src="{{user.prof_pic.url}}"></a></td>
+                                <td class="w-50"><b><a class="text-dark" href="{% url 'user-detail' user.pk %}">{{user.username}}</a></b></td>
+                                <td>
+                                    <form action="{% url 'follow-user' user.pk %}" method="POST">
+                                        {% csrf_token %}
+
+                                        <button class="bg-white border-0 text-info" type="submit" name="redirect_path" value="{% url 'user-detail' user.pk %}">Follow</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    {% endfor %}
+                </div>
+            </article>
+        </section>
+    </div>
 {% endfor %}
-
-
 {% endblock %}
