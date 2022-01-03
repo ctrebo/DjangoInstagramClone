@@ -1,8 +1,7 @@
 from django.contrib import admin
-from .models import CustomUser, PostComment, Post, Story
+from .models import CustomUser, PostComment, Post, Story, Hashtag
 from .forms import CustomUserCreationForm, CustomUserCreationFormAdmin, CustomUserChangeForm
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-
 
 @admin.register(CustomUser)
 class CustomUserAdmin(BaseUserAdmin):
@@ -60,3 +59,10 @@ class StoryAdmin(admin.ModelAdmin):
 
 
     fieldsets = (("Story information", {'fields': ('author', 'picture')}),)
+
+@admin.register(Hashtag)
+class HashtagAdmin(admin.ModelAdmin):
+    list_display = ("hashtag_name", "id")
+    list_filter = ("hashtag_name",)
+
+    fieldsets = (("Hashtag information", {"fields": ("hashtag_name",)}),)

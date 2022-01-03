@@ -280,3 +280,12 @@ class Story(models.Model):
                 return result + " h"
             else:
                 return result + " h"  
+
+class Hashtag(models.Model):
+    hashtag_name = models.CharField(max_length=50, unique=True)
+
+    def __str__(self):
+        """
+        String for representing the Model object.
+        """
+        return self.hashtag_name
