@@ -13,6 +13,7 @@
         <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     </head>
     <body class="body-margin">
+        {% load insta_extras %}
         <nav class="navbar fixed-top navbar-expand shadow1 border-navbar bg-white">
             <div class="container">
                 <a class="navbar-brand text-dark" href="#"><strong>Instagram</strong></a>
@@ -89,8 +90,7 @@
                                     <td style="width: 40px;" class="align-top"><a href="{% if post.author.story_set.exists and not post.author.is_private or post.author.story_set.exists and post.author in user.followed.all or post.author.story_set.exists and post.author == user %} {% url 'stories-user' post.author.pk %} {% else %}{% if user == post.author %} {% url 'profpage-user' %} {% else %} {% url 'user-detail' post.author.pk %} {% endif %}{% endif %}"><img class="post-pp {% if post.author.story_set.exists and not post.author.is_private or post.author.story_set.exists and post.author in user.followed.all or post.author.story_set.exists and post.author == user %}story-pp-in-header rounded-gradiants-small-pp{% endif %}"  src="{{post.author.prof_pic.url}}" alt="alt"></a></td>
                                     <td class="w-auto line-height-posts"><span class="font-size-username">
                                             <span class="font-size-username">
-                                                {% load insta_extras %}
-                                                <b><a class="text-dark" href="{% if post.author == user %}  {% url 'profpage-user'  %} {% else %} {% url 'user-detail' post.author.pk %} {% endif %}">{{post.author.username}}</a></b><span>&nbsp</span><span class="">{% for word in post.caption_to_array %} {% if word == "<new_line_code/>" %}<br>{% elif "@" in word %} <a href="{% get_tagged_user word user %}">{{word}}  </a> {% else %}{{word}} {% endif %}{% endfor %}</span><p class="time-ago mb-0"><span>{{post.time_posted_ago}}</span></p>
+                                                <b><a class="text-dark" href="{% if post.author == user %}  {% url 'profpage-user'  %} {% else %} {% url 'user-detail' post.author.pk %} {% endif %}">{{post.author.username}}</a></b><span>&nbsp</span><span class="">{% for word in post.caption_to_array %} {% if word == "<new_line_code/>" %}<br>{% elif word|first == "@" and word|length > 1 %}<a href="{% get_tagged_user word user %}">{{word}}  </a>{% elif word|first == "#" and word|length > 1 %}<a href="{% get_hashtag_path word comment.author post.author post.id %}">{{word}} </a>{% else %}{{word}} {% endif %}{% endfor %}</span><p class="time-ago mb-0"><span>{{post.time_posted_ago}}</span></p>
                                             </span>
                                     </td>
                                 </tr>
@@ -109,7 +109,7 @@
                                         <td class="w-auto line-height-comments"><span class="font-size-username">
                                                 <span class="font-size-username">
                                                     {% load insta_extras %}
-                                                    <b><a class="text-dark" href="{% if comment.author == user %}  {% url 'profpage-user'  %} {% else %} {% url 'user-detail' comment.author.pk %} {% endif %}">{{comment.author.username}}</a></b><span>&nbsp</span><span class="">{% for word in comment.description_to_array %} {% if word == "<new_line_code/>" %}<br>{% elif "@" in word %} <a href="{% get_tagged_user word user %}">{{word}}  </a> {% else %}{{word}} {% endif %}{% endfor %}</span>
+                                                    <b><a class="text-dark" href="{% if comment.author == user %}  {% url 'profpage-user'  %} {% else %} {% url 'user-detail' comment.author.pk %} {% endif %}">{{comment.author.username}}</a></b><span>&nbsp</span><span class="">{% for word in comment.description_to_array %} {% if word == "<new_line_code/>" %}<br>{% elif word|first == "@" and word|length > 1 %}<a href="{% get_tagged_user word user %}">{{word}}  </a>{% elif word|first == "#" and word|length > 1 %}<a href="{% get_hashtag_path word comment.author post.author post.id %}">{{word}} </a>{% else %}{{word}} {% endif %}{% endfor %}</span>
                                                     <p class="time-ago mb-0">
                                                         <span>{{comment.time_commented_ago}}</span>{% if comment.likes.exists %}<b class="ml-2 comment-likes" data-toggle="modal" data-target="#modalLikesComment-{{comment.id}}">{{ comment.likes.count }} like{{ comment.likes.count|pluralize }} </b>{% endif %}<b class="ml-1 cursor-pointer write-to-textarea" name="{{comment.author.username}}">Answer</b><b name="{{comment.id}}"></b>
                                                     </p>
@@ -224,7 +224,7 @@
                                                             &nbsp
                                                         </span>
                                                         <span class="">
-                                                            {% for word in childcomment.description_to_array %} {% if word == "<new_line_code/>" %} {% elif "@" in word %} <a href="{% get_tagged_user word user %}">{{word}}  </a> {% else %}{{word}} {% endif %}{% endfor %}
+                                                            {% for word in childcomment.description_to_array %} {% if word == "<new_line_code/>" %}<br>{% elif word|first == "@" and word|length > 1 %}<a href="{% get_tagged_user word user %}">{{word}}  </a>{% elif word|first == "#" and word|length > 1 %}<a href="{% get_hashtag_path word comment.author post.author post.id %}">{{word}} </a>{% else %}{{word}} {% endif %}{% endfor %}
                                                         </span>
                                                         <p class="time-ago mb-0">
                                                             <span>{{childcomment.time_commented_ago}}</span>{% if childcomment.likes.exists %}<b class="ml-2 comment-likes" data-toggle="modal" data-target="#modalLikesComment-{{childcomment.id}}">{{ childcomment.likes.count }} like{{ childcomment.likes.count|pluralize }}</b>{% endif %}<b class="ml-1 cursor-pointer write-to-textarea" name="{{comment.author.username}}">Answer</b><b name="{{comment.id}}"></b>
