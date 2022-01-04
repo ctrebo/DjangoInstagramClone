@@ -65,4 +65,4 @@ class HashtagAdmin(admin.ModelAdmin):
     list_display = ("hashtag_name", "id")
     list_filter = ("hashtag_name",)
 
-    fieldsets = (("Hashtag information", {"fields": ("hashtag_name",)}),)
+    fieldsets = (("Hashtag information", {"fields": ("hashtag_name","posts")}),)

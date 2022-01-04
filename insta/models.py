@@ -283,6 +283,7 @@ class Story(models.Model):
 
 class Hashtag(models.Model):
     hashtag_name = models.CharField(max_length=50, unique=True)
+    posts = models.ManyToManyField(Post, related_name='hashtag_posts', blank=True)
 
     def __str__(self):
         """

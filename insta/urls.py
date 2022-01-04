@@ -21,9 +21,10 @@ urlpatterns = [
     re_path(r"^search-page/$", views.SearchPageListView.as_view(), name='search_page'),
     re_path(r'^signup/$', views.signup, name='signup'),
     re_path(r"^user/activity/$", views.activityPage, name='activity-page'),
-    re_path(r"^user/(?P<string>[\w\-]+)/$", views.dontexistPage, name='user-dont-exist'),
+    re_path(r"^object/(?P<string>[\w\-]+)/$", views.dontexistPage, name='object-dont-exist'),
     re_path(r"^post/(?P<pk>[0-9]+)/delete/$", views.deletePostView, name='delete-post'),
     re_path(r"^comment/(?P<pk>[0-9]+)/delete/$", views.deleteCommentView, name='delete-comment'),
     re_path(r"^stories/(?P<pk>[0-9]+)/view/$", views.story_of_user, name='stories-user'),
     re_path(r"^stories/create/$", views.StoryCreateView.as_view(), name='create-stories'),
+    re_path(r"^hashtag/(?P<pk>[0-9]+)/view/$", views.HashtagDetailView.as_view(), name='hashtag-detail'),
 ]

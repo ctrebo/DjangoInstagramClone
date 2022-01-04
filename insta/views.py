@@ -20,7 +20,7 @@ from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 
 
-from .models import Post, PostComment, Story
+from .models import Post, PostComment, Story, Hashtag
 
 from insta.forms import PostCommentAnswerCreateForm, PostCommentCreateForm, PostCommentCreateMobileForm, UserUpdateForm, CustomUserCreationForm, StoryCreateForm
 
@@ -483,3 +483,6 @@ class StoryCreateView(LoginRequiredMixin, CreateView):
         # Call super-class form validation behaviour
         return super(StoryCreateView, self).form_valid(form)
 
+
+class HashtagDetailView(LoginRequiredMixin, generic.DetailView):
+    model = Hashtag
