@@ -120,6 +120,22 @@ function goToSavedPosts() {
   window.location.href ="http://127.0.0.1:8000/insta/user/profilpage#execute";
 }
 
+function seeTopPosts() {
+    $("#topPosts").removeClass("d-none");
+    $("#mostRecentPosts").addClass("d-none");
+
+    $("#buttonTopPosts").addClass("border-saved-or-posts");
+    $("#buttonMostRecentPosts").removeClass("border-saved-or-posts");
+}
+
+function seeMostRecentPosts() {
+    $("#mostRecentPosts").removeClass("d-none");
+    $("#topPosts").addClass("d-none");
+
+    $("#buttonMostRecentPosts").addClass("border-saved-or-posts");
+    $("#buttonTopPosts").removeClass("border-saved-or-posts");
+}
+
 if (window.location.hash === '#execute') {
   seeSavedPosts();
   history.replaceState(null, null, ' ');
@@ -197,20 +213,19 @@ $('.show-child-comments').on('click', function(evt) {
 // If 'Answer' gets clicked write 'parent_id' into
 // the input(to signal that it is a childcomment) and 
 // write the the username of author as value of input
-$('.write-to-textarea').on('click', function(evt) {
-    // Tomorow find way to pass id of parent comment to input as value
-    var name_of_author = $(this).attr("name");
-    var parent_id = $(this).next().attr("name");
-    var form_textarea = $("#form-write-comment");
-    var textarea = form_textarea.find("textarea");
-    var input_child_comment = $("#parent_id");
-    input_child_comment.attr("name", "parent_id");
-    input_child_comment.attr("value", parent_id);
-
-    textarea.val("@"+name_of_author);
-
-}); 
-
+//$('.write-to-textarea').on('click', function(evt) {
+//    // Tomorow find way to pass id of parent comment to input as value
+//    var name_of_author = $(this).attr("name");
+//    var parent_id = $(this).next().attr("name");
+//    var form_textarea = $("#form-write-comment");
+//    var textarea = form_textarea.find("textarea");
+//    var input_child_comment = $("#parent_id");
+//    input_child_comment.attr("name", "parent_id");
+//    input_child_comment.attr("value", parent_id);
+//
+//    textarea.val("@"+name_of_author);
+//
+//}); 
 
 $('.write-to-textarea').on('click', function(evt) {
     // Tomorow find way to pass id of parent comment to input as value

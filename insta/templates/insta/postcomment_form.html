@@ -204,10 +204,10 @@
                 {% for comment in comment_list %}
                 <section class="wrap-parent-and-child">
                     <section class="pl-3 pt-3 d-none d-sm-block single-comment position-relative">
-                        <span class="position-absolute d-none comment-options" data-toggle="modal" data-target="#modal-comment-{{post.pk}}" >
+                        <span class="position-absolute d-none comment-options" data-toggle="modal" data-target="#modal-comment-{{comment.pk}}" >
                             <i class="fa fa-circle font-size-05" aria-hidden=""></i><i class="fa fa-circle font-size-05 margin-015rem" aria-hidden="true"></i><i class="fa fa-circle font-size-05" aria-hidden="true"></i>  
                         </span>
-                        <div class="modal fade" id="modal-comment-{{post.pk}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                        <div class="modal fade" id="modal-comment-{{comment.pk}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered" role="document">
                                 <div class="modal-content modal-content-delete">
 
@@ -217,7 +217,7 @@
                                             <article><form action="{% url 'delete-comment' post.pk %}" method="POST">
                                                     {% csrf_token %}
                                                     <div class="text-center">
-                                                        <button type="submit" name="comment_delete_id" value="{{comment.pk}}" class="bg-white p-0 font-weight-bold text-danger border-0 m-auto">Delete Comment</button>
+                                                        <button type="submit" name="comment_delete_id" value="{{comment.pk}}" class="bg-white p-0 font-weight-bold text-danger border-0 m-auto w-100">Delete Comment</button>
                                                     </div>                
                                                 </form></article>
                                         </section>
@@ -283,8 +283,7 @@
                                                                 <small class="font-weight-light text-dark">{{user_in_list.first_name}}</small>
                                                             </article>
                                                             <article class="d-inline float-right">
-                                                                <form action="{% url 'follow-user' user_in_list.pk %}" method="POST"
-                                                                                                                                                                                                                                                                                      class="d-inline ml-md-2">
+                                                                <form action="{% url 'follow-user' user_in_list.pk %}" method="POST" class="d-inline ml-md-2">
                                                                     {% csrf_token %}
                                                                     {%  if user_in_list == user %}
                                                                     {% elif user_in_list in user.followed.all %}
@@ -320,10 +319,10 @@
                             {% for childcomment in comment.replies.all %} 
                             <section class="">
                                 <section class="pl-5 pt-2 d-none d-md-block single-comment position-relative">
-                                    <span class="position-absolute d-none comment-options" data-toggle="modal" data-target="#modal-comment-{{post.pk}}" >
+                                    <span class="position-absolute d-none comment-options" data-toggle="modal" data-target="#modal-comment-{{childcomment.pk}}" >
                                         <i class="fa fa-circle font-size-05" aria-hidden=""></i><i class="fa fa-circle font-size-05 margin-015rem" aria-hidden="true"></i><i class="fa fa-circle font-size-05" aria-hidden="true"></i>  
                                     </span>
-                                    <div class="modal fade" id="modal-comment-{{post.pk}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                    <div class="modal fade" id="modal-comment-{{childcomment.pk}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-centered" role="document">
                                             <div class="modal-content modal-content-delete">
 
@@ -333,7 +332,7 @@
                                                         <article><form action="{% url 'delete-comment' post.pk %}" method="POST">
                                                                 {% csrf_token %}
                                                                 <div class="text-center">
-                                                                    <button type="submit" name="comment_delete_id" value="{{childcomment.pk}}" class="bg-white p-0 font-weight-bold text-danger border-0 m-auto">Delete Comment</button>
+                                                                    <button type="submit" name="comment_delete_id" value="{{childcomment.pk}}" class="bg-white p-0 font-weight-bold text-danger border-0 m-auto w-100">Delete Comment</button>
                                                                 </div>                
                                                             </form></article>
                                                     </section>
@@ -361,10 +360,10 @@
                                                             &nbsp
                                                         </span>
                                                         <span class="">
-                                                            {% for word in childcomment.description_to_array %} {% if word == "<new_line_code/>" %}<br>{% elif word|first == "@" and word|length > 1 %}<a href="{% get_tagged_user word user %}">{{word}}  </a>{% elif word|first == "#" and word|length > 1 %}<a href="{% get_hashtag_path word comment.author post.author post.id %}">{{word}} </a>{% else %}{{word}} {% endif %}{% endfor %}
+                                                            {% for word in childcomment.description_to_array %} {% if word == "<new_line_code/>" %}<br>{% elif word|first == "@" and word|length > 1 %}<a href="{% get_tagged_user word user %}">{{word}}  </a>{% elif word|first == "#" and word|length > 1 %}<a href="{% get_hashtag_path word childcomment.author post.author post.id %}">{{word}} </a>{% else %}{{word}} {% endif %}{% endfor %}
                                                         </span>
                                                         <p class="time-ago mb-0">
-                                                        <span>{{childcomment.time_commented_ago}}</span>{% if childcomment.likes.exists %}<b class="ml-2 comment-likes" data-toggle="modal" data-target="#modalLikesComment-{{childcomment.id}}">{{ childcomment.likes.count }} like{{ childcomment.likes.count|pluralize }}</b>{% endif %}<b class="ml-1 write-to-modal-textarea cursor-pointer" name="{{comment.author.username}}" data-toggle="modal" data-target="#answerToParentComment-{{comment.id}}">Answer</b> 
+                                                        <span>{{childcomment.time_commented_ago}}</span>{% if childcomment.likes.exists %}<b class="ml-2 comment-likes" data-toggle="modal" data-target="#modalLikesComment-{{childcomment.id}}">{{ childcomment.likes.count }} like{{ childcomment.likes.count|pluralize }}</b>{% endif %}<b class="ml-1 write-to-textarea cursor-pointer" name="{{childcomment.author.username}}" >Answer</b><b name="{{comment.id}}"></b> 
                                                         </p>
                                                     </span>
                                                 </td>
