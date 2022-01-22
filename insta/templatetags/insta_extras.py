@@ -18,7 +18,7 @@ def get_tagged_user(tagged_user, logged_in_user):
             user = get_object_or_404(user_model, username=tagged_user[1:])
             if(user == logged_in_user):
                 return reverse("profpage-user")
-            return reverse('user-detail', args=[str(user.id)])
+            return user.get_absolute_url()
         else:
             #return to custom page
             return reverse('object-dont-exist', args=[str(tagged_user[1:])])
@@ -44,13 +44,13 @@ def get_hashtag_path(word_hashtag, comment_author, post_author, post_id):
                 hashtag = Hashtag.objects.create(hashtag_name=word_hashtag)
 
             addPostToHashtag(hashtag, post_id)
-            return reverse('hashtag-detail', args=[str(hashtag.id)])
+            return hashtag.get_absolute_url() 
         else:
             # If comment author not equal post author only return
             # to hashtag detail page
             if hashtag_exists:
                 hashtag = get_object_or_404(Hashtag, hashtag_name=word_hashtag)
-                return reverse('hashtag-detail', args=[str(hashtag.id)])
+                return hashtag.get_absolute_url() 
             else:
                 return reverse('object-dont-exist', args=[str(word_hashtag[1:])])
     else:

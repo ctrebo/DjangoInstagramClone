@@ -35,9 +35,9 @@
                                         <table>
                                             <tr>
                                                 <td class="position-relative">
-                                                    <a href="{% if story.author == user %}{% url 'create-stories' %}{% else %}{% url 'user-detail' story.author.pk %}{% endif %}">{% if story.author == user %}<i class="fa fa-plus icon-create-story-story-by-user"></i>{% endif %}<img class="post-pp img-fluid" src="{{story.author.prof_pic.url}}" alt="Author picture"></a>
+                                                    <a href="{% if story.author == user %}{% url 'create-stories' %}{% else %}{{ story.author.get_absolute_url }}{% endif %}">{% if story.author == user %}<i class="fa fa-plus icon-create-story-story-by-user"></i>{% endif %}<img class="post-pp img-fluid" src="{{story.author.prof_pic.url}}" alt="Author picture"></a>
                                                 </td>
-                                                <td class="text-white pl-1 pr-3"><a href="{% if story.author == user %} {% url 'profpage-user' %}{% else %} {% url 'user-detail' story.author.pk %} {% endif %}" class="text-white text-decoration-none">{{story.author.username}}</a></td>
+                                                <td class="text-white pl-1 pr-3"><a href="{% if story.author == user %} {% url 'profpage-user' %}{% else %} {{ story.author.get_absolute_url }} {% endif %}" class="text-white text-decoration-none">{{story.author.username}}</a></td>
                                                 <td class="text-white font-weight-light">{{story.time_posted_ago}}</td>
                                                 <td class="width-auto"> </td>
                                             </tr>

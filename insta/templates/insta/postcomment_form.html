@@ -7,11 +7,11 @@
         <section class="d-block d-md-none">
             <header class="px-3 p-075 border-comments">
                 <article>
-                    <a href="{% if user == post.author %}{% url 'profpage-user' %} {% else %} {% url 'user-detail' post.author.pk %} {% endif %}" class="">                    
+                    <a href="{% if user == post.author %}{% url 'profpage-user' %} {% else %} {{ post.author.get_absolute_url }} {% endif %}" class="">                    
                         <img class="post-pp"  src="{{post.author.prof_pic.url}}" alt="alt">
                     </a>
                     <span class="ml-2 font-size-username">
-                        <a href="{% if user == post.author %} {% url 'profpage-user' %} {% else %} {% url 'user-detail' post.author.pk %} {% endif %}">
+                        <a href="{% if user == post.author %} {% url 'profpage-user' %} {% else %} {{ post.author.get_absolute_url }} {% endif %}">
                             <b class="text-dark">{{post.author.username}}</b>
                         </a>
                     </span>
@@ -101,7 +101,7 @@
                         </div>
                         <div class="modal-body">
                           {% for user in post.tagged_people.all %}
-                            <a href="{% url 'user-detail' user.pk %}" class="">
+                          <a href="{{ user.get_absolute_url }}" class="">
                                 <section class="position-relative mb-1 section-search-page px-2 py-2">
                                     <div>
                                         <article class="d-inline my-auto ">
@@ -130,11 +130,11 @@
         <section class="d-none d-md-block">
             <header class="px-3 p-075 border-comments" id="header-create-comment">
                 <article>
-                    <a href="{% if post.author.story_set.exists %} {% url 'stories-user' post.author.pk %} {% else %} {% if user == post.author %}{% url 'profpage-user' %}{% else %}{% url 'user-detail' post.author.pk %}{% endif %}{% endif %}" class="text-decoration-none">                    
+                    <a href="{% if post.author.story_set.exists %} {% url 'stories-user' post.author.pk %} {% else %} {% if user == post.author %}{% url 'profpage-user' %}{% else %}{{ post.author.get_absolute_url }}{% endif %}{% endif %}" class="text-decoration-none">                    
                         <img class="post-pp {% if post.author.story_set.exists %}story-pp-in-header rounded-gradiants-small-pp{% endif %}" src="{{post.author.prof_pic.url}}" alt="alt">
                     </a>
                     <span class="ml-2 font-size-username">
-                        <b><a class="text-dark" href="{% if user == post.author %} {% url 'profpage-user' %} {% else %} {% url 'user-detail' post.author.pk %} {% endif %}">{{post.author.username}}</a></b>
+                        <b><a class="text-dark" href="{% if user == post.author %} {% url 'profpage-user' %} {% else %} {{ post.author.get_absolute_url }} {% endif %}">{{post.author.username}}</a></b>
                     </span>
                     <span class="float-right" data-toggle="modal" data-target="#modal-{{post.pk}}-2">
                         <i class="fa fa-circle font-size-05" aria-hidden=""></i><i class="fa fa-circle font-size-05 margin-015rem" aria-hidden="true"></i><i class="fa fa-circle font-size-05" aria-hidden="true"></i>  
@@ -235,12 +235,12 @@
                         <article>
                             <table class="w-100">
                                 <tr>
-                                    <td style="width: 40px;" class="align-top"><a href="{% if comment.author.story_set.exists and not comment.author.is_private or comment.author.story_set.exists and comment.author in user.followed.all or comment.author.story_set.exists and comment.author == user %} {% url 'stories-user' comment.author.pk %} {% else %}{% if user == comment.author %} {% url 'profpage-user' %} {% else %} {% url 'user-detail' comment.author.pk %} {% endif %}{% endif %}"><img class="post-pp {% if comment.author.story_set.exists and not comment.author.is_private or comment.author.story_set.exists and comment.author in user.followed.all or comment.author.story_set.exists and comment.author == user %}story-pp-in-header rounded-gradiants-small-pp{% endif %}"  src="{{comment.author.prof_pic.url}}" alt="alt"></a></td>
+                                    <td style="width: 40px;" class="align-top"><a href="{% if comment.author.story_set.exists and not comment.author.is_private or comment.author.story_set.exists and comment.author in user.followed.all or comment.author.story_set.exists and comment.author == user %} {% url 'stories-user' comment.author.pk %} {% else %}{% if user == comment.author %} {% url 'profpage-user' %} {% else %} {{ comment.author.get_absolute_url }} {% endif %}{% endif %}"><img class="post-pp {% if comment.author.story_set.exists and not comment.author.is_private or comment.author.story_set.exists and comment.author in user.followed.all or comment.author.story_set.exists and comment.author == user %}story-pp-in-header rounded-gradiants-small-pp{% endif %}"  src="{{comment.author.prof_pic.url}}" alt="alt"></a></td>
                                     <td class="w-auto line-height-comments">
                                         <span class="font-size-username">
                                             {% load insta_extras %}
                                             <b>
-                                                <a class="text-dark" href="{% if comment.author == user %}  {% url 'profpage-user'  %} {% else %} {% url 'user-detail' comment.author.pk %} {% endif %}">{{comment.author.username}}</a>
+                                                <a class="text-dark" href="{% if comment.author == user %}  {% url 'profpage-user'  %} {% else %} {{ comment.author.get_absolute_url }} {% endif %}">{{comment.author.username}}</a>
                                             </b>
                                             <span>
                                                 &nbsp
@@ -268,14 +268,14 @@
                                                     <section class="position-relative mb-1 section-search-page px-2 py-2">
                                                         <div>
                                                             <article class="d-inline my-auto">
-                                                                <a href="{% if user_in_list == user %}{% url 'profpage-user' %}{% else %}{% url 'user-detail' user_in_list.pk %}{% endif %}">
+                                                                <a href="{% if user_in_list == user %}{% url 'profpage-user' %}{% else %}{{ user_in_list.get_absolute_url }}{% endif %}">
                                                                     <img src="{{user_in_list.prof_pic.url}}" class="post-pp img-fluid">
                                                                 </a>
 
                                                             </article>
                                                             <article class="d-inline search-article">
                                                                 <div>
-                                                                    <a href="{% if user_in_list == user %}{% url 'profpage-user' %}{% else %}{% url 'user-detail' user_in_list.pk %}{% endif %}">
+                                                                    <a href="{% if user_in_list == user %}{% url 'profpage-user' %}{% else %}{{ user_in_list.get_absolute_url }}{% endif %}">
                                                                         <b class="username-search text-dark">{{user_in_list.username}}</b>
                                                                     </a>
 
@@ -287,12 +287,12 @@
                                                                     {% csrf_token %}
                                                                     {%  if user_in_list == user %}
                                                                     {% elif user_in_list in user.followed.all %}
-                                                                    <button type="submit" name="redirect_path" value="{% url 'create-comment' post.pk %}" class="btn border bg-white text-dark">Following</button>
+                                                                    <button type="submit" name="redirect_path" value="{{ post.get_absolute_url }}" class="btn border bg-white text-dark">Following</button>
 
                                                                     {% elif user in user_in_list.pending_requests.all %}
-                                                                    <button type="submit" name="redirect_path" value="{% url 'create-comment' post.pk %}" class="btn bg-white border text-dark">Requested</button>
+                                                                    <button type="submit" name="redirect_path" value="{{ post.get_absolute_url }}" class="btn bg-white border text-dark">Requested</button>
                                                                     {% else %}
-                                                                    <button type="submit" name="redirect_path" value="{% url 'create-comment' post.pk %}" class="btn border bg-primary text-white">Follow</button>
+                                                                    <button type="submit" name="redirect_path" value="{{ post.get_absolute_url }}" class="btn border bg-primary text-white">Follow</button>
                                                                     {% endif %}
                                                                 </form>
                                                             </article>
@@ -306,7 +306,7 @@
                                     <td class="float-right align-top">
                                         <form action="{% url 'like-postcomment' comment.pk %}" method="POST">
                                             {% csrf_token %}                
-                                            <button type="submit" name="redirect_path" value="{% url 'create-comment' post.pk %}" class="btn mt-2 bg-white" id=""><i class="fa fa-heart{% if user in comment.likes.all %} text-danger{% else %} text-white fontawesome-border{% endif %}"></i></button>
+                                            <button type="submit" name="redirect_path" value="{{ post.get_absolute_url }}" class="btn mt-2 bg-white" id=""><i class="fa fa-heart{% if user in comment.likes.all %} text-danger{% else %} text-white fontawesome-border{% endif %}"></i></button>
                                         </form>
                                     </td>
                                 </tr>
@@ -350,11 +350,11 @@
                                     <article>
                                         <table class="w-100">
                                             <tr>
-                                                <td style="width: 40px;" class="align-top"><a href="{% if childcomment.author.story_set.exists and not childcomment.author.is_private or childcomment.author.story_set.exists and childcomment.author in user.followed.all or childcomment.author.story_set.exists and childcomment.author == user %} {% url 'stories-user' childcomment.author.pk %} {% else %}{% if user == childcomment.author %} {% url 'profpage-user' %} {% else %} {% url 'user-detail' childcomment.author.pk %} {% endif %}{% endif %}"><img class="post-pp {% if childcomment.author.story_set.exists and not childcomment.author.is_private or childcomment.author.story_set.exists and childcomment.author in user.followed.all or childcomment.author.story_set.exists and childcomment.author == user %}story-pp-in-header rounded-gradiants-small-pp{% endif %}"  src="{{childcomment.author.prof_pic.url}}" alt="alt"></a></td>
+                                                <td style="width: 40px;" class="align-top"><a href="{% if childcomment.author.story_set.exists and not childcomment.author.is_private or childcomment.author.story_set.exists and childcomment.author in user.followed.all or childcomment.author.story_set.exists and childcomment.author == user %} {% url 'stories-user' childcomment.author.pk %} {% else %}{% if user == childcomment.author %} {% url 'profpage-user' %} {% else %} {{ childcomment.author.get_absolute_url }} {% endif %}{% endif %}"><img class="post-pp {% if childcomment.author.story_set.exists and not childcomment.author.is_private or childcomment.author.story_set.exists and childcomment.author in user.followed.all or childcomment.author.story_set.exists and childcomment.author == user %}story-pp-in-header rounded-gradiants-small-pp{% endif %}"  src="{{childcomment.author.prof_pic.url}}" alt="alt"></a></td>
                                                 <td class="w-auto line-height-comments">
                                                     <span class="font-size-username">
                                                         <b>
-                                                            <a class="text-dark" href="{% if childcomment.author == user %}  {% url 'profpage-user'  %} {% else %} {% url 'user-detail' childcomment.author.pk %} {% endif %}">{{childcomment.author.username}}</a>
+                                                            <a class="text-dark" href="{% if childcomment.author == user %}{% url 'profpage-user'  %} {% else %}{{ childcomment.author.get_absolute_url }}{% endif %}">{{childcomment.author.username}}</a>
                                                         </b>
                                                         <span>
                                                             &nbsp
@@ -382,14 +382,14 @@
                                                                 <section class="position-relative mb-1 section-search-page px-2 py-2">
                                                                     <div>
                                                                         <article class="d-inline my-auto">
-                                                                            <a href="{% if user_in_list == user %}{% url 'profpage-user' %}{% else %}{% url 'user-detail' user_in_list.pk %}{% endif %}">
-                                                                                <img src="{{user_in_list.prof_pic.url}}" class="post-pp img-fluid">
+                                                                            <a href="{% if user_in_list == user %}{% url 'profpage-user' %}{% else %}{{user_in_list.get_absolute_url}}{% endif %}">
+                                                                                <img src="{{ user_in_list.prof_pic.url }}" class="post-pp img-fluid">
                                                                             </a>
 
                                                                         </article>
                                                                         <article class="d-inline search-article">
                                                                             <div>
-                                                                                <a href="{% if user_in_list == user %}{% url 'profpage-user' %}{% else %}{% url 'user-detail' user_in_list.pk %}{% endif %}">
+                                                                                <a href="{% if user_in_list == user %}{% url 'profpage-user' %}{% else %}{{ user_in_list.get_absolute_url }}{% endif %}">
                                                                                     <b class="username-search text-dark">{{user_in_list.username}}</b>
                                                                                 </a>
 
@@ -397,17 +397,15 @@
                                                                             <small class="font-weight-light text-dark">{{user_in_list.first_name}}</small>
                                                                         </article>
                                                                         <article class="d-inline float-right">
-                                                                            <form action="{% url 'follow-user' user_in_list.pk %}" method="POST"
-                                                                                                                                   class="d-inline ml-md-2">
+                                                                            <form action="{% url 'follow-user' user_in_list.pk %}" method="POST" class="d-inline ml md-2">
                                                                                 {% csrf_token %}
                                                                                 {%  if user_in_list == user %}
                                                                                 {% elif user_in_list in user.followed.all %}
-                                                                                <button type="submit" name="redirect_path" value="{% url 'create-comment' post.pk %}" class="btn border bg-white text-dark">Following</button>
-
+                                                                                <button type="submit" name="redirect_path" value="{{ post.get_absolute_url }}" class="btn border bg-white text-dark">Following</button>
                                                                                 {% elif user in user_in_list.pending_requests.all %}
-                                                                                <button type="submit" name="redirect_path" value="{% url 'create-comment' post.pk %}" class="btn bg-white border text-dark">Requested</button>
+                                                                                <button type="submit" name="redirect_path" value="{{ post.get_absolute_url }}" class="btn bg-white border text-dark">Requested</button>
                                                                                 {% else %}
-                                                                                <button type="submit" name="redirect_path" value="{% url 'create-comment' post.pk %}" class="btn border bg-primary text-white">Follow</button>
+                                                                                <button type="submit" name="redirect_path" value="{{ post.get_absolute_url }}" class="btn border bg-primary text-white">Follow</button>
                                                                                 {% endif %}
                                                                             </form>
                                                                         </article>
@@ -421,7 +419,7 @@
                                                 <td class="float-right align-top">
                                                     <form action="{% url 'like-postcomment' childcomment.pk %}" method="POST">
                                                         {% csrf_token %}                
-                                                        <button type="submit" name="redirect_path" value="{% url 'create-comment' post.pk %}" class="btn mt-2 bg-white" id=""><i class="fa fa-heart{% if user in childcomment.likes.all %} text-danger{% else %} text-white fontawesome-border{% endif %}"></i></button>
+                                                        <button type="submit" name="redirect_path" value="{{ post.get_absolute_url }}" class="btn mt-2 bg-white" id=""><i class="fa fa-heart{% if user in childcomment.likes.all %} text-danger{% else %} text-white fontawesome-border{% endif %}"></i></button>
                                                     </form>
                                                 </td>
                                             </tr>
@@ -443,12 +441,12 @@
             <article>
                 <form class="d-inline-block" action="{% url 'like-post' post.pk %}" method="POST">
                     {% csrf_token %}                
-                    <button type="submit" name="redirect_path" value="{% url 'create-comment' post.pk %}" class="btn bg-white pb-md-0" id="like-create-comment"><i class="fa fa-15 fa-heart{% if post_is_liked %} text-danger{% else %} text-white fontawesome-border{% endif %}"></i></button>
+                    <button type="submit" name="redirect_path" value="{{ post.get_absolute_url }}" class="btn bg-white pb-md-0" id="like-create-comment"><i class="fa fa-15 fa-heart{% if post_is_liked %} text-danger{% else %} text-white fontawesome-border{% endif %}"></i></button>
                 </form>
                 <a class="px-2 d-inline d-md-none" href="{% url 'create-comment-mobile' post.pk %}"><i class="fa fa-15 fa-comment fontawesome-border text-white"></i></a>
                 <form class="d-inline-block float-right" action="{% url 'save-post' post.pk %}" method="POST">
                     {% csrf_token %}                
-                    <button type="submit" name="redirect_path" value="{% url 'create-comment' post.pk %}" class="btn bg-white" id="save-create-comment"><i class="fa fa-15 fa-bookmark{% if post_is_saved %} text-dark{% else %} text-white fontawesome-border{% endif %}"></i></button>
+                    <button type="submit" name="redirect_path" value="{{ post.get_absolute_url }}" class="btn bg-white" id="save-create-comment"><i class="fa fa-15 fa-bookmark{% if post_is_saved %} text-dark{% else %} text-white fontawesome-border{% endif %}"></i></button>
                 </form>
             </article>
         </section>
@@ -476,7 +474,7 @@
     <section>
         <article>
             <div>
-                <p>Other posts from <a class="text-dark" href="{% url 'user-detail' post.author.pk %}"><b>{{post.author.username}}</b></a></p>
+                <p>Other posts from <a class="text-dark" href="{{ post.author.get_absolute_url }}"><b>{{post.author.username}}</b></a></p>
             </div>
         </article>
     </section>
@@ -493,11 +491,11 @@
                     Your browser does not support the video tag.
                 </video>
             {% endif %}
-            <div onclick="location.href='{% url 'create-comment' post.pk %}';" class="hover h-100 w-100 mx-auto">
+            <div onclick="location.href='{{ post.get_absolute_url }}';" class="hover h-100 w-100 mx-auto">
                 <p class="px-3 center-comment-symbol"
-                    href="{% url 'create-comment' post.pk %}"><i class="fa fa-15 fa-comment"></i> {{post.postcomment_set.count}}</p>
+                   href="{{ post.get_absolute_url }}"><i class="fa fa-15 fa-comment"></i> {{post.postcomment_set.count}}</p>
                 <p class="px-3 center-heart-symbol"
-                    href="{% url 'create-comment' post.pk %}"><i class="fa fa-15 fa-heart"></i> {{post.number_of_likes}}</p>
+                   href="{{ post.get_absolute_url }}"><i class="fa fa-15 fa-heart"></i> {{post.number_of_likes}}</p>
             </div>
         </div>
     </div>

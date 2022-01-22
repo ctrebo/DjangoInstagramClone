@@ -360,6 +360,8 @@ def updateUser(request, pk):
 
 def user_detail(request, pk):
     user_for_page = get_object_or_404(user_model, pk=pk)
+    if user_for_page == request.user:
+        return HttpResponseRedirect(reverse("profpage-user"))
     logged_in_user_is_following = request.user.followed.filter(id=user_for_page.id).exists()
     # True if logged in user can see story of user_for_page
     has_and_show_story = (not user_for_page.is_private or logged_in_user_is_following) and user_for_page.story_set.exists()

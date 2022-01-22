@@ -22,11 +22,11 @@
                         <form action="{% url 'follow-user' user_for_page.pk %}" method="POST" class="d-inline ml-md-2">
                             {% csrf_token %}
                             {% if user_is_followed %}                
-                            	<button type="submit" name="redirect_path" value="{% url 'user-detail' user_for_page.pk %}" class="btn bg-white border" id="">Unfollow</button>
+                            <button type="submit" name="redirect_path" value="{{ user_for_page.get_absolute_url }}" class="btn bg-white border" id="">Unfollow</button>
                             {% elif user in user_for_page.pending_requests.all %}
-                            	<button type="submit" name="redirect_path" value="{% url 'user-detail' user_for_page.pk %}" class="btn bg-white border text-dark" id="">Requested</button>
+                            	<button type="submit" name="redirect_path" value="{{ user_for_page.get_absolute_url }}" class="btn bg-white border text-dark" id="">Requested</button>
                             {% else %}
-                            	<button type="submit" name="redirect_path" value="{% url 'user-detail' user_for_page.pk %}" class="btn bg-primary border text-white" id="">Follow</button>
+                            	<button type="submit" name="redirect_path" value="{{ user_for_page.get_absolute_url }}" class="btn bg-primary border text-white" id="">Follow</button>
                             {% endif %}
                         </form>
                     </h2>
@@ -58,14 +58,14 @@
                                                 <section class="position-relative mb-1 section-search-page px-2 py-2">
                                                     <div>
                                                         <article class="d-inline my-auto">
-                                                            <a {% ifnotequal user.pk user_follower.pk %} href="{% url 'user-detail' user_follower.pk %}" {% else %}  href="{% url 'profpage-user' %}" {% endifnotequal %}>
+                                                            <a {% ifnotequal user.pk user_follower.pk %} href="{{ user_follower.get_absolute_url }}" {% else %}  href="{% url 'profpage-user' %}" {% endifnotequal %}>
                                                                 <img src="{{user_follower.prof_pic.url}}" class="post-pp img-fluid">
                                                             </a>
                                                                 
                                                         </article>
                                                         <article class="d-inline search-article">
                                                             <div>
-                                                                <a {% ifnotequal user.pk user_follower.pk %} href="{% url 'user-detail' user_follower.pk %}" {% else %}  href="{% url 'profpage-user' %}" {% endifnotequal %}>
+                                                                <a {% ifnotequal user.pk user_follower.pk %} href="{{user_follower.get_absolute_url}}" {% else %}  href="{% url 'profpage-user' %}" {% endifnotequal %}>
                                                                     <b class="username-search text-dark">{{user_follower.username}}</b>
                                                                 </a>
                                                                 
@@ -77,9 +77,9 @@
                                                             {% csrf_token %}
                                                             {% if  user_follower == user  %}
                                                             {% elif user_follower in user.followed.all %}
-                                                            <button type="submit" name="redirect_path" value="{% url 'user-detail' user_follower.pk %}" class="btn border bg-white text-dark">Following</button>
+                                                            <button type="submit" name="redirect_path" value="{{ user_follower.get_absolute_url }}" class="btn border bg-white text-dark">Following</button>
                                                             {% else %}
-                                                            <button type="submit" name="redirect_path" value="{% url 'user-detail'  user_follower.pk %}" class="btn border bg-primary text-white">Follow</button>
+                                                            <button type="submit" name="redirect_path" value="{{ user_follower.get_absolute_url }}" class="btn border bg-primary text-white">Follow</button>
                                                             {% endif %}
                                                         </form>
                                                         </article>
@@ -115,14 +115,14 @@
                                                 <section class="position-relative mb-1 section-search-page px-2 py-2">
                                                     <div>
                                                         <article class="d-inline my-auto">
-                                                            <a {% ifnotequal user.pk user_following.pk %} href="{% url 'user-detail' user_following.pk %}" {% else %}  href="{% url 'profpage-user' %}" {% endifnotequal %}>
+                                                            <a {% ifnotequal user.pk user_following.pk %} href="{{ user_following.get_absolute_url }}" {% else %}  href="{% url 'profpage-user' %}" {% endifnotequal %}>
                                                                 <img src="{{user_following.prof_pic.url}}" class="post-pp img-fluid">
                                                             </a>
                                                                 
                                                         </article>
                                                         <article class="d-inline search-article">
                                                             <div>
-                                                                <a {% ifnotequal user.pk user_following.pk %} href="{% url 'user-detail' user_following.pk %}" {% else %}  href="{% url 'profpage-user' %}" {% endifnotequal %}>
+                                                                <a {% ifnotequal user.pk user_following.pk %} href="{{ user_following.get_absolute_url }}" {% else %}  href="{% url 'profpage-user' %}" {% endifnotequal %}>
                                                                     <b class="username-search text-dark">{{user_following.username}}</b>
                                                                 </a>
                                                                 
@@ -134,9 +134,9 @@
                                                                 {% csrf_token %}
                                                                 {% if  user_following == user  %}
                                                                 {% elif user_following in user.followed.all %}
-                                                                <button type="submit" name="redirect_path" value="{% url 'user-detail' user_following.pk %}" class="btn border bg-white text-dark">Following</button>
+                                                                <button type="submit" name="redirect_path" value="{{ user_following.get_absolute_url }}" class="btn border bg-white text-dark">Following</button>
                                                                 {% else %}
-                                                                <button type="submit" name="redirect_path" value="{% url 'user-detail'  user_following.pk %}" class="btn border bg-primary text-white">Follow</button>
+                                                                <button type="submit" name="redirect_path" value="{{ user_following.get_absolute_url }}" class="btn border bg-primary text-white">Follow</button>
                                                                 {% endif %}
                                                             </form>
                                                         </article>
@@ -205,14 +205,14 @@
                                     <section class="position-relative mb-1 section-search-page px-2 py-2">
                                         <div>
                                             <article class="d-inline my-auto">
-                                                <a href="{% url 'user-detail' user_in_list.pk %}">
+                                                <a href="{{ user_in_list.get_absolute_url }}">
                                                     <img src="{{user_in_list.prof_pic.url}}" class="post-pp img-fluid">
                                                 </a>
 
                                             </article>
                                             <article class="d-inline search-article">
                                                 <div>
-                                                    <a href="{% url 'user-detail' user_in_list.pk %}">
+                                                    <a href="{{ user_in_list.get_absolute_url }}">
                                                         <b class="username-search text-dark">{{user_in_list.username}}</b>
                                                     </a>
 
@@ -224,9 +224,9 @@
                                                     {% csrf_token %}
                                                     {% if  user_in_list == user  %}
                                                     {% elif user_in_list in user.followed.all %}
-                                                    <button type="submit" name="redirect_path" value="{% url 'user-detail' user_in_list.pk %}" class="btn border bg-white text-dark">Following</button>
+                                                    <button type="submit" name="redirect_path" value="{{ user_in_list.get_absolute_url }}" class="btn border bg-white text-dark">Following</button>
                                                     {% else %}
-                                                    <button type="submit" name="redirect_path" value="{% url 'user-detail'  user_in_list.pk %}" class="btn border bg-primary text-white">Follow</button>
+                                                    <button type="submit" name="redirect_path" value="{{ user_in_list.get_absolute_url }}" class="btn border bg-primary text-white">Follow</button>
                                                     {% endif %}
                                                 </form>
                                         </article>
@@ -261,14 +261,14 @@
                                     <section class="position-relative mb-1 section-search-page px-2 py-2">
                                         <div>
                                             <article class="d-inline my-auto">
-                                                <a href="{% url 'user-detail' user.pk %}">
+                                                <a href="{{ user.get_absolute_url }}">
                                                     <img src="{{user.prof_pic.url}}" class="post-pp img-fluid">
                                                 </a>
 
                                             </article>
                                             <article class="d-inline search-article">
                                                 <div>
-                                                    <a href="{% url 'user-detail' user.pk %}">
+                                                    <a href="{{ user.get_absolute_url }}">
                                                         <b class="username-search text-dark">{{user.username}}</b>
                                                     </a>
 
@@ -280,7 +280,7 @@
                                                 <form action="{% url 'follow-user' user.pk %}"
                                                     method="POST" class="d-inline ml-md-2">
                                                     {% csrf_token %}
-                                                    <button type="submit" name="redirect_path" value="{% url 'user-detail' user_for_page.pk %}" class="btn border btn-white bg-white" id="">Following</button>
+                                                    <button type="submit" name="redirect_path" value="{{ user_for_page.get_absolute_url }}" class="btn border btn-white bg-white" id="">Following</button>
                                                 </form>
                                             </article>
                                         </div>
@@ -325,10 +325,10 @@
                         Your browser does not support the video tag.
                     </video>
                 {% endif %}
-                <div onclick="location.href='{% url 'create-comment' post.pk %}';" class="hover h-100 w-100 mx-auto">
-                    <p class="px-3 center-comment-symbol d-none d-md-block" href="{% url 'create-comment' post.pk %}"><i
+                <div onclick="location.href='{{ post.get_absolute_url }}';" class="hover h-100 w-100 mx-auto">
+                    <p class="px-3 center-comment-symbol d-none d-md-block" href="{{ post.get_absolute_url }}"><i
                             class="fa fa-15 fa-comment"></i> {{post.postcomment_set.count}}</p>
-                    <p class="px-3 center-heart-symbol" href="{% url 'create-comment' post.pk %}"><i
+                    <p class="px-3 center-heart-symbol" href="{{ post.get_absolute_url }}"><i
                             class="fa fa-15 fa-heart"></i> {{post.number_of_likes}}</p>
                 </div>
             </div>
@@ -359,10 +359,10 @@
                         Your browser does not support the video tag.
                     </video>
                 {% endif %}
-                <div onclick="location.href='{% url 'create-comment' post.pk %}';" class="hover h-100 w-100 mx-auto">
-                    <p class="px-3 center-comment-symbol d-none d-md-block" href="{% url 'create-comment' post.pk %}"><i
+                <div onclick="location.href='{{ post.get_absolute_url }}';" class="hover h-100 w-100 mx-auto">
+                    <p class="px-3 center-comment-symbol d-none d-md-block" href="{{ post.get_absolute_url }}"><i
                             class="fa fa-15 fa-comment"></i> {{post.postcomment_set.count}}</p>
-                    <p class="px-3 center-heart-symbol" href="{% url 'create-comment' post.pk %}"><i
+                    <p class="px-3 center-heart-symbol" href="{{ post.get_absolute_url }}"><i
                             class="fa fa-15 fa-heart"></i> {{post.number_of_likes}}</p>
                 </div>
             </div>

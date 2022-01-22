@@ -39,6 +39,9 @@ class CustomUser(AbstractUser):
         # At the end split the text again into words
         return ("".join([s + " <new_line_code/> " for s in self.bio.splitlines()]).split())
 
+    def get_absolute_url(self):
+        return reverse('user-detail', kwargs={'pk': self.pk})
+
 class Post(models.Model):
     """
     Model representing a Post
@@ -63,9 +66,9 @@ class Post(models.Model):
 
     def get_absolute_url(self):
         """
-        Returns the url to access a particular blog-author instance.
+        Return url of 'create-comment' because that serves as alternative to a 'post-detail' url. Posts can be watched there. 
         """
-        return reverse('post-detail', args=[str(self.id)])
+        return reverse('create-comment', kwargs={'pk': self.pk})
 
     @property
     def number_of_likes(self):
@@ -83,15 +86,11 @@ class Post(models.Model):
              return str(num_likes//1000000000)+"B"
     
 
-    """
-    Return when difference of now and time, when it was posted
-    """
     @property
     def time_posted_ago(self):
         """
-        Function that return how long ago post was created
+        Return when difference of now and time, when it was posted
         """
-
         difference = datetime.datetime.now(timezone.utc) - self.post_date 
         if difference.total_seconds() < 1:
             return "Now"
@@ -294,3 +293,6 @@ class Hashtag(models.Model):
         String for representing the Model object.
         """
         return self.hashtag_name
+    
+    def get_absolute_url(self):
+        return reverse('hashtag-detail', kwargs={'pk': self.pk})

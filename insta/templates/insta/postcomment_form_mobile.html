@@ -87,10 +87,10 @@
                         <article>
                             <table class="w-100">
                                 <tr>
-                                    <td style="width: 40px;" class="align-top"><a href="{% if post.author.story_set.exists and not post.author.is_private or post.author.story_set.exists and post.author in user.followed.all or post.author.story_set.exists and post.author == user %} {% url 'stories-user' post.author.pk %} {% else %}{% if user == post.author %} {% url 'profpage-user' %} {% else %} {% url 'user-detail' post.author.pk %} {% endif %}{% endif %}"><img class="post-pp {% if post.author.story_set.exists and not post.author.is_private or post.author.story_set.exists and post.author in user.followed.all or post.author.story_set.exists and post.author == user %}story-pp-in-header rounded-gradiants-small-pp{% endif %}"  src="{{post.author.prof_pic.url}}" alt="alt"></a></td>
+                                    <td style="width: 40px;" class="align-top"><a href="{% if post.author.story_set.exists and not post.author.is_private or post.author.story_set.exists and post.author in user.followed.all or post.author.story_set.exists and post.author == user %} {% url 'stories-user' post.author.pk %} {% else %}{% if user == post.author %} {% url 'profpage-user' %} {% else %} {{ post.author.get_absolute_url }} {% endif %}{% endif %}"><img class="post-pp {% if post.author.story_set.exists and not post.author.is_private or post.author.story_set.exists and post.author in user.followed.all or post.author.story_set.exists and post.author == user %}story-pp-in-header rounded-gradiants-small-pp{% endif %}"  src="{{post.author.prof_pic.url}}" alt="alt"></a></td>
                                     <td class="w-auto line-height-posts"><span class="font-size-username">
                                             <span class="font-size-username">
-                                                <b><a class="text-dark" href="{% if post.author == user %}  {% url 'profpage-user'  %} {% else %} {% url 'user-detail' post.author.pk %} {% endif %}">{{post.author.username}}</a></b><span>&nbsp</span><span class="">{% for word in post.caption_to_array %} {% if word == "<new_line_code/>" %}<br>{% elif word|first == "@" and word|length > 1 %}<a href="{% get_tagged_user word user %}">{{word}}  </a>{% elif word|first == "#" and word|length > 1 %}<a href="{% get_hashtag_path word comment.author post.author post.id %}">{{word}} </a>{% else %}{{word}} {% endif %}{% endfor %}</span><p class="time-ago mb-0"><span>{{post.time_posted_ago}}</span></p>
+                                                <b><a class="text-dark" href="{% if post.author == user %}  {% url 'profpage-user'  %} {% else %} {{ post.author.get_absolute_url }} {% endif %}">{{post.author.username}}</a></b><span>&nbsp</span><span class="">{% for word in post.caption_to_array %} {% if word == "<new_line_code/>" %}<br>{% elif word|first == "@" and word|length > 1 %}<a href="{% get_tagged_user word user %}">{{word}}  </a>{% elif word|first == "#" and word|length > 1 %}<a href="{% get_hashtag_path word comment.author post.author post.id %}">{{word}} </a>{% else %}{{word}} {% endif %}{% endfor %}</span><p class="time-ago mb-0"><span>{{post.time_posted_ago}}</span></p>
                                             </span>
                                     </td>
                                 </tr>
@@ -105,11 +105,11 @@
                             <article>
                                 <table class="w-100">
                                     <tr>
-                                        <td style="width: 40px;" class="align-top"><a href="{% if comment.author.story_set.exists and not comment.author.is_private or comment.author.story_set.exists and comment.author in user.followed.all or comment.author.story_set.exists and comment.author == user %} {% url 'stories-user' comment.author.pk %} {% else %}{% if user == comment.author %} {% url 'profpage-user' %} {% else %} {% url 'user-detail' comment.author.pk %} {% endif %}{% endif %}"><img class="post-pp {% if comment.author.story_set.exists and not comment.author.is_private or comment.author.story_set.exists and comment.author in user.followed.all or comment.author.story_set.exists and comment.author == user %}story-pp-in-header rounded-gradiants-small-pp{% endif %}"  src="{{comment.author.prof_pic.url}}" alt="alt"></a></td>
+                                        <td style="width: 40px;" class="align-top"><a href="{% if comment.author.story_set.exists and not comment.author.is_private or comment.author.story_set.exists and comment.author in user.followed.all or comment.author.story_set.exists and comment.author == user %} {% url 'stories-user' comment.author.pk %} {% else %}{% if user == comment.author %} {% url 'profpage-user' %} {% else %} {{ comment.author.get_absolute_url }} {% endif %}{% endif %}"><img class="post-pp {% if comment.author.story_set.exists and not comment.author.is_private or comment.author.story_set.exists and comment.author in user.followed.all or comment.author.story_set.exists and comment.author == user %}story-pp-in-header rounded-gradiants-small-pp{% endif %}"  src="{{comment.author.prof_pic.url}}" alt="alt"></a></td>
                                         <td class="w-auto line-height-comments"><span class="font-size-username">
                                                 <span class="font-size-username">
                                                     {% load insta_extras %}
-                                                    <b><a class="text-dark" href="{% if comment.author == user %}  {% url 'profpage-user'  %} {% else %} {% url 'user-detail' comment.author.pk %} {% endif %}">{{comment.author.username}}</a></b><span>&nbsp</span><span class="">{% for word in comment.description_to_array %} {% if word == "<new_line_code/>" %}<br>{% elif word|first == "@" and word|length > 1 %}<a href="{% get_tagged_user word user %}">{{word}}  </a>{% elif word|first == "#" and word|length > 1 %}<a href="{% get_hashtag_path word comment.author post.author post.id %}">{{word}} </a>{% else %}{{word}} {% endif %}{% endfor %}</span>
+                                                    <b><a class="text-dark" href="{% if comment.author == user %}  {% url 'profpage-user'  %} {% else %} {{ comment.author.get_absolute_url }} {% endif %}">{{comment.author.username}}</a></b><span>&nbsp</span><span class="">{% for word in comment.description_to_array %} {% if word == "<new_line_code/>" %}<br>{% elif word|first == "@" and word|length > 1 %}<a href="{% get_tagged_user word user %}">{{word}}  </a>{% elif word|first == "#" and word|length > 1 %}<a href="{% get_hashtag_path word comment.author post.author post.id %}">{{word}} </a>{% else %}{{word}} {% endif %}{% endfor %}</span>
                                                     <p class="time-ago mb-0">
                                                         <span>{{comment.time_commented_ago}}</span>{% if comment.likes.exists %}<b class="ml-2 comment-likes" data-toggle="modal" data-target="#modalLikesComment-{{comment.id}}">{{ comment.likes.count }} like{{ comment.likes.count|pluralize }} </b>{% endif %}<b class="ml-1 cursor-pointer write-to-textarea" name="{{comment.author.username}}">Answer</b><b name="{{comment.id}}"></b>
                                                     </p>
@@ -130,14 +130,14 @@
                                                         <section class="position-relative mb-1 section-search-page px-2 py-2">
                                                             <div>
                                                                 <article class="d-inline my-auto">
-                                                                    <a href="{% if user_in_list == user %}{% url 'profpage-user' %}{% else %}{% url 'user-detail' user_in_list.pk %}{% endif %}">
+                                                                    <a href="{% if user_in_list == user %}{% url 'profpage-user' %}{% else %}{{ user_in_list.get_absolute_url }}{% endif %}">
                                                                         <img src="{{user_in_list.prof_pic.url}}" class="post-pp img-fluid">
                                                                     </a>
 
                                                                 </article>
                                                                 <article class="d-inline search-article">
                                                                     <div>
-                                                                        <a href="{% if user_in_list == user %}{% url 'profpage-user' %}{% else %}{% url 'user-detail' user_in_list.pk %}{% endif %}">
+                                                                        <a href="{% if user_in_list == user %}{% url 'profpage-user' %}{% else %}{{ user_in_list.get_absolute_url }}{% endif %}">
                                                                             <b class="username-search text-dark">{{user_in_list.username}}</b>
                                                                         </a>
 
@@ -213,12 +213,12 @@
                                     <article>
                                         <table class="w-100">
                                             <tr>
-                                                <td style="width: 40px;" class="align-top"><a href="{% if childcomment.author.story_set.exists and not childcomment.author.is_private or childcomment.author.story_set.exists and childcomment.author in user.followed.all or childcomment.author.story_set.exists and childcomment.author == user %} {% url 'stories-user' childcomment.author.pk %} {% else %}{% if user == childcomment.author %} {% url 'profpage-user' %} {% else %} {% url 'user-detail' childcomment.author.pk %} {% endif %}{% endif %}"><img class="post-pp {% if childcomment.author.story_set.exists and not childcomment.author.is_private or childcomment.author.story_set.exists and childcomment.author in user.followed.all or childcomment.author.story_set.exists and childcomment.author == user %}story-pp-in-header rounded-gradiants-small-pp{% endif %}"  src="{{childcomment.author.prof_pic.url}}" alt="alt"></a></td>
+                                                <td style="width: 40px;" class="align-top"><a href="{% if childcomment.author.story_set.exists and not childcomment.author.is_private or childcomment.author.story_set.exists and childcomment.author in user.followed.all or childcomment.author.story_set.exists and childcomment.author == user %} {% url 'stories-user' childcomment.author.pk %} {% else %}{% if user == childcomment.author %} {% url 'profpage-user' %} {% else %} {{ childcomment.author.get_absolute_url }} {% endif %}{% endif %}"><img class="post-pp {% if childcomment.author.story_set.exists and not childcomment.author.is_private or childcomment.author.story_set.exists and childcomment.author in user.followed.all or childcomment.author.story_set.exists and childcomment.author == user %}story-pp-in-header rounded-gradiants-small-pp{% endif %}"  src="{{childcomment.author.prof_pic.url}}" alt="alt"></a></td>
                                                 <td class="w-auto line-height-comments">
                                                     <span class="font-size-username">
                                                         {% load insta_extras %}
                                                         <b>
-                                                            <a class="text-dark" href="{% if childcomment.author == user %}  {% url 'profpage-user'  %} {% else %} {% url 'user-detail' childcomment.author.pk %} {% endif %}">{{childcomment.author.username}}</a>
+                                                            <a class="text-dark" href="{% if childcomment.author == user %}  {% url 'profpage-user'  %} {% else %} {{ childcomment.author.get_absolute_url }} {% endif %}">{{childcomment.author.username}}</a>
                                                         </b>
                                                         <span>
                                                             &nbsp
@@ -246,14 +246,14 @@
                                                                 <section class="position-relative mb-1 section-search-page px-2 py-2">
                                                                     <div>
                                                                         <article class="d-inline my-auto">
-                                                                            <a href="{% if user_in_list == user %}{% url 'profpage-user' %}{% else %}{% url 'user-detail' user_in_list.pk %}{% endif %}">
+                                                                            <a href="{% if user_in_list == user %}{% url 'profpage-user' %}{% else %}{{ user_in_list.get_absolute_url }}{% endif %}">
                                                                                 <img src="{{user_in_list.prof_pic.url}}" class="post-pp img-fluid">
                                                                             </a>
 
                                                                         </article>
                                                                         <article class="d-inline search-article">
                                                                             <div>
-                                                                                <a href="{% if user_in_list == user %}{% url 'profpage-user' %}{% else %}{% url 'user-detail' user_in_list.pk %}{% endif %}">
+                                                                                <a href="{% if user_in_list == user %}{% url 'profpage-user' %}{% else %}{{ user_in_list.get_absolute_url }}{% endif %}">
                                                                                     <b class="username-search text-dark">{{user_in_list.username}}</b>
                                                                                 </a>
 

@@ -30,9 +30,9 @@
                         <form action="{% url 'follow-hashtag' hashtag.pk %}" method="POST" class="d-inline ml-md-2">
                             {% csrf_token %}
                             {% if hashtag_is_followed %}                
-                            <button type="submit" name="redirect_path" value="{% url 'hashtag-detail' hashtag.pk %}" class="btn bg-white border" id="">Unfollow</button>
+                            <button type="submit" name="redirect_path" value="{{hashtag.get_absolute_url}}" class="btn bg-white border" id="">Unfollow</button>
                             {% else %}
-                            <button type="submit" name="redirect_path" value="{% url 'hashtag-detail' hashtag.pk %}" class="btn bg-primary border text-white" id="">Follow</button>
+                            <button type="submit" name="redirect_path" value="{{hashtag.get_absolute_url}}" class="btn bg-primary border text-white" id="">Follow</button>
                             {% endif %}
                         </form>
                     </article>
@@ -61,10 +61,10 @@
                     Your browser does not support the video tag.
                 </video>
             {% endif %}
-            <div onclick="location.href='{% url 'create-comment' post.pk %}';" class="hover h-100 w-100 mx-auto">
-                <p class="px-3 center-comment-symbol d-none d-md-block" href="{% url 'create-comment' post.pk %}"><i
+            <div onclick="location.href='{{post.get_absolute_url}}';" class="hover h-100 w-100 mx-auto">
+                <p class="px-3 center-comment-symbol d-none d-md-block" href="{{post.get_absolute_url}}"><i
                         class="fa fa-15 fa-comment"></i> {{post.postcomment_set.count}}</p>
-                <p class="px-3 center-heart-symbol" href="{% url 'create-comment' post.pk %}"><i
+                <p class="px-3 center-heart-symbol" href="{{post.get_absolute_url}}"><i
                         class="fa fa-15 fa-heart"></i> {{post.number_of_likes}}</p>
             </div>
         </div>
@@ -84,10 +84,10 @@
                     Your browser does not support the video tag.
                 </video>
             {% endif %}
-            <div onclick="location.href='{% url 'create-comment' post.pk %}';" class="hover h-100 w-100 mx-auto">
-                <p class="px-3 center-comment-symbol d-none d-md-block" href="{% url 'create-comment' post.pk %}"><i
+            <div onclick="location.href='{{post.get_absolute_url}}';" class="hover h-100 w-100 mx-auto">
+                <p class="px-3 center-comment-symbol d-none d-md-block" href="{{post.get_absolute_url}}"><i
                         class="fa fa-15 fa-comment"></i> {{post.postcomment_set.count}}</p>
-                <p class="px-3 center-heart-symbol" href="{% url 'create-comment' post.pk %}"><i
+                <p class="px-3 center-heart-symbol" href="{{post.get_absolute_url}}"><i
                         class="fa fa-15 fa-heart"></i> {{post.number_of_likes}}</p>
             </div>
         </div>
