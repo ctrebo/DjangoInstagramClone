@@ -18,7 +18,7 @@ class CustomUserAdmin(BaseUserAdmin):
         ('Permissions',{
             'fields': ('is_private', 'is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions',)}),
 
-        ('Custom user', {'fields': ('bio', 'prof_pic', 'followed', 'saved_posts', 'pending_requests', )}),
+        ('Custom user', {'fields': ('bio', 'prof_pic', 'followed', 'followed_hashtags','saved_posts', 'pending_requests', )}),
     )
    
    #variables that will be displayed on the creaet user side

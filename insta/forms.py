@@ -16,7 +16,7 @@ class CustomUserCreationFormAdmin(UserCreationForm):
 
     class Meta(UserCreationForm):
         model = CustomUser
-        fields = ('username', 'bio','is_private', 'followed')
+        fields = ('username', 'bio','is_private', 'followed', 'followed_hashtags')
 class CustomUserCreationForm(forms.Form):
     email = forms.EmailField(label='', widget=EmailInput(attrs= {'placeholder': 'Email', "class":"w-100 borderradius-input-field"}))
     username = forms.CharField(label='', min_length=4, max_length=150, widget=TextInput(attrs={'placeholder': 'username', 'class': "w-100 borderradius-input-field"}))

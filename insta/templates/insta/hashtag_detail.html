@@ -11,7 +11,7 @@
             </article>
         </section>
     </div>
-    <div class="col-8 col-md-8 ml-md-auto mt-0 mt-md-4">
+    <div class="col-8 col-md-8 ml-md-3 mt-0 mt-md-4">
         <section>
             <article>
                 <div>
@@ -27,14 +27,12 @@
                         </ul>
                     </article> 
                     <article>
-                        <form action="" method="POST" class="d-inline ml-md-2">
+                        <form action="{% url 'follow-hashtag' hashtag.pk %}" method="POST" class="d-inline ml-md-2">
                             {% csrf_token %}
-                            {% if user_is_followed %}                
-                            	<button type="submit" name="redirect_path" value="" class="btn bg-white border" id="">Unfollow</button>
-                            {% elif user in user_for_page.pending_requests.all %}
-                            	<button type="submit" name="redirect_path" value="" class="btn bg-white border text-dark" id="">Requested</button>
+                            {% if hashtag_is_followed %}                
+                            <button type="submit" name="redirect_path" value="{% url 'hashtag-detail' hashtag.pk %}" class="btn bg-white border" id="">Unfollow</button>
                             {% else %}
-                            	<button type="submit" name="redirect_path" value="" class="btn bg-primary border text-white w-100" id="">Follow</button>
+                            <button type="submit" name="redirect_path" value="{% url 'hashtag-detail' hashtag.pk %}" class="btn bg-primary border text-white" id="">Follow</button>
                             {% endif %}
                         </form>
                     </article>

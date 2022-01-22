@@ -135,7 +135,7 @@ def followUser(request, pk):
     
     # If user already follows, remove follow
     if request.user.followed.filter(id=user_to_follow.id).exists():
-        (request.user).followed.remove(user_to_follow)
+        request.user.followed.remove(user_to_follow)
 
     else:
         if user_to_follow.is_private:
@@ -148,7 +148,19 @@ def followUser(request, pk):
                 user_to_follow.pending_requests.add(request.user)
         # If user i s public follow him
         else:
-            (request.user).followed.add(user_to_follow)
+            request.user.followed.add(user_to_follow)
+        
+    return HttpResponseRedirect(redirect_path)
+
+def followHashtag(request, pk):
+    hashtag_to_follow = get_object_or_404(Hashtag, id=pk)
+    redirect_path = request.POST.get('redirect_path')
+    
+    # If user already follows, remove follow
+    if request.user.followed_hashtags.filter(id=hashtag_to_follow.id).exists():
+        request.user.followed_hashtags.remove(hashtag_to_follow)
+    else:
+        request.user.followed_hashtags.add(hashtag_to_follow)
         
     return HttpResponseRedirect(redirect_path)
 
@@ -496,7 +508,10 @@ class HashtagDetailView(LoginRequiredMixin, generic.DetailView):
         # Posts for Hashta, ordered by latest
         posts_ordered_by_time = hashtag.posts.all().order_by("-post_date")
 
+        hashtag_is_followed = self.request.user.followed_hashtags.filter(id=hashtag.pk).exists()
+
         context = super(HashtagDetailView, self).get_context_data(**kwargs)
         context["posts_ordered_by_likes"] = posts_ordered_by_likes
         context["posts_ordered_by_time"] = posts_ordered_by_time
+        context["hashtag_is_followed"] = hashtag_is_followed
         return context

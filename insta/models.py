@@ -21,8 +21,12 @@ class CustomUser(AbstractUser):
     date_joined      = models.DateTimeField(auto_now_add=True)
     prof_pic         = models.ImageField(upload_to ='pp_pics/', height_field=None, width_field=None, default="default_pp.jpg")
     bio              = models.TextField(max_length=150, blank=True, null=True)
+
     # People user is following
     followed         = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='followed_field', blank=True)
+
+    # Hashtags user is following
+    followed_hashtags= models.ManyToManyField('Hashtag', related_name='followed_field_hashtag', blank=True)
     saved_posts      = models.ManyToManyField('Post', related_name="saved_post_field", blank=True)
     is_private       = models.BooleanField(default=False)
     # If user is private and someone tries to follow this user
