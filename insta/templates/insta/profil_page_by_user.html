@@ -212,15 +212,15 @@
                         </span>
                         <div class="modal fade" id="seeSubscribersModalMobile" tabindex="-1" role="dialog"
                         aria-labelledby="seeSubscribersModalTitle" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered" role="document">
-                            <div class="modal-content modal-content-subs">
+                        <div class="modal-dialog modal-dialog-centered fullscreen-modal-dialog" role="document">
+                            <div class="modal-content fullscreen-modal-content">
                                 <div class="modal-header p-2 black-border-top">
                                     <h5 class="modal-title text-center" id="exampleModalLongTitle">Followers</h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
-                                <div class="modal-body modal-body-subs pt-0">
+                                <div class="modal-body modal-body-subs pt-0 mt-2">
                                     {% for user_in_list in user.followed_field.all %}
                                     <section class="position-relative mb-1 section-search-page px-2 py-2">
                                         <div>
@@ -266,8 +266,8 @@
                         </span>
                         <div class="modal fade" id="seeFollowedPeopleModalMobil" tabindex="-1" role="dialog"
                             aria-labelledby="seeSubscribersModalTitle" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered" role="document">
-                                <div class="modal-content modal-content-subs">
+                            <div class="modal-dialog modal-dialog-centered fullscreen-modal-dialog" role="document">
+                                <div class="modal-content fullscreen-modal-content">
                                     <div class="modal-header p-2">
                                         <h5 class="modal-title text-center" id="exampleModalLongTitle">Following</h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -278,8 +278,8 @@
                                     <div>
                                         <div class="container">
                                             <div class="row">
-                                                <div class="col-6"><p id="seeUsersFollowingMobile" class="text-center w-100 h3 text-info cursor-pointer" onclick="seeUserFollowingsMobile()">Users</p></div>
-                                                <div class="col-6"><p id="seeHashtagsFollowingMobile" class="text-center w-100 h3 text-info cursor-pointer" onclick="seeHashtagFollowingsMobile()">Hashtags</p></div>
+                                                <div class="col-6"><p id="seeUsersFollowingMobile" class="text-center w-100 h3 color-dark-blue opacity-03 cursor-pointer user-and-hashtag-clicked" onclick="seeUserFollowingsMobile()">Users</p></div>
+                                                <div class="col-6"><p id="seeHashtagsFollowingMobile" class="text-center w-100 h3 color-dark-blue cursor-pointer opacity-03" onclick="seeHashtagFollowingsMobile()">Hashtags</p></div>
                                             </div>
                                         </div>
                                     </div>

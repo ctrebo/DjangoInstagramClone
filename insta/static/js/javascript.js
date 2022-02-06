@@ -159,11 +159,18 @@ function seeUserFollowingsMobile() {
     $("#following_hashtag_mobile").addClass("d-none")
     $("#following_user_mobile").removeClass("d-none")
    //$("#following_hashtag_mobile").removeClass()
+
+    
+    $("#seeHashtagsFollowingMobile").removeClass("user-and-hashtag-clicked")
+    $("#seeUsersFollowingMobile").addClass("user-and-hashtag-clicked")
 }
 
 function seeHashtagFollowingsMobile() {
     $("#following_hashtag_mobile").removeClass("d-none")
     $("#following_user_mobile").addClass("d-none")
+
+    $("#seeHashtagsFollowingMobile").addClass("user-and-hashtag-clicked")
+    $("#seeUsersFollowingMobile").removeClass("user-and-hashtag-clicked")
 }
 
 if (window.location.hash === '#execute') {
