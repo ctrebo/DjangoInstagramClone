@@ -719,6 +719,16 @@ textarea::-webkit-scrollbar {
     z-index: 1;
 }
 
+/* if user is watching which hashtags he follows add this to users p tag */
+
+.opacity-03 {
+    opacity: .3;
+}
+
+.user-and-hashtag-clicked {
+    opacity: 1 !important;
+}
+
 .bg-createcomment-mobile {
     background: #dfe4e6;
 }
@@ -759,6 +769,10 @@ textarea::-webkit-scrollbar {
 
 .overflow-y-auto {
     overflow-y: auto;
+}
+
+.color-dark-blue {
+    color: rgba(0, 55, 107, 1);
 }
 
 @media (min-width: 769px) {

@@ -136,9 +136,39 @@ function seeMostRecentPosts() {
     $("#buttonTopPosts").removeClass("border-saved-or-posts");
 }
 
+//////////////////////////////////////////////////////////////////////////
+
+function seeUserFollowings() {
+    $("#following_hashtag").addClass("d-none")
+    $("#following_user").removeClass("d-none")
+
+    $("#seeHashtagsFollowing").removeClass("user-and-hashtag-clicked")
+    $("#seeUsersFollowing").addClass("user-and-hashtag-clicked")
+
+}
+
+function seeHashtagFollowings() {
+    $("#following_hashtag").removeClass("d-none")
+    $("#following_user").addClass("d-none")
+
+    $("#seeHashtagsFollowing").addClass("user-and-hashtag-clicked")
+    $("#seeUsersFollowing").removeClass("user-and-hashtag-clicked")
+}
+
+function seeUserFollowingsMobile() {
+    $("#following_hashtag_mobile").addClass("d-none")
+    $("#following_user_mobile").removeClass("d-none")
+   //$("#following_hashtag_mobile").removeClass()
+}
+
+function seeHashtagFollowingsMobile() {
+    $("#following_hashtag_mobile").removeClass("d-none")
+    $("#following_user_mobile").addClass("d-none")
+}
+
 if (window.location.hash === '#execute') {
-  seeSavedPosts();
-  history.replaceState(null, null, ' ');
+    seeSavedPosts();
+    history.replaceState(null, null, ' ');
   
 }
 

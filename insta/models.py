@@ -14,7 +14,6 @@ from django.utils import timezone
 from django.db.models.signals import m2m_changed
 from django.core.exceptions import ValidationError
 
-
 from .validators import validate_file_extension
 
 class CustomUser(AbstractUser):

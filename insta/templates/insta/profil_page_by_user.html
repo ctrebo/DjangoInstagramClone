@@ -90,42 +90,83 @@
                         aria-labelledby="seeSubscribersModalTitle" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered" role="document">
                             <div class="modal-content modal-content-subs">
-                                <div class="modal-header p-2 black-border-top">
+                                <div class="modal-header p-2">
                                     <h5 class="modal-title text-center" id="exampleModalLongTitle">Following</h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
+                                <div>
+                                    <div class="container black-border-top">
+                                        <div class="row py-2">
+                                            <div class="col"><p id="seeUsersFollowing" class="text-center w-100 h4 color-dark-blue cursor-pointer user-and-hashtag-clicked opacity-03" onclick="seeUserFollowings()">Users</p></div>
+                                            <div class="col"><p id="seeHashtagsFollowing" class="text-center w-100 h4 color-dark-blue cursor-pointer opacity-03" onclick="seeHashtagFollowings()">Hashtags</p></div>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="modal-body modal-body-subs pt-0 ">
+                                    <div id="following_user">
                                     {% for user_in_list in user_follows_list %}
-                                    <section class="position-relative mb-1 section-search-page px-2 py-2">
-                                        <div>
-                                            <article class="d-inline my-auto">
-                                                <a href="{{ user_in_list.get_absolute_url }}">
-                                                    <img src="{{user_in_list.prof_pic.url}}" class="post-pp img-fluid">
-                                                </a>
-
-                                            </article>
-                                            <article class="d-inline search-article">
-                                                <div>
+                                        <section class="position-relative mb-1 section-search-page px-2 py-2">
+                                            <div>
+                                                <article class="d-inline my-auto">
                                                     <a href="{{ user_in_list.get_absolute_url }}">
-                                                        <b class="username-search text-dark">{{user_in_list.username}}</b>
+                                                        <img src="{{user_in_list.prof_pic.url}}" class="post-pp img-fluid">
                                                     </a>
 
-                                                </div>
-                                                <small class="font-weight-light text-dark">{{user_in_list.first_name}}</small>
-                                            </article>
-                                            <article class="d-inline float-right">
-                                                <form action="{% url 'follow-user' user_in_list.pk %}" method="POST"
-                                                    class="d-inline ml-md-2">
-                                                    {% csrf_token %}
-                                                    <button type="submit" name="redirect_path" value="{% url 'profpage-user' %}" class="btn border btn-white bg-white" id=""> {% if  user_in_list in user.followed.all %} Following{% else %}Follow{% endif %}</button>
-                                                </form>
-                                            </article>
-                                        </div>
-                                    </section>
-                                    {% endfor %}
+                                                </article>
+                                                <article class="d-inline search-article">
+                                                    <div>
+                                                        <a href="{{ user_in_list.get_absolute_url }}">
+                                                            <b class="username-search text-dark">{{user_in_list.username}}</b>
+                                                        </a>
 
+                                                    </div>
+                                                    <small class="font-weight-light text-dark">{{user_in_list.first_name}}</small>
+                                                </article>
+                                                <article class="d-inline float-right">
+                                                    <form action="{% url 'follow-user' user_in_list.pk %}" method="POST"
+                                                        class="d-inline ml-md-2">
+                                                        {% csrf_token %}
+                                                        <button type="submit" name="redirect_path" value="{% url 'profpage-user' %}" class="btn border btn-white bg-white" id=""> {% if  user_in_list in user.followed.all %} Following{% else %}Follow{% endif %}</button>
+                                                    </form>
+                                                </article>
+                                            </div>
+                                        </section>
+                                    {% endfor %}
+                                    </div>
+                                    <div id="following_hashtag" class="d-none">
+                                    {% for hashtag in user_follows_hashtags_list %}
+                                        <section class="position-relative mb-1 section-search-page px-2 py-2">
+                                            <div>
+                                                <article class="d-inline my-auto">
+                                                    <a href="{{ hashtag.get_absolute_url }}">
+                                                        <img src="{{hashtag.posts.first.picture.url}}" class="post-pp img-fluid">
+                                                    </a>
+
+                                                </article>
+                                                <article class="d-inline search-article">
+                                                    <div>
+                                                        <a href="{{ hashtag.get_absolute_url }}">
+                                                            <b class="username-search text-dark">{{hashtag.hashtag_name}}</b>
+                                                        </a>
+
+                                                    </div>
+                                                    {% with num_posts_hashtag=hashtag.posts.count %}
+                                                    <small class="font-weight-light text-dark">{{num_posts_hashtag}} Post{{num_posts_hashtag|pluralize}}</small>
+                                                    {% endwith %}
+                                                </article>
+                                                <article class="d-inline float-right">
+                                                    <form action="{% url 'follow-hashtag' hashtag.pk %}" method="POST"
+                                                        class="d-inline ml-md-2">
+                                                        {% csrf_token %}
+                                                        <button type="submit" name="redirect_path" value="{% url 'profpage-user' %}" class="btn border btn-white bg-white" id=""> {% if  hashtag in user.followed_hashtags.all %} Following{% else %}Follow{% endif %}</button>
+                                                    </form>
+                                                </article>
+                                            </div>
+                                        </section>
+                                    {% endfor %}
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -227,43 +268,85 @@
                             aria-labelledby="seeSubscribersModalTitle" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered" role="document">
                                 <div class="modal-content modal-content-subs">
-                                    <div class="modal-header p-2 black-border-top">
+                                    <div class="modal-header p-2">
                                         <h5 class="modal-title text-center" id="exampleModalLongTitle">Following</h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
+                                    <!-- Decide if user wants to see users he follows or hashtags -->
+                                    <div>
+                                        <div class="container">
+                                            <div class="row">
+                                                <div class="col-6"><p id="seeUsersFollowingMobile" class="text-center w-100 h3 text-info cursor-pointer" onclick="seeUserFollowingsMobile()">Users</p></div>
+                                                <div class="col-6"><p id="seeHashtagsFollowingMobile" class="text-center w-100 h3 text-info cursor-pointer" onclick="seeHashtagFollowingsMobile()">Hashtags</p></div>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="modal-body modal-body-subs pt-0 ">
+                                        <div id="following_user_mobile">
                                         {% for user in user_follows_list %}
-                                        <section class="position-relative mb-1 section-search-page px-2 py-2">
-                                            <div>
-                                                <article class="d-inline my-auto">
-                                                    <a href="{{ user.get_absolute_url }}">
-                                                        <img src="{{user.prof_pic.url}}" class="post-pp img-fluid">
-                                                    </a>
-
-                                                </article>
-                                                <article class="d-inline search-article">
-                                                    <div>
+                                            <section class="position-relative mb-1 section-search-page px-2 py-2">
+                                                <div>
+                                                    <article class="d-inline my-auto">
                                                         <a href="{{ user.get_absolute_url }}">
-                                                            <b class="username-search text-dark">{{user.username}}</b>
+                                                            <img src="{{user.prof_pic.url}}" class="post-pp img-fluid">
                                                         </a>
 
-                                                    </div>
-                                                    <small
-                                                        class="font-weight-light text-dark">{{user.first_name}}</small>
-                                                </article>
-                                                <article class="d-inline float-right">
-                                                    <form action="{% url 'follow-user' user.pk %}"
-                                                        method="POST" class="d-inline ml-md-2">
-                                                        {% csrf_token %}
-                                                        <button type="submit" name="redirect_path" value="{% url 'profpage-user' %}" class="btn border btn-white bg-white" id="">Following</button>
-                                                    </form>
-                                                </article>
-                                            </div>
-                                        </section>
-                                        {% endfor %}
+                                                    </article>
+                                                    <article class="d-inline search-article">
+                                                        <div>
+                                                            <a href="{{ user.get_absolute_url }}">
+                                                                <b class="username-search text-dark">{{user.username}}</b>
+                                                            </a>
 
+                                                        </div>
+                                                        <small
+                                                            class="font-weight-light text-dark">{{user.first_name}}</small>
+                                                    </article>
+                                                    <article class="d-inline float-right">
+                                                        <form action="{% url 'follow-user' user.pk %}"
+                                                            method="POST" class="d-inline ml-md-2">
+                                                            {% csrf_token %}
+                                                            <button type="submit" name="redirect_path" value="{% url 'profpage-user' %}" class="btn border btn-white bg-white" id="">Following</button>
+                                                        </form>
+                                                    </article>
+                                                </div>
+                                            </section>
+                                        {% endfor %}
+                                        </div>
+                                        <div id="following_hashtag_mobile" class="d-none">
+                                        {% for hashtag in user_follows_hashtags_list %}
+                                            <section class="position-relative mb-1 section-search-page px-2 py-2">
+                                                <div>
+                                                    <article class="d-inline my-auto">
+                                                        <a href="{{ hashtag.get_absolute_url }}">
+                                                            <img src="{{hashtag.posts.first.picture.url}}" class="post-pp img-fluid">
+                                                        </a>
+
+                                                    </article>
+                                                    <article class="d-inline search-article">
+                                                        <div>
+                                                            <a href="{{ hashtag.get_absolute_url }}">
+                                                                <b class="username-search text-dark">{{hashtag.hashtag_name}}</b>
+                                                            </a>
+
+                                                        </div>
+                                                        {% with num_posts_hashtag=hashtag.posts.count %}
+                                                        <small class="font-weight-light text-dark">{{num_posts_hashtag}} Post{{num_posts_hashtag|pluralize}}</small>
+                                                        {% endwith %}
+                                                    </article>
+                                                    <article class="d-inline float-right">
+                                                        <form action="{% url 'follow-hashtag' hashtag.pk %}" method="POST"
+                                                            class="d-inline ml-md-2">
+                                                            {% csrf_token %}
+                                                            <button type="submit" name="redirect_path" value="{% url 'profpage-user' %}" class="btn border btn-white bg-white" id=""> {% if  hashtag in user.followed_hashtags.all %} Following{% else %}Follow{% endif %}</button>
+                                                        </form>
+                                                    </article>
+                                                </div>
+                                            </section>
+                                        {% endfor %}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
