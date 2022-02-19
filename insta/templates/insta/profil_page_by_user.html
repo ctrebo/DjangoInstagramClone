@@ -165,6 +165,18 @@
                                                 </article>
                                             </div>
                                         </section>
+                                    {% empty %}
+                                    <section class="m-3">
+                                        <article class="mt-5">
+                                            <div class="hashtag-modal-circle text-center">
+                                                <p class="hashtag-modal-hashtag">#</p>
+                                            </div>
+                                        </article>
+                                        <article class="mt-3">
+                                            <h3 class="font-weight-light text-center">Hashtags you are following</h3>
+                                            <p class="text-center">If you follow hashtags, they will show here</p>
+                                        </article>
+                                    </section>
                                     {% endfor %}
                                     </div>
                                 </div>
@@ -344,6 +356,18 @@
                                                         </form>
                                                     </article>
                                                 </div>
+                                            </section>
+                                            {% empty %}
+                                            <section class="m-3">
+                                                <article class="mt-5">
+                                                    <div class="hashtag-modal-circle text-center">
+                                                        <p class="hashtag-modal-hashtag">#</p>
+                                                    </div>
+                                                </article>
+                                                <article class="mt-3">
+                                                    <h4 class="font-weight-light text-center">Hashtags you are following</h3>
+                                                    <p class="text-center">If you follow hashtags, they will show here</p>
+                                                </article>
                                             </section>
                                         {% endfor %}
                                         </div>
