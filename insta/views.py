@@ -419,16 +419,26 @@ class SearchResultsView(LoginRequiredMixin, generic.ListView):
     model = user_model
     template_name="insta/search_results.html"
 
-    def get_queryset(self):
-        query = self.request.GET.get('q')
-        object_list = user_model.objects.filter(username__icontains=query).exclude(username=self.request.user.username)[:50]
 
-        return object_list 
+    def get_context_data(self, **kwargs):
+
+        query = self.request.GET.get('q').strip()
+        # Search users is True if the first character of query isnt a '#' 
+        search_users = query[0] != '#'
+        if search_users:
+            object_list = user_model.objects.filter(username__icontains=query).exclude(username=self.request.user.username)[:50]
+        else:
+            query = query[1:]
+            object_list = Hashtag.objects.filter(hashtag_name__icontains=query)
+
+        context = super(SearchResultsView, self).get_context_data(**kwargs)
+        context["search_users"] = search_users
+        context["object_list"] = object_list
+        return context
 
 class SearchPageListView(LoginRequiredMixin, generic.ListView):
     model = Post
     template_name = "insta/search_page.html"
-
 
     def get_queryset(self):
         user_vars = self.request.user.followed.all()

@@ -279,3 +279,4 @@ $('.write-to-textarea').on('click', function(evt) {
     textarea.val("@"+name_of_author);
     textarea_mobile.val("@"+name_of_author);
 }); 
+

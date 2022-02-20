@@ -4,26 +4,38 @@
     <div class="col-12 col-md-8 m-auto">
         <h1 class="text-center">Search Results</h1>
         <hr>
-        <!-- <h2 class="text-center d-md-none">Search Results</h2> -->
         {% if object_list %}
-        <!-- <ul class="mt-5"> -->
-          {% for user_in_list in object_list %}
-                <section class="position-relative mb-1 section-search-page px-2 py-2">
-                    <div>
-                        <article class="d-inline my-auto ">
-                            <a href="{% if user_in_list.story_set.exists and not user_in_list.is_private or user_in_list.story_set.exists and user_in_list in user.followed.all %}{% url 'stories-user' user_in_list.pk %}{% else %}{{ user_in_list.get_absolute_url }}{% endif %}"><img src="{{user_in_list.prof_pic.url}}" class="post-pp img-fluid{% if user_in_list.story_set.exists and not user_in_list.is_private or user_in_list.story_set.exists and user_in_list in user.followed.all %}story-pp-in-header rounded-gradiants-small-pp{% endif %}"></a>
-                        </article>
-                        <a href="{{ user_in_list.get_absolute_url }}">
-                        <article class="d-inline search-article w-100">
-                                <div>
-                                    <b class="username-search text-dark">{{user_in_list.username}}</b>
-                                </div>
-                                <small class="font-weight-light text-dark">{{user_in_list.first_name}}</small>
-                        </article>
-                            </a>
-                    </div>
-                </section>
-          {% endfor %}
+        <!-- 'user_in_list' is misleading because variable
+            can contain user objects or hashtag objects. It is
+            being kept like this becaues of simplicity -->
+        {% for user_in_list in object_list %}
+        <section class="position-relative mb-1 section-search-page px-2 py-2">
+            <div>
+                <article class="d-inline my-auto ">
+                    <a href="{% if user_in_list.story_set.exists and not user_in_list.is_private or user_in_list.story_set.exists and user_in_list in user.followed.all %}{% url 'stories-user' user_in_list.pk %}{% else %}{{ user_in_list.get_absolute_url }}{% endif %}"><img src="{% if search_users %}{{user_in_list.prof_pic.url}}{% else %}../../../media/hashtagsearchpic.jpg{% endif %}" class="post-pp img-fluid{% if user_in_list.story_set.exists and not user_in_list.is_private or user_in_list.story_set.exists and user_in_list in user.followed.all %}story-pp-in-header rounded-gradiants-small-pp{% endif %}"></a>
+                </article>
+                <a href="{{ user_in_list.get_absolute_url }}">
+                    <article class="d-inline search-article w-100">
+                        <!-- if query contains user objects -->
+                        {% if search_users %}
+                            <div>
+                                <b class="username-search text-dark">{{user_in_list.username}}</b>
+                            </div>
+                            <small class="font-weight-light text-dark">{{user_in_list.first_name}}</small>
+                        <!-- if query contains hashtag objects -->
+                        {% else %}
+                            <div>
+                                <b class="username-search text-dark">{{user_in_list.hashtag_name}}</b>
+                            </div>
+                            {% with num_posts_hashtag=user_in_list.posts.count %}
+                            <small class="font-weight-light text-dark">{{num_posts_hashtag}} Post{{ num_posts_hashtag|pluralize }}</small>
+                            {% endwith %}
+                        {% endif %}
+                    </article>
+                </a>
+            </div>
+        </section>
+        {% endfor %}
         <!-- </ul> -->
         {% else %}
         <p>No queries</p>

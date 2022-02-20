@@ -16,8 +16,8 @@
   <nav class="navbar fixed-top navbar-expand shadow1 border-navbar bg-white">
     <div class="container">
       <a class="navbar-brand text-dark" href="#"><strong>Instagram</strong></a>
-      <form class="d-none d-md-block" action="{% url 'search_results' %}" method="get">
-        <input class="px-2 borderradius-input-field border-search-field" name="q" type="text" placeholder="Search...">
+      <form class="d-none d-md-block" id="search-form" action="{% url 'search_results' %}" method="get">
+        <input class="px-2 borderradius-input-field border-search-field" name="q" type="text" placeholder="Search..." required>
       </form>
 
       <div class="" id="navbarNavDropdown">

@@ -284,6 +284,7 @@ class Story(models.Model):
                 return result + " h"  
 
 class Hashtag(models.Model):
+    # hashtag name also contains '#' character
     hashtag_name = models.CharField(max_length=50, unique=True)
     posts = models.ManyToManyField(Post, related_name='hashtag_posts', blank=True)
 
