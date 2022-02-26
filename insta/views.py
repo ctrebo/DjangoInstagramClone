@@ -412,6 +412,7 @@ class PostCreateView(LoginRequiredMixin, CreateView):
         """
         #Add logged-in user as author of post
         form.instance.author = self.request.user
+
         # Call super-class form validation behaviour
         return super(PostCreateView, self).form_valid(form)
 
