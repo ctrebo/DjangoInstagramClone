@@ -276,7 +276,9 @@ $('.write-to-textarea').on('click', function(evt) {
     input_child_comment.attr("name", "parent_id");
     input_child_comment.attr("value", parent_id);
 
-    textarea.val("@"+name_of_author);
-    textarea_mobile.val("@"+name_of_author);
+    textarea.val("@"+name_of_author + " ");
+    textarea.focus();
+    textarea_mobile.val("@"+name_of_author + " ");
+    textarea_mobile.focus();
 }); 
 
