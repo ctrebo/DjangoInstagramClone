@@ -3,11 +3,6 @@ window.addEventListener('load', function () {
     $("#comment-section").css("height", variable_height.toString() + "px");
 })
 
-
-$( ".fontawesome-border" ).click(function() {
-    $(this).css("text-shadow", "-1px 0 rgb(136, 128, 128), 0 1px rgb(136, 128, 128), 1px 0 rgb(136, 128, 128), 0 -1px rgb(136, 128, 128)");
-  });
-
 $("#searchfield-mobile").css("width", ($("body").outerWidth() - $("#ul-mobile-search").outerWidth() - 12).toString() + "px");
 
 

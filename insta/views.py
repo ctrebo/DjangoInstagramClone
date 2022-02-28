@@ -4,11 +4,12 @@ from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse, reverse_lazy
-from django.http import Http404, HttpResponseRedirect
+from django.http import Http404, HttpResponseRedirect, JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
 from django.views.decorators.csrf import csrf_exempt,csrf_protect #Add this
 from django.db.models import Q, Count
+from django.core import serializers
 # Libraries for timedelta...
 from django.utils import timezone
 import pytz
@@ -87,20 +88,31 @@ class PostListView(LoginRequiredMixin, generic.ListView):
 
 
 def postLike(request, pk):
-    redirect_path = request.POST.get('redirect_path')
-    post = get_object_or_404(Post, id=pk)
+    if request.is_ajax and request.method == "POST":
+        post = get_object_or_404(Post, id=pk)
+        # True if user liked the post, false otherwise(True if it was previously white,
+        # false if it was previously red)
+        heart_tobe_red = False
+        # If logged in user has no permission to like post
+        # redirect him to previous page without liking
+        if (post.author.is_private and post.author not in request.user.followed.all() and post.author != request.user):
+            return HttpResponseRedirect(reverse("user-detail", args=[str(pk)]))
 
-    # If logged in user has no permission to like post
-    # redirect him to previous page without liking
-    if (post.author.is_private and post.author not in request.user.followed.all() and post.author != request.user):
-        return HttpResponseRedirect(reverse("user-detail", args=[str(pk)]))
-
-    if post.likes.filter(id=request.user.id).exists():
-        post.likes.remove(request.user)
+        if post.likes.filter(id=request.user.id).exists():
+            post.likes.remove(request.user)
+        else:
+            post.likes.add(request.user)
+            heart_tobe_red = True
+        ser_post = serializers.serialize('json', [ post, ])
+        
+        context = {
+            "new_num_likes": post.likes.count(),
+            "heart_tobe_red": heart_tobe_red,
+            "post_id": post.id
+        }
+        return JsonResponse(context, status=200)
     else:
-        post.likes.add(request.user)
-
-    return HttpResponseRedirect(redirect_path)
+        return JsonResponse({"error": "An error occured"}, status=400)
 
 def postCommentLike(request, pk):
     redirect_path = request.POST.get('redirect_path')

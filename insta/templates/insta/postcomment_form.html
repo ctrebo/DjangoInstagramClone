@@ -182,7 +182,7 @@
                                     <article><form action="{% url 'delete-post' post.pk %}" method="POST">
                                         {% csrf_token %}
                                         <div class="text-center">
-                                            <button type="submit" name="post_delete_id" value="{{post.pk}}" class="bg-white p-0 font-weight-bold text-danger border-0 m-auto">Delete Post</button>
+                                            <button type="submit" name="post_delete_id" value="{{post.pk}}" class="bg-white p-0 font-weight-bold text-danger border-0 m-auto" id="like-create-comment">Delete Post</button>
                                         </div>                
                                     </form></article>
                                 </section>
@@ -304,7 +304,7 @@
                                         </div>
                                     </div>
                                     <td class="float-right align-top">
-                                        <form action="{% url 'like-postcomment' comment.pk %}" method="POST">
+                                        <form action="{% url 'like-postcomment' comment.pk %}" method="POST" >
                                             {% csrf_token %}                
                                             <button type="submit" name="redirect_path" value="{{ post.get_absolute_url }}" class="btn mt-2 bg-white" id=""><i class="fa fa-heart{% if user in comment.likes.all %} text-danger{% else %} text-white fontawesome-border{% endif %}"></i></button>
                                         </form>
@@ -439,9 +439,10 @@
         </section>
         <section class="mt-1">
             <article>
-                <form class="d-inline-block" action="{% url 'like-post' post.pk %}" method="POST">
+                <!-- Form for ajax -->
+                <form class="d-inline-block like_post_form" data-url="{% url 'like-post' post.pk %}">
                     {% csrf_token %}                
-                    <button type="submit" name="redirect_path" value="{{ post.get_absolute_url }}" class="btn bg-white pb-md-0" id="like-create-comment"><i class="fa fa-15 fa-heart{% if post_is_liked %} text-danger{% else %} text-white fontawesome-border{% endif %}"></i></button>
+                    <button id="like-create-comment" type="submit" name="post_pk" value={{post.pk}} class="btn bg-white pb-md-0"><i class="fa fa-15 fa-heart{% if post_is_liked %} text-danger{% else %} text-white fontawesome-border{% endif %}"></i></button>
                 </form>
                 <a class="px-2 d-inline d-md-none" href="{% url 'create-comment-mobile' post.pk %}"><i class="fa fa-15 fa-comment fontawesome-border text-white"></i></a>
                 <form class="d-inline-block float-right" action="{% url 'save-post' post.pk %}" method="POST">
@@ -452,7 +453,7 @@
         </section>
         <section class="px-3" id="like-count">
             <article>
-                <b>{{post.likes.count}} Like{{post.likes.count|pluralize}}</b>
+                <b id="likenumber-{{post.id}}">{{post.likes.count}} Like{{post.likes.count|pluralize}}</b>
             </article>
         </section>
         <section class="px-3 d-none d-md-block">
