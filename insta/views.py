@@ -87,6 +87,7 @@ class PostListView(LoginRequiredMixin, generic.ListView):
         return context
 
 
+@login_required
 def postLike(request, pk):
     if request.is_ajax and request.method == "POST":
         post = get_object_or_404(Post, id=pk)
@@ -103,7 +104,6 @@ def postLike(request, pk):
         else:
             post.likes.add(request.user)
             heart_tobe_red = True
-        ser_post = serializers.serialize('json', [ post, ])
         
         context = {
             "new_num_likes": post.likes.count(),
@@ -114,17 +114,54 @@ def postLike(request, pk):
     else:
         return JsonResponse({"error": "An error occured"}, status=400)
 
-def postCommentLike(request, pk):
-    redirect_path = request.POST.get('redirect_path')
-    comment = get_object_or_404(PostComment, id=pk) 
-    if comment.likes.filter(id=request.user.id).exists():
-        comment.likes.remove(request.user)
+@login_required
+def userSavePost(request, pk):
+    if request.is_ajax and request.method == "POST":
+        post = get_object_or_404(Post, id=pk)
+        # True if post wasnt previously saved but now is  
+        is_post_saved = False
+
+        # Without following 2 lines logged in user could save every post
+        # even form people he doesnt follows and are private
+        if (post.author.is_private and post.author not in request.user.followed.all() and post.author != request.user):
+            return HttpResponseRedirect(reverse("index"))
+
+        redirect_path = request.POST.get('redirect_path')
+        if request.user.saved_posts.filter(id=post.id).exists():
+            request.user.saved_posts.remove(post)
+        else:
+            request.user.saved_posts.add(post)
+            is_post_saved = True
+                
+        return JsonResponse({"is_post_saved": is_post_saved}, status=200)
     else:
-        comment.likes.add(request.user)
+        return JsonResponse({"error":"An error occured"}, status=400);
 
-    return HttpResponseRedirect(redirect_path)
+@login_required
+def postCommentLike(request, pk):
+    if request.is_ajax and request.method == "POST":
+        comment = get_object_or_404(PostComment, id=pk) 
+        # True if user liked the post, false otherwise(True if it was previously white,
+        # false if it was previously red)
+        heart_tobe_red = False
+        if comment.likes.filter(id=request.user.id).exists():
+            comment.likes.remove(request.user)
+        else:
+            comment.likes.add(request.user)
+            heart_tobe_red = True
+
+        context = {
+            "new_num_likes": comment.likes.count(),
+            "heart_tobe_red": heart_tobe_red,
+            "postcomment_id": comment.id
+        }
+        return JsonResponse(context, status=200)
+    else:
+        return JsonResponse({"error":"An error occured"}, status=400);
 
 
+
+@login_required
 def deletePostView(request, pk):
     post = get_object_or_404(Post, id=pk)
 
@@ -135,12 +172,14 @@ def deletePostView(request, pk):
     
     return HttpResponseRedirect(reverse('profpage-user'))
 
+@login_required
 def deleteCommentView(request, pk):
     comment = get_object_or_404(PostComment, id=request.POST.get('comment_delete_id'))
     comment.delete()
 
     return HttpResponseRedirect(reverse('create-comment', args=[str(pk)]))
 
+@login_required
 def followUser(request, pk):
     user_to_follow = get_object_or_404(user_model, id=pk)
     redirect_path = request.POST.get('redirect_path')
@@ -164,6 +203,7 @@ def followUser(request, pk):
         
     return HttpResponseRedirect(redirect_path)
 
+@login_required
 def followHashtag(request, pk):
     hashtag_to_follow = get_object_or_404(Hashtag, id=pk)
     redirect_path = request.POST.get('redirect_path')
@@ -185,6 +225,7 @@ def removeTag(request, pk):
 
     return HttpResponseRedirect(redirect_path)
 
+@login_required
 def acceptOrDelteUsersRequest(request, pk):
     user_who_has_requested = get_object_or_404(user_model, id=pk)
 
@@ -202,22 +243,6 @@ def acceptOrDelteUsersRequest(request, pk):
     
     return HttpResponseRedirect(reverse('activity-page'))
 
-@login_required
-def userSavePost(request, pk):
-    post = get_object_or_404(Post, id=pk)
-
-    # Without following 2 lines logged in user could save every post
-    # even form people he doesnt follows and are private
-    if (post.author.is_private and post.author not in request.user.followed.all() and post.author != request.user):
-        return HttpResponseRedirect(reverse("index"))
-
-    redirect_path = request.POST.get('redirect_path')
-    if request.user.saved_posts.filter(id=post.id).exists():
-        request.user.saved_posts.remove(post)
-    else:
-        request.user.saved_posts.add(post)
-            
-    return HttpResponseRedirect(redirect_path)
 
 
 @login_required

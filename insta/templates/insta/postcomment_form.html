@@ -442,12 +442,12 @@
                 <!-- Form for ajax -->
                 <form class="d-inline-block like_post_form" data-url="{% url 'like-post' post.pk %}">
                     {% csrf_token %}                
-                    <button id="like-create-comment" type="submit" name="post_pk" value={{post.pk}} class="btn bg-white pb-md-0"><i class="fa fa-15 fa-heart{% if post_is_liked %} text-danger{% else %} text-white fontawesome-border{% endif %}"></i></button>
+                    <button id="like-create-comment" type="submit" class="btn bg-white pb-md-0"><i class="fa fa-15 fa-heart{% if post_is_liked %} text-danger{% else %} text-white fontawesome-border{% endif %}"></i></button>
                 </form>
                 <a class="px-2 d-inline d-md-none" href="{% url 'create-comment-mobile' post.pk %}"><i class="fa fa-15 fa-comment fontawesome-border text-white"></i></a>
-                <form class="d-inline-block float-right" action="{% url 'save-post' post.pk %}" method="POST">
+                <form class="d-inline-block float-right save_post_form" data-url="{% url 'save-post' post.pk %}" method="POST">
                     {% csrf_token %}                
-                    <button type="submit" name="redirect_path" value="{{ post.get_absolute_url }}" class="btn bg-white" id="save-create-comment"><i class="fa fa-15 fa-bookmark{% if post_is_saved %} text-dark{% else %} text-white fontawesome-border{% endif %}"></i></button>
+                    <button type="submit" class="btn bg-white" id="save-create-comment"><i class="fa fa-15 fa-bookmark{% if post_is_saved %} text-dark{% else %} text-white fontawesome-border{% endif %}"></i></button>
                 </form>
             </article>
         </section>

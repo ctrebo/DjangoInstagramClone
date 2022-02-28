@@ -209,21 +209,21 @@
                 <section class="px-3 bg-white">
                     <article class="pt-2">
                         {% load insta_extras %}
-                        <form action="{% url 'like-post' post.pk %}" class="d-inline like-form" method="POST">
+                        <form class="d-inline like-form like_post_form" method="POST" data-url="{% url 'like-post' post.pk %}" >
                             {% csrf_token %}
-                            <button type="submit" name="redirect_path" value="{% url 'index' %}" class="btn bg-white px-0 like-submit-bottom-home"><i class="fa fa-15 fa-heart {% if user in post.likes.all %} text-danger {% else %} text-white fontawesome-border {% endif %} "></i></button>
+                            <button type="submit" class="btn bg-white px-0 like-submit-bottom-home"><i class="fa fa-15 fa-heart {% if user in post.likes.all %} text-danger {% else %} text-white fontawesome-border {% endif %} "></i></button>
                         </form>
                         <a class="px-2 d-none d-md-inline" href="{{ post.get_absolute_url }}"><i class="fa fa-15 fa-comment fontawesome-border text-white"></i></a>
                         <a class="px-2 d-inline d-md-none" href="{% url 'create-comment-mobile' post.pk %}"><i class="fa fa-15 fa-comment fontawesome-border text-white"></i></a>
-                        <form class='float-right' action="{% url 'save-post' post.pk %}" method="POST">
+                        <form class='float-right save_post_form' method="POST" data-url="{% url 'save-post' post.pk %}">
                             {% csrf_token %}
-                            <button type="submit" name="redirect_path" value="{% url 'index' %}" class="btn bg-white"><i class="fa fa-15 fa-bookmark{% if post in user.saved_posts.all %} text-dark{% else %} text-white fontawesome-border{% endif %}"></i></button>
+                            <button type="submit" class="btn bg-white"><i class="fa fa-15 fa-bookmark{% if post in user.saved_posts.all %} text-dark{% else %} text-white fontawesome-border{% endif %}"></i></button>
                         </form>
                     </article>
                 </section>
                 <section class="px-3">
                     <article>
-                        <b>{{post.likes.count}} Like{{post.likes.count|pluralize}}</b>
+                        <b id="likenumber-{{post.id}}">{{post.likes.count}} Like{{post.likes.count|pluralize}}</b>
                     </article>
                 </section>
                 <section class="px-3">
