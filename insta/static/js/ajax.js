@@ -87,9 +87,11 @@ $(".like_postcomment_form").submit(function (e) {
     // preventing from page reload and default actions
     e.preventDefault();
     // serialize the data for sending the form data.
-    var serializedData = $(this).serialize();
     var this_form = $(this)
+    //alert(this_form.data('url'));
     // make POST ajax call
+    var serializedData = $(this).serialize();
+
     $.ajax({
         type: 'POST',
         url: this_form.data('url'),
@@ -99,8 +101,8 @@ $(".like_postcomment_form").submit(function (e) {
             var new_num_likes = JSON.parse(response["new_num_likes"]);
             var heart_tobe_red = JSON.parse(response["heart_tobe_red"]);
             var fa_heart_button = this_form.find('.fa-heart');
-            var postcomment_id = JSON.parse(response["post_id"]);
-            var selector_like_field = "likenumber-" + post_id;
+            var postcomment_id = JSON.parse(response["postcomment_id"]);
+            var selector_like_field = "likesComment-" + postcomment_id;
             var like_field = $("#" + selector_like_field);
             if(heart_tobe_red) {
                 if(fa_heart_button.hasClass("text-white")) {
