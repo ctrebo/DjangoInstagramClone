@@ -159,25 +159,35 @@ def postCommentLike(request, pk):
     else:
         return JsonResponse({"error":"An error occured"}, status=400);
 
-
-
+# Potential security issue here make
 @login_required
 def deletePostView(request, pk):
-    post = get_object_or_404(Post, id=pk)
+    if request.method == "POST":
+        post = get_object_or_404(Post, id=pk)
 
-    # Without lines below everyone could delete every post
-    if request.user != post.author:
+        # Without lines below everyone could delete every post
+        if request.user != post.author:
+            return HttpResponseRedirect(reverse("index")) 
+        post.delete()
+        
+        return HttpResponseRedirect(reverse('profpage-user'))
+    else:
         return HttpResponseRedirect(reverse("index")) 
-    post.delete()
-    
-    return HttpResponseRedirect(reverse('profpage-user'))
 
 @login_required
 def deleteCommentView(request, pk):
-    comment = get_object_or_404(PostComment, id=request.POST.get('comment_delete_id'))
-    comment.delete()
-
-    return HttpResponseRedirect(reverse('create-comment', args=[str(pk)]))
+    if request.is_ajax and request.method == "POST":
+        comment = get_object_or_404(PostComment, id=pk)
+        had_childs = comment.replies.all().count() != 0
+        comment_id = comment.id
+        comment.delete()
+        context = {
+            "comment_id": comment_id,
+            "had_childs": had_childs,
+        }
+        return JsonResponse(context, status=200)
+    else:
+        return JsonResponse({"Error", "An error occured"}, status=400)
 
 @login_required
 def followUser(request, pk):

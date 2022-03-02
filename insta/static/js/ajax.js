@@ -131,3 +131,37 @@ $(".like_postcomment_form").submit(function (e) {
         }
     })
 });
+
+$(".delete_postcomment_form").submit(function (e) {
+    // preventing from page reload and default actions
+    e.preventDefault();
+    // serialize the data for sending the form data.
+    var this_form = $(this)
+    //alert(this_form.data('url'));
+    // make POST ajax call
+    var serializedData = $(this).serialize();
+
+    $.ajax({
+        type: 'POST',
+        url: this_form.data('url'),
+        data: serializedData,
+        success: function (response) {
+            // on successfull creating object
+            var comment_id = JSON.parse(response["comment_id"]);
+            var had_childs = JSON.parse(response["had_childs"]);
+            comment_section_selector = "#comment-"+ comment_id;
+            if(had_childs) {
+                $(comment_section_selector).next(".show-child-comments").remove();
+                $(comment_section_selector).next("section").addClass("d-none");
+            }
+            $("#modal-comment-" + comment_id).modal("hide");
+            $('body').removeClass('modal-open');
+            $('.modal-backdrop').remove();
+            $(comment_section_selector).remove();
+        },
+        error: function (response) {
+            // alert the error if any error occured
+            alert("Error");
+        }
+    })
+});
