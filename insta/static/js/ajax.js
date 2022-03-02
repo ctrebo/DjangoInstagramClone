@@ -137,7 +137,6 @@ $(".delete_postcomment_form").submit(function (e) {
     e.preventDefault();
     // serialize the data for sending the form data.
     var this_form = $(this)
-    //alert(this_form.data('url'));
     // make POST ajax call
     var serializedData = $(this).serialize();
 

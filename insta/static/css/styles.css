@@ -523,16 +523,10 @@ textarea::-webkit-scrollbar {
     transform: translateX(calc(50% + 2px));
 }
 
-.comment-options {
-    position: absolute;
-    right: 50px;
-    top: 50%;
-    transform: translateY(-50%);
-}
-
 .w-10 {
     width: 10%;
 }
+
 .no-marked-posts-bookmark {
     position: absolute;
     top: 0;

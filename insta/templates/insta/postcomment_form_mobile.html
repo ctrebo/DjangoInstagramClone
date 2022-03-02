@@ -102,9 +102,6 @@
                     {% for comment in comment_list %}
                     <section class="wrap-parent-and-child">
                         <section class="pt-3 single-comment position-relative" id="comment-{{comment.id}}">
-                            <span class="position-absolute d-none comment-options" data-toggle="modal" data-target="#modal-comment-{{comment.pk}}" >
-                                <i class="fa fa-circle font-size-05" aria-hidden=""></i><i class="fa fa-circle font-size-05 margin-015rem" aria-hidden="true"></i><i class="fa fa-circle font-size-05" aria-hidden="true"></i>  
-                            </span>
                             <div class="modal fade" id="modal-comment-{{comment.pk}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered" role="document">
                                     <div class="modal-content modal-content-delete">
@@ -139,6 +136,9 @@
                                                     <b><a class="text-dark" href="{% if comment.author == user %}  {% url 'profpage-user'  %} {% else %} {{ comment.author.get_absolute_url }} {% endif %}">{{comment.author.username}}</a></b><span>&nbsp</span><span class="">{% for word in comment.description_to_array %} {% if word == "<new_line_code/>" %}<br>{% elif word|first == "@" and word|length > 1 %}<a href="{% get_tagged_user word user %}">{{word}}  </a>{% elif word|first == "#" and word|length > 1 %}<a href="{% get_hashtag_path word comment.author post.author post.id %}">{{word}} </a>{% else %}{{word}} {% endif %}{% endfor %}</span>
                                                     <p class="time-ago mb-0">
                                                     <span>{{comment.time_commented_ago}}</span><b class="ml-2 comment-likes" data-toggle="modal" data-target="#modalLikesComment-{{comment.id}}" id="likesComment-{{comment.id}}">{{ comment.likes.count }} like{{ comment.likes.count|pluralize }} </b><b class="ml-1 cursor-pointer write-to-textarea" name="{{comment.author.username}}">Answer</b><b name="{{comment.id}}"></b>
+                                                    <span class="position-absolute comment-options ml-2" data-toggle="modal" data-target="#modal-comment-{{comment.pk}}" >
+                                                        <i class="fa fa-circle font-size-05" aria-hidden=""></i><i class="fa fa-circle font-size-05 margin-015rem" aria-hidden="true"></i><i class="fa fa-circle font-size-05" aria-hidden="true"></i>  
+                                                    </span>
                                                     </p>
                                                 </span>
                                         </td>
@@ -209,9 +209,6 @@
                             {% for childcomment in comment.replies.all %} 
                             <section class="">
                                 <section class="pl-5 pt-2 single-comment position-relative" id="comment-{{childcomment.pk}}">
-                                    <span class="position-absolute comment-options" data-toggle="modal" data-target="#modal-comment-{{childcomment.pk}}" >
-                                        <i class="fa fa-circle font-size-05" aria-hidden=""></i><i class="fa fa-circle font-size-05 margin-015rem" aria-hidden="true"></i><i class="fa fa-circle font-size-05" aria-hidden="true"></i>  
-                                    </span>
                                     <div class="modal fade" id="modal-comment-{{childcomment.pk}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-centered" role="document">
                                             <div class="modal-content modal-content-delete">
@@ -256,6 +253,9 @@
                                                         <p class="time-ago mb-0">
                                                         <span>{{childcomment.time_commented_ago}}</span><b class="ml-2 comment-likes" data-toggle="modal" data-target="#modalLikesComment-{{childcomment.id}}" id="likesComment-{{childcomment.id}}">{{ childcomment.likes.count }} like{{ childcomment.likes.count|pluralize }}</b><b class="ml-1 cursor-pointer write-to-textarea" name="{{childcomment.author.username}}">Answer</b><b name="{{comment.id}}"></b>
                                                         </p>
+                                                        <span class="position-absolute comment-options ml-2" data-toggle="modal" data-target="#modal-comment-{{childcomment.pk}}" >
+                                                            <i class="fa fa-circle font-size-05" aria-hidden=""></i><i class="fa fa-circle font-size-05 margin-015rem" aria-hidden="true"></i><i class="fa fa-circle font-size-05" aria-hidden="true"></i>  
+                                                        </span>
                                                     </span>
                                                 </td>
                                                 <div class="modal fade modal-answer-form" id="modalLikesComment-{{childcomment.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">

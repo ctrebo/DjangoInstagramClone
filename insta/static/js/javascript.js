@@ -174,14 +174,6 @@ if (window.location.hash === '#execute') {
   
 }
 
-$( ".single-comment" ).hover(
-  function() {
-    $( this ).children(".comment-options").removeClass("d-none");
-  }, function() {
-    $( this ).children(".comment-options").addClass("d-none");
-  }
-);
-
 $('.carousel').carousel({
  pause: false 
 }) 
