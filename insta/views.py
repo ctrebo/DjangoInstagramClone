@@ -178,6 +178,7 @@ def deletePostView(request, pk):
 def deleteCommentView(request, pk):
     if request.is_ajax and request.method == "POST":
         comment = get_object_or_404(PostComment, id=pk)
+        # True if comment has(or 'had' because of deletion) child comments
         had_childs = comment.replies.all().count() != 0
         comment_id = comment.id
         comment.delete()
@@ -191,27 +192,43 @@ def deleteCommentView(request, pk):
 
 @login_required
 def followUser(request, pk):
-    user_to_follow = get_object_or_404(user_model, id=pk)
-    redirect_path = request.POST.get('redirect_path')
-    
-    # If user already follows, remove follow
-    if request.user.followed.filter(id=user_to_follow.id).exists():
-        request.user.followed.remove(user_to_follow)
+    if request.is_ajax and request.method == "POST":
+        user_to_follow = get_object_or_404(user_model, id=pk)
 
-    else:
-        if user_to_follow.is_private:
-            # If user to follow is private and there is a request pending remove it
-            # because this means that he wants to withdraw it
-            if user_to_follow.pending_requests.filter(id=request.user.id).exists():
-                user_to_follow.pending_requests.remove(request.user)
-            # Else add request
-            else:
-                user_to_follow.pending_requests.add(request.user)
-        # If user i s public follow him
-        else:
-            request.user.followed.add(user_to_follow)
+        is_following_now = False
+        is_not_following_now = False
+        is_requesting_now = False
         
-    return HttpResponseRedirect(redirect_path)
+        # If user already follows, remove follow
+        if request.user.followed.filter(id=user_to_follow.id).exists():
+            request.user.followed.remove(user_to_follow)
+            is_not_following_now = True
+        else:
+            if user_to_follow.is_private:
+                # If user to follow is private and there is a request pending remove it
+                # because this means that he wants to withdraw it
+                if user_to_follow.pending_requests.filter(id=request.user.id).exists():
+                    user_to_follow.pending_requests.remove(request.user)
+                    is_not_following_now = True
+                # Else add request
+                else:
+                    user_to_follow.pending_requests.add(request.user)
+                    is_requesting_now = True
+            # If user i s public follow him
+            else:
+                request.user.followed.add(user_to_follow)
+                is_following_now = True
+            
+        context = {
+            "is_following_now": is_following_now,
+            "is_not_following_now": is_not_following_now,
+            "is_requesting_now": is_requesting_now,
+            "usertofollow_is_private": user_to_follow.is_private
+        }
+        return JsonResponse(context, status=200)
+    else:
+        return JsonResponse({"Error", "An error occured"}, status=400)
+
 
 @login_required
 def followHashtag(request, pk):

@@ -18,15 +18,15 @@
         <section>
             <article>
                 <div>
-                    <h2 class="font-weight-normal font-italic">{{user_for_page.username}}                 
-                        <form action="{% url 'follow-user' user_for_page.pk %}" method="POST" class="d-inline ml-md-2">
+                    <h2 class="font-weight-normal font-italic">{{ user_for_page|truncatechars:12 }}
+                        <form data-url="{% url 'follow-user' user_for_page.pk %}" method="POST" class="d-inline ml-md-2 follow_user_form">
                             {% csrf_token %}
                             {% if user_is_followed %}                
-                            <button type="submit" name="redirect_path" value="{{ user_for_page.get_absolute_url }}" class="btn bg-white border" id="">Unfollow</button>
+                                <button type="submit" class="btn bg-white border text-dark" id="">Following</button>
                             {% elif user in user_for_page.pending_requests.all %}
-                            	<button type="submit" name="redirect_path" value="{{ user_for_page.get_absolute_url }}" class="btn bg-white border text-dark" id="">Requested</button>
+                            	<button type="submit" class="btn bg-white border text-dark" id="">Requested</button>
                             {% else %}
-                            	<button type="submit" name="redirect_path" value="{{ user_for_page.get_absolute_url }}" class="btn bg-primary border text-white" id="">Follow</button>
+                            	<button type="submit" class="btn bg-primary border text-white" id="">Follow</button>
                             {% endif %}
                         </form>
                     </h2>
@@ -44,7 +44,7 @@
                                 
                                 {% if user_is_followed or not user_for_page.is_private %}
                                     <!-- Modal followers-->
-                                    <div class="modal fade" id="seeSubscribersModal" tabindex="-1" role="dialog" aria-labelledby="seeSubscribersModalTitle" aria-hidden="true">
+                                    <div class="modal fade ajax_form_hide" id="seeSubscribersModal" tabindex="-1" role="dialog" aria-labelledby="seeSubscribersModalTitle" aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-centered" role="document">
                                           <div class="modal-content modal-content-subs">
                                             <div class="modal-header p-2 black-border-top">
@@ -73,13 +73,15 @@
                                                             <small class="font-weight-light text-dark">{{user_follower.first_name}}</small>
                                                         </article>
                                                         <article class="d-inline float-right">
-                                                        <form action="{% url 'follow-user' user_follower.pk %}" method="POST" class="d-inline ml-md-2">
+                                                        <form data-url="{% url 'follow-user' user_follower.pk %}" method="POST" class="d-inline ml-md-2 follow_user_form_buttons">
                                                             {% csrf_token %}
                                                             {% if  user_follower == user  %}
                                                             {% elif user_follower in user.followed.all %}
-                                                            <button type="submit" name="redirect_path" value="{{ user_follower.get_absolute_url }}" class="btn border bg-white text-dark">Following</button>
+                                                                <button type="submit" class="btn border bg-white text-dark">Following</button>
+                                                            {% elif user_follower in user.pending_requests.all %}
+                                                                <button type="submit" class="btn border bg-white text-dark">Requested</button>
                                                             {% else %}
-                                                            <button type="submit" name="redirect_path" value="{{ user_follower.get_absolute_url }}" class="btn border bg-primary text-white">Follow</button>
+                                                                <button type="submit" class="btn border bg-primary text-white">Follow</button>
                                                             {% endif %}
                                                         </form>
                                                         </article>
@@ -101,7 +103,7 @@
 
                                 {% if user_is_followed or not user_for_page.is_private %}
                                 <!-- Modal Following -->
-                                    <div class="modal fade" id="seeFollowedPeopleModal" tabindex="-1" role="dialog" aria-labelledby="seeSubscribersModalTitle" aria-hidden="true">
+                                    <div class="modal fade ajax_form_hide" id="seeFollowedPeopleModal" tabindex="-1" role="dialog" aria-labelledby="seeSubscribersModalTitle" aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-centered" role="document">
                                           <div class="modal-content modal-content-subs">
                                             <div class="modal-header p-2">
@@ -140,14 +142,15 @@
                                                                 <small class="font-weight-light text-dark">{{user_in_list.first_name}}</small>
                                                             </article>
                                                             <article class="d-inline float-right">
-                                                                <form action="{% url 'follow-user' user_in_list.pk %}" method="POST"
-                                                                    class="d-inline ml-md-2">
+                                                                <form data-url="{% url 'follow-user' user_in_list.pk %}" method="POST" class="d-inline ml-md-2 follow_user_form_buttons">
                                                                     {% csrf_token %}
                                                                     {% if user_in_list == user %}
                                                                     {% elif user_in_list in user.followed.all %}
-                                                                        <button type="submit" name="redirect_path" value="{% url 'profpage-user' %}" class="btn border btn-white bg-white" id="">Following</button>
+                                                                        <button type="submit" class="btn border btn-white bg-white" id="">Following</button>
+                                                                    {% elif user in user_in_list.pending_request.all %}
+                                                                        <button type="submit" class="btn border btn-white bg-white" id="">Requested</button>
                                                                     {% else %}
-                                                                        <button type="submit" name="redirect_path" value="{% url 'profpage-user' %}" class="btn border text-white bg-primary" id="">Follow</button>
+                                                                        <button type="submit" class="btn border text-white bg-primary" id="">Follow</button>
                                                                     {% endif %}
                                                                 </form>
                                                             </article>
@@ -249,18 +252,17 @@
                             <span class="d-block text-center"><b>{{user_for_page.followed_field.count}}</b></span>
                             Follower
                         </span>
-                        <div class="modal fade" id="seeSubscribersModalMobile" tabindex="-1" role="dialog"
-                        aria-labelledby="seeSubscribersModalTitle" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered fullscreen-modal-dialog" role="document">
-                            <div class="modal-content fullscreen-modal-content">
-                                <div class="modal-header p-2 black-border-top">
-                                    <h5 class="modal-title text-center" id="exampleModalLongTitle">Followers</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body modal-body-subs pt-0 mt-2">
-                                    {% for user_in_list in user_for_page.followed_field.all %}
+                        <div class="modal fade" id="seeSubscribersModalMobile" tabindex="-1" role="dialog" aria-labelledby="seeSubscribersModalTitle" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered fullscreen-modal-dialog" role="document">
+                                <div class="modal-content fullscreen-modal-content">
+                                    <div class="modal-header p-2 black-border-top">
+                                        <h5 class="modal-title text-center" id="exampleModalLongTitle">Followers</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body modal-body-subs pt-0 mt-2">
+                                        {% for user_in_list in user_for_page.followed_field.all %}
                                         <section class="position-relative mb-1 section-search-page px-2 py-2">
                                             <div>
                                                 <article class="d-inline my-auto">
@@ -279,23 +281,25 @@
                                                     <small class="font-weight-light text-dark">{{user_in_list.first_name}}</small>
                                                 </article>
                                                 <article class="d-inline float-right">
-                                                    <form action="{% url 'follow-user' user_in_list.pk %}" method="POST" class="d-inline ml-md-2">
+                                                    <form data-url="{% url 'follow-user' user_in_list.pk %}" method="POST" class="d-inline ml-md-2 follow_user_form_buttons">
                                                         {% csrf_token %}
                                                         {% if  user_in_list == user  %}
                                                         {% elif user_in_list in user.followed.all %}
-                                                        <button type="submit" name="redirect_path" value="{{ user_in_list.get_absolute_url }}" class="btn border bg-white text-dark">Following</button>
+                                                        <button type="submit" class="btn border bg-white text-dark">Following</button>
+                                                        {% elif user in user_in_list.pending_requests.all %}
+                                                        <button type="submit" class="btn border bg-white text-dark">Reqested</button>
                                                         {% else %}
-                                                        <button type="submit" name="redirect_path" value="{{ user_in_list.get_absolute_url }}" class="btn border bg-primary text-white">Follow</button>
+                                                        <button type="submit" class="btn border bg-primary text-white">Follow</button>
                                                         {% endif %}
                                                     </form>
-                                            </article>
+                                                </article>
                                             </div>
                                         </section>
-                                    {% endfor %}
+                                        {% endfor %}
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
                     </li>
 
                     <li class="d-inline-block following-right">
@@ -303,58 +307,62 @@
                             <span class="d-block text-center"><b>{{user_for_page.followed.count}}</b></span>
                             Following
                         </span>
-                        <div class="modal fade" id="seeFollowedPeopleModalMobile" tabindex="-1" role="dialog"
-                        aria-labelledby="seeSubscribersModalTitle" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered fullscreen-modal-dialog" role="document">
-                            <div class="modal-content fullscreen-modal-content">
-                                <div class="modal-header p-2 black-border-top">
-                                    <h5 class="modal-title text-center" id="exampleModalLongTitle">Following</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div>
-                                    <div class="container">
-                                        <div class="row">
-                                            <div class="col-6"><p id="seeUsersFollowingMobile" class="text-center w-100 h3 color-dark-blue opacity-03 cursor-pointer user-and-hashtag-clicked" onclick="seeUserFollowingsMobile()">Users</p></div>
-                                            <div class="col-6"><p id="seeHashtagsFollowingMobile" class="text-center w-100 h3 color-dark-blue cursor-pointer opacity-03" onclick="seeHashtagFollowingsMobile()">Hashtags</p></div>
+                        <div class="modal fade" id="seeFollowedPeopleModalMobile" tabindex="-1" role="dialog" aria-labelledby="seeSubscribersModalTitle" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered fullscreen-modal-dialog" role="document">
+                                <div class="modal-content fullscreen-modal-content">
+                                    <div class="modal-header p-2 black-border-top">
+                                        <h5 class="modal-title text-center" id="exampleModalLongTitle">Following</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div>
+                                        <div class="container">
+                                            <div class="row">
+                                                <div class="col-6"><p id="seeUsersFollowingMobile" class="text-center w-100 h3 color-dark-blue opacity-03 cursor-pointer user-and-hashtag-clicked" onclick="seeUserFollowingsMobile()">Users</p></div>
+                                                <div class="col-6"><p id="seeHashtagsFollowingMobile" class="text-center w-100 h3 color-dark-blue cursor-pointer opacity-03" onclick="seeHashtagFollowingsMobile()">Hashtags</p></div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="modal-body modal-body-subs pt-0 mt-2">
-                                    <div id="following_user_mobile">
-                                    {% for user in user_for_page.followed.all %}
-                                        <section class="position-relative mb-1 section-search-page px-2 py-2">
-                                            <div>
-                                                <article class="d-inline my-auto">
-                                                    <a href="{{ user.get_absolute_url }}">
-                                                        <img src="{{user.prof_pic.url}}" class="post-pp img-fluid">
-                                                    </a>
-
-                                                </article>
-                                                <article class="d-inline search-article">
-                                                    <div>
-                                                        <a href="{{ user.get_absolute_url }}">
-                                                            <b class="username-search text-dark">{{user.username}}</b>
+                                    <div class="modal-body modal-body-subs pt-0 mt-2">
+                                        <div id="following_user_mobile">
+                                            {% for user_in_list in user_for_page.followed.all %}
+                                            <section class="position-relative mb-1 section-search-page px-2 py-2">
+                                                <div>
+                                                    <article class="d-inline my-auto">
+                                                        <a href="{{ user_in_list.get_absolute_url }}">
+                                                            <img src="{{user_in_list.prof_pic.url}}" class="post-pp img-fluid">
                                                         </a>
 
-                                                    </div>
-                                                    <small
-                                                        class="font-weight-light text-dark">{{user.first_name}}</small>
-                                                </article>
-                                                <article class="d-inline float-right">
-                                                    <form action="{% url 'follow-user' user.pk %}"
-                                                        method="POST" class="d-inline ml-md-2">
-                                                        {% csrf_token %}
-                                                        <button type="submit" name="redirect_path" value="{{ user_for_page.get_absolute_url }}" class="btn border btn-white bg-white" id="">Following</button>
-                                                    </form>
-                                                </article>
-                                            </div>
-                                        </section>
-                                    {% endfor %}
-                                    </div>
-                                    <div id="following_hashtag_mobile" class="d-none">
-                                        {% for hashtag in user_follows_hashtags_list %}
+                                                    </article>
+                                                    <article class="d-inline search-article">
+                                                        <div>
+                                                            <a href="{{ user_in_list.get_absolute_url }}">
+                                                                <b class="username-search text-dark">{{user_in_list.username}}</b>
+                                                            </a>
+
+                                                        </div>
+                                                        <small class="font-weight-light text-dark">{{user_in_list.first_name}}</small>
+                                                    </article>
+                                                    <article class="d-inline float-right">
+                                                        <form data-url="{% url 'follow-user' user_in_list.pk %}" method="POST" class="d-inline ml-md-2 follow_user_form_buttons">
+                                                            {% csrf_token %}
+                                                            {% if user_in_list == user %}
+                                                            {% elif user_in_list in user.followed.all %}                
+                                                                <button type="submit" class="btn bg-white border text-dark" id="">Following</button>
+                                                            {% elif user in user_in_list.pending_requests.all %}
+                                                                <button type="submit" class="btn bg-white border text-dark" id="">Requested</button>
+                                                            {% else %}
+                                                                <button type="submit" class="btn bg-primary border text-white" id="">Follow</button>
+                                                            {% endif %}
+                                                        </form>
+                                                    </article>
+                                                </div>
+                                            </section>
+                                            {% endfor %}
+                                        </div>
+                                        <div id="following_hashtag_mobile" class="d-none">
+                                            {% for hashtag in user_follows_hashtags_list %}
                                             <section class="position-relative mb-1 section-search-page px-2 py-2">
                                                 <div>
                                                     <article class="d-inline my-auto">
@@ -376,7 +384,7 @@
                                                     </article>
                                                     <article class="d-inline float-right">
                                                         <form action="{% url 'follow-hashtag' hashtag.pk %}" method="POST"
-                                                            class="d-inline ml-md-2">
+                                                                                                             class="d-inline ml-md-2">
                                                             {% csrf_token %}
                                                             <button type="submit" name="redirect_path" value="{% url 'profpage-user' %}" class="btn border btn-white bg-white" id=""> {% if  hashtag in user.followed_hashtags.all %} Following{% else %}Follow{% endif %}</button>
                                                         </form>
@@ -395,7 +403,8 @@
                                                     <p class="text-center">If you follow hashtags, they will show here</p>
                                                 </article>
                                             </section>
-                                        {% endfor %}
+                                            {% endfor %}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -409,6 +418,7 @@
 <hr class="mt-0 mb-0 d-md-none">
 
 {% if user_is_followed or not user_for_page.is_private %}
+<section class="ajax_form_hide">
     <div class="d-none d-md-block">
         <div class="row mt-0 mt-md-4 mb-5 border-top-gray">
             <button class="border-0 bg-color-page ml-auto py-3 text-decoration-none text-muted mr-5 border-saved-or-posts"id="buttonSeePosts" onclick="seePosts()"><i class="fa fa-camera-retro mr-1"></i>Posts</button>
@@ -428,18 +438,18 @@
         <div class="col-4 p-15px mb-for-user-detail position-relative">
             <div class="img-user-detail">
                 {% if post.is_image %} 
-                    <img class="media-on-profilpage" src="{{post.picture.url}}" alt="alt">
+                <img class="media-on-profilpage" src="{{post.picture.url}}" alt="alt">
                 {% else %}
-                    <video class="media-on-profilpage" controls> 
-                        <source src="{{post.picture.url}}" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video>
+                <video class="media-on-profilpage" controls> 
+                    <source src="{{post.picture.url}}" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
                 {% endif %}
                 <div onclick="location.href='{{ post.get_absolute_url }}';" class="hover h-100 w-100 mx-auto">
                     <p class="px-3 center-comment-symbol d-none d-md-block" href="{{ post.get_absolute_url }}"><i
-                            class="fa fa-15 fa-comment"></i> {{post.postcomment_set.count}}</p>
+                                                                            class="fa fa-15 fa-comment"></i> {{post.postcomment_set.count}}</p>
                     <p class="px-3 center-heart-symbol" href="{{ post.get_absolute_url }}"><i
-                            class="fa fa-15 fa-heart"></i> {{post.number_of_likes}}</p>
+                                                        class="fa fa-15 fa-heart"></i> {{post.number_of_likes}}</p>
                 </div>
             </div>
         </div>
@@ -462,18 +472,18 @@
         <div class="col-4 p-15px mb-for-user-detail position-relative">
             <div class="img-user-detail">
                 {% if post.is_image %} 
-                    <img class="media-on-profilpage" src="{{post.picture.url}}" alt="alt">
+                <img class="media-on-profilpage" src="{{post.picture.url}}" alt="alt">
                 {% else %}
-                    <video class="media-on-profilpage" controls> 
-                        <source src="{{post.picture.url}}" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video>
+                <video class="media-on-profilpage" controls> 
+                    <source src="{{post.picture.url}}" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
                 {% endif %}
                 <div onclick="location.href='{{ post.get_absolute_url }}';" class="hover h-100 w-100 mx-auto">
                     <p class="px-3 center-comment-symbol d-none d-md-block" href="{{ post.get_absolute_url }}"><i
-                            class="fa fa-15 fa-comment"></i> {{post.postcomment_set.count}}</p>
+                                                                            class="fa fa-15 fa-comment"></i> {{post.postcomment_set.count}}</p>
                     <p class="px-3 center-heart-symbol" href="{{ post.get_absolute_url }}"><i
-                            class="fa fa-15 fa-heart"></i> {{post.number_of_likes}}</p>
+                                                        class="fa fa-15 fa-heart"></i> {{post.number_of_likes}}</p>
                 </div>
             </div>
         </div>
@@ -490,8 +500,24 @@
         </div>
         {% endfor %}
     </div>
+</section>
 {% else %}
-<div class="row mt-5 border">
+    <div class="row mt-5 border">
+        <div class="col-12 bg-white m-auto">
+            <div class="row">
+                <div class="col-10 col-md-4 m-auto">
+                    <section class="p-5 text-center">
+                        <article>
+                            <span><b>This account is private</b></span>                
+                            <p class="mt-3">Follow the account to see pictures and videos</p>
+                        </article>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}
+<div class="row mt-5 border d-none ajax_form_show">
     <div class="col-12 bg-white m-auto">
         <div class="row">
             <div class="col-10 col-md-4 m-auto">
@@ -505,5 +531,4 @@
         </div>
     </div>
 </div>
-{% endif %}
 {% endblock %}
