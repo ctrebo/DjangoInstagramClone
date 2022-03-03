@@ -203,6 +203,10 @@ def followUser(request, pk):
         if request.user.followed.filter(id=user_to_follow.id).exists():
             request.user.followed.remove(user_to_follow)
             is_not_following_now = True
+            if user_to_follow.is_private:
+                saved_posts_from_user_to_follow = request.user.saved_posts.filter(author=user_to_follow)
+                for post in saved_posts_from_user_to_follow:
+                    request.user.saved_posts.remove(post)
         else:
             if user_to_follow.is_private:
                 # If user to follow is private and there is a request pending remove it
@@ -446,7 +450,6 @@ class ProfilPageListView(LoginRequiredMixin, generic.ListView):
         return Post.objects.filter(author=self.request.user)
     
     def get_context_data(self, **kwargs):
-        
         user_is_marked_list = Post.objects.filter(tagged_people__id=self.request.user.id)
         user_follows_list = self.request.user.followed.all()
         user_follows_hashtags_list = self.request.user.followed_hashtags.all()

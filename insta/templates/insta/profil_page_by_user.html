@@ -7,7 +7,7 @@
     </div>
     <div class="col-8 col-md-6 header1">
         <article class="pt-3">
-            <h1 class="font-weight-light">{{user.username}} <a
+            <h1 class="font-weight-light">{{ user.username|truncatechars:12 }}<a
                     class="btn border text-decoration-none opacity-07-active ml-md-3 d-none d-md-inline bg-white"
                     href="{% url 'update-user' user.pk %}">Update profile</a></h1>
             <a class="btn border text-decoration-none opacity-07-active ml-md-3 d-block d-md-none bg-white"
@@ -57,23 +57,21 @@
                                                 <small class="font-weight-light text-dark">{{user_in_list.first_name}}</small>
                                             </article>
                                             <article class="d-inline float-right">
-                                                <form action="{% url 'follow-user' user_in_list.pk %}" method="POST"
-                                                    class="d-inline ml-md-2">
+                                                <form data-url="{% url 'follow-user' user_in_list.pk %}" method="POST" class="d-inline ml-md-2 follow_user_form_buttons">
                                                     {% csrf_token %}
                                                     {% if user_in_list in user.followed.all %}
-                                                        <button type="submit" name="redirect_path" value="{% url 'profpage-user' %}" class="btn border bg-white text-dark">Following</button>
+                                                        <button type="submit" class="btn border bg-white text-dark">Following</button>
 
                                                     {% elif user in user_in_list.pending_requests.all %}
-                                                        <button type="submit" name="redirect_path" value="{% url 'profpage-user' %}" class="btn bg-white border text-dark">Requested</button>
+                                                        <button type="submit" class="btn bg-white border text-dark">Requested</button>
                                                     {% else %}
-                                                        <button type="submit" name="redirect_path" value="{% url 'profpage-user' %}" class="btn border bg-primary text-white">Follow</button>
+                                                        <button type="submit" class="btn border bg-primary text-white">Follow</button>
                                                     {% endif %}
                                                 </form>
                                             </article>
                                         </div>
                                     </section>
                                     {% endfor %}
-
                                 </div>
                             </div>
                         </div>
@@ -125,10 +123,15 @@
                                                     <small class="font-weight-light text-dark">{{user_in_list.first_name}}</small>
                                                 </article>
                                                 <article class="d-inline float-right">
-                                                    <form action="{% url 'follow-user' user_in_list.pk %}" method="POST"
-                                                        class="d-inline ml-md-2">
+                                                    <form data-url="{% url 'follow-user' user_in_list.pk %}" method="POST" class="d-inline ml-md-2 follow_user_form_buttons">
                                                         {% csrf_token %}
-                                                        <button type="submit" name="redirect_path" value="{% url 'profpage-user' %}" class="btn border btn-white bg-white" id=""> {% if  user_in_list in user.followed.all %} Following{% else %}Follow{% endif %}</button>
+                                                        {% if user_in_list in user.followed.all %}
+                                                            <button type="submit" class="btn border bg-white text-dark">Following</button>
+                                                        {% elif user in user_in_list.pending_requests.all %}
+                                                            <button type="submit" class="btn bg-white border text-dark">Requested</button>
+                                                        {% else %}
+                                                            <button type="submit" class="btn border bg-primary text-white">Follow</button>
+                                                        {% endif %}
                                                     </form>
                                                 </article>
                                             </div>

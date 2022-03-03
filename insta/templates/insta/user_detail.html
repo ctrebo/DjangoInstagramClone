@@ -18,7 +18,7 @@
         <section>
             <article>
                 <div>
-                    <h2 class="font-weight-normal font-italic">{{ user_for_page|truncatechars:12 }}
+                    <h2 class="font-weight-normal font-italic">{{ user_for_page.username|truncatechars:12 }}
                         <form data-url="{% url 'follow-user' user_for_page.pk %}" method="POST" class="d-inline ml-md-2 follow_user_form">
                             {% csrf_token %}
                             {% if user_is_followed %}                
@@ -287,7 +287,7 @@
                                                         {% elif user_in_list in user.followed.all %}
                                                         <button type="submit" class="btn border bg-white text-dark">Following</button>
                                                         {% elif user in user_in_list.pending_requests.all %}
-                                                        <button type="submit" class="btn border bg-white text-dark">Reqested</button>
+                                                        <button type="submit" class="btn border bg-white text-dark">Requested</button>
                                                         {% else %}
                                                         <button type="submit" class="btn border bg-primary text-white">Follow</button>
                                                         {% endif %}
