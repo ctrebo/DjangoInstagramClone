@@ -236,16 +236,82 @@ $(".follow_user_form_buttons").submit(function (e) {
             if(is_following_now) {
                 follow_button.addClass("btn bg-white border");
                 follow_button.html("Following")
-            } else if(is_not_following_now && usertofollow_is_private) {
-                follow_button.addClass("btn bg-primary border text-white");
-                follow_button.html("Follow");
-                    
-            } else if(is_not_following_now && !usertofollow_is_private) { // Write all conditions out because of readability
+            } else if(is_not_following_now) { // Write all conditions out because of readability
                 follow_button.addClass("btn bg-primary border text-white");
                 follow_button.html("Follow");
             } else if(is_requesting_now) {
                 follow_button.addClass("btn bg-white border");
                 follow_button.html("Requested");
+            }
+        },
+        error: function (response) {
+            // alert the error if any error occured
+            alert("Error");
+        }
+    })
+});
+
+$(".follow_user_form_recommendations").submit(function (e) {
+    // preventing from page reload and default actions
+    e.preventDefault();
+    // serialize the data for sending the form data.
+    var this_form = $(this)
+    // make POST ajax call
+    var serializedData = $(this).serialize();
+    $.ajax({
+        type: 'POST',
+        url: this_form.data('url'),
+        data: serializedData,
+        success: function (response) {
+            // on successfull creating object
+            var is_following_now = JSON.parse(response["is_following_now"]);
+            var is_not_following_now = JSON.parse(response["is_not_following_now"]);
+            var is_requesting_now = JSON.parse(response["is_requesting_now"]);
+            var usertofollow_is_private = JSON.parse(response["usertofollow_is_private"]);
+
+            follow_button = this_form.find("button");
+            follow_button.removeClass();
+            if(is_following_now) {
+                follow_button.addClass("border-0 bg-transparent text-dark");
+                follow_button.html("Following")
+            } else if(is_not_following_now) { // Write all conditions out because of readability
+                follow_button.addClass("border-0 bg-transparent text-info");
+                follow_button.html("Follow");
+            } else if(is_requesting_now) {
+                follow_button.addClass("border-0 bg-transparent text-dark");
+                follow_button.html("Requested");
+            }
+        },
+        error: function (response) {
+            // alert the error if any error occured
+            alert("Error");
+        }
+    })
+});
+
+$(".follow_hashtag_form").submit(function (e) {
+    // preventing from page reload and default actions
+    e.preventDefault();
+    // serialize the data for sending the form data.
+    var this_form = $(this)
+    // make POST ajax call
+    var serializedData = $(this).serialize();
+    $.ajax({
+        type: 'POST',
+        url: this_form.data('url'),
+        data: serializedData,
+        success: function (response) {
+            // on successfull creating object
+            var follows_now = JSON.parse(response["follows_now"]);
+
+            follow_button = this_form.find("button");
+            follow_button.removeClass();
+            if(follows_now) {
+                follow_button.addClass("btn bg-white border text-dark");
+                follow_button.html("Following")
+            } else { 
+                follow_button.addClass("btn bg-primary border text-white");
+                follow_button.html("Follow")
             }
         },
         error: function (response) {

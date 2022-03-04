@@ -27,12 +27,12 @@
                         </ul>
                     </article> 
                     <article>
-                        <form action="{% url 'follow-hashtag' hashtag.pk %}" method="POST" class="d-inline ml-md-2">
+                        <form data-url="{% url 'follow-hashtag' hashtag.pk %}" method="POST" class="d-inline ml-md-2 follow_hashtag_form">
                             {% csrf_token %}
                             {% if hashtag_is_followed %}                
-                            <button type="submit" name="redirect_path" value="{{hashtag.get_absolute_url}}" class="btn bg-white border" id="">Unfollow</button>
+                                <button type="submit" class="btn bg-white border">Unfollow</button>
                             {% else %}
-                            <button type="submit" name="redirect_path" value="{{hashtag.get_absolute_url}}" class="btn bg-primary border text-white" id="">Follow</button>
+                                <button type="submit" class="btn bg-primary border text-white">Follow</button>
                             {% endif %}
                         </form>
                     </article>

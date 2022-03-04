@@ -265,17 +265,23 @@
             <article>
                 <div class="py-4">
                     <p class="font-weight-light mb-4">Recommandations for you</p>
-                    {% for user in recommandation_list %}
+                    {% for user_in_list in recommandation_list %}
                     <div class="mb-3">
                         <table class="w-100">
                             <tr>
-                                <td class="w-10"><a href="{{ user.get_absolute_url }}"><img class="post-pp img-fluid" src="{{user.prof_pic.url}}"></a></td>
-                                <td class="w-50"><b><a class="text-dark" href="{{user.get_absolute_url}}">{{user.username}}</a></b></td>
+                                <td class="w-10"><a href="{{ user_in_list.get_absolute_url }}"><img class="post-pp img-fluid" src="{{user_in_list.prof_pic.url}}"></a></td>
+                                <td class="w-50"><b><a class="text-dark" href="{{user_in_list.get_absolute_url}}">{{user_in_list.username}}</a></b></td>
                                 <td>
-                                    <form action="{% url 'follow-user' user.pk %}" method="POST">
+                                    <form data-url="{% url 'follow-user' user_in_list.pk %}" method="POST" class="follow_user_form_recommendations">
                                         {% csrf_token %}
 
-                                        <button class="bg-white border-0 text-info" type="submit" name="redirect_path" value="{{ user.get_absolute_url }}">Follow</button>
+                                        {% if user_in_list in user.followed.all %}
+                                            <button type="submit" class="border-0 bg-white text-dark">Following</button>
+                                        {% elif user in user_in_list.pending_requests.all %}
+                                            <button type="submit" class="border-0 bg-white text-dark">Requested</button>
+                                        {% else %}
+                                            <button type="submit" class="border-0 bg-transparent text-info">Follow</button>
+                                        {% endif %}
                                     </form>
                                 </td>
                             </tr>

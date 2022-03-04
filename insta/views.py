@@ -236,16 +236,21 @@ def followUser(request, pk):
 
 @login_required
 def followHashtag(request, pk):
-    hashtag_to_follow = get_object_or_404(Hashtag, id=pk)
-    redirect_path = request.POST.get('redirect_path')
-    
-    # If user already follows, remove follow
-    if request.user.followed_hashtags.filter(id=hashtag_to_follow.id).exists():
-        request.user.followed_hashtags.remove(hashtag_to_follow)
-    else:
-        request.user.followed_hashtags.add(hashtag_to_follow)
+    if request.is_ajax and request.method == "POST":
+        hashtag_to_follow = get_object_or_404(Hashtag, id=pk)
+
+        follows_now = False
         
-    return HttpResponseRedirect(redirect_path)
+        # If user already follows, remove follow
+        if request.user.followed_hashtags.filter(id=hashtag_to_follow.id).exists():
+            request.user.followed_hashtags.remove(hashtag_to_follow)
+        else:
+            request.user.followed_hashtags.add(hashtag_to_follow)
+            follows_now = True
+            
+        return JsonResponse({"follows_now": follows_now}, status=200)
+    else:
+        return JsonResponse({"Error": "An error occured"}, status=400)
 
 def removeTag(request, pk):
     post = get_object_or_404(Post, id=pk)
@@ -257,7 +262,7 @@ def removeTag(request, pk):
     return HttpResponseRedirect(redirect_path)
 
 @login_required
-def acceptOrDelteUsersRequest(request, pk):
+def acceptOrDeleteUsersRequest(request, pk):
     user_who_has_requested = get_object_or_404(user_model, id=pk)
 
     # Get value if user wants to delete or accept request
