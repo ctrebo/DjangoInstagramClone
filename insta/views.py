@@ -54,7 +54,13 @@ class PostListView(LoginRequiredMixin, generic.ListView):
 
     def get_queryset(self):
         ids_followed = self.request.user.followed.all()
-        return Post.objects.filter(author__in=ids_followed)
+        hashtags_followed = self.request.user.followed_hashtags.all()
+
+        # Hashtag posts
+        posts_hashtag_qs = Post.objects.filter(hashtag_posts__in=hashtags_followed).annotate(num_likes=Count("likes")).order_by("-num_likes")[:15]
+        posts_user_qs = Post.objects.filter(author__in=ids_followed) 
+
+        return (posts_hashtag_qs | posts_user_qs).order_by("post_date")
 
     
     def get_context_data(self, **kwargs):
@@ -263,21 +269,24 @@ def removeTag(request, pk):
 
 @login_required
 def acceptOrDeleteUsersRequest(request, pk):
-    user_who_has_requested = get_object_or_404(user_model, id=pk)
+    if request.is_ajax and request.method == "POST":
+        user_who_has_requested = get_object_or_404(user_model, id=pk)
 
-    # Get value if user wants to delete or accept request
-    accept_or_delete = request.POST.get('accept_or_delete')
+        # Get value if user wants to delete or accept request
+        accept_or_delete = request.POST.get('accept_or_delete')
 
-    # If logged in user accpets(confirms) remove usre who requested out
-    # of pending requests field and add logged in user to requested users
-    # followed field(so he follows logged in user)
-    if accept_or_delete == "accept":
-        request.user.pending_requests.remove(user_who_has_requested)
-        user_who_has_requested.followed.add(request.user)
+        # If logged in user accpets(confirms) remove usre who requested out
+        # of pending requests field and add logged in user to requested users
+        # followed field(so he follows logged in user)
+        if accept_or_delete == "accept":
+            request.user.pending_requests.remove(user_who_has_requested)
+            user_who_has_requested.followed.add(request.user)
+        else:
+            request.user.pending_requests.remove(user_who_has_requested)
+        
+        return JsonResponse({}, status=200)
     else:
-        request.user.pending_requests.remove(user_who_has_requested)
-    
-    return HttpResponseRedirect(reverse('activity-page'))
+        return JsonResponse({"Error", "An error message"}, status=400)
 
 
 
@@ -475,8 +484,7 @@ class PostCreateView(LoginRequiredMixin, CreateView):
         """
         After posting comment return to home page
         """
-        return reverse("profpage-user")
-
+        return reverse('create-comment', kwargs={'pk': self.object.pk})
 
     def form_valid(self, form):
         """

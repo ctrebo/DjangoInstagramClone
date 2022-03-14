@@ -136,7 +136,15 @@
                         <img class="post-pp {% if post.author.story_set.exists %}story-pp-in-header rounded-gradiants-small-pp{% endif %}" src="{{post.author.prof_pic.url}}" alt="alt">
                     </a>
                     <span class="ml-2 font-size-username">
-                        <b><a class="text-dark" href="{% if user == post.author %} {% url 'profpage-user' %} {% else %} {{ post.author.get_absolute_url }} {% endif %}">{{post.author.username}}</a></b>
+                        <b><a class="text-dark" href="{% if user == post.author %} {% url 'profpage-user' %} {% else %} {{ post.author.get_absolute_url }} {% endif %}">{{post.author.username}}</a> •</b>
+                        <form data-url="{% url 'follow-user' post.author.pk %}" class="follow_user_form_recommendations d-inline">
+                            {% csrf_token %}
+                            {% if post.author in user.followed.all %}
+                                <button type="submit" class="border-0 bg-white text-dark font-weight-bold pl-0">Following</button>
+                            {% else %}
+                                <button type="submit" class="border-0 bg-transparent text-info font-weight-bold pl-0">Follow</button>
+                            {% endif %}
+                        </form>
                     </span>
                     <span class="float-right" data-toggle="modal" data-target="#modal-{{post.pk}}-2">
                         <i class="fa fa-circle font-size-05" aria-hidden=""></i><i class="fa fa-circle font-size-05 margin-015rem" aria-hidden="true"></i><i class="fa fa-circle font-size-05" aria-hidden="true"></i>  

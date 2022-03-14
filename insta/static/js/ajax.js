@@ -320,3 +320,25 @@ $(".follow_hashtag_form").submit(function (e) {
         }
     })
 });
+
+$(".accept_or_delete_form").submit(function (e) {
+    // preventing from page reload and default actions
+    e.preventDefault();
+    // serialize the data for sending the form data.
+    var this_form = $(this)
+    // make POST ajax call
+    var serializedData = $(this).serialize();
+    $.ajax({
+        type: 'POST',
+        url: this_form.data('url'),
+        data: serializedData,
+        success: function (response) {
+            // on successfull creating object
+            this_form.closest(".userwhorequested-section").remove();
+        },
+        error: function (response) {
+            // alert the error if any error occured
+            alert("Error");
+        }
+    })
+});
