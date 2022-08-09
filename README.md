@@ -3,7 +3,7 @@
 ## The goal of this python project is to have a python Instagram applicaton which can be used like Instagram
 
 ## Technologies
-Project is created with:
+The Project is created with:
 
 * Python
 * Django
